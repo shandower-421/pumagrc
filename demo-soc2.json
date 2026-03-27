@@ -1,0 +1,440 @@
+{
+  "version": "1.0",
+  "lastSaved": "2026-03-27T12:00:00.000Z",
+  "subcategories": {
+    "CC1.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Code of conduct published and acknowledged by all employees annually. Ethics hotline operational. Board oversight of integrity standards documented in governance charter.",
+      "plan": "",
+      "notes": "Last SOC 2 Type II report confirmed no exceptions."
+    },
+    "CC1.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Board of directors includes independent members with IT/security expertise. Audit committee charter defines oversight responsibilities. Quarterly board review of internal controls.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC1.3": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Organizational chart with reporting lines published. Security team structure documented with clear authorities. RACI matrix for control activities maintained in GRC platform.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC1.4": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Job descriptions include competency requirements for security roles. Annual performance reviews include security objective assessment. Training budget allocated per team.",
+      "plan": "Implement competency framework with formal skill assessments for security team members.",
+      "notes": ""
+    },
+    "CC1.5": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Internal control responsibilities documented in job descriptions. Control owner accountability tracked in GRC tool. Performance metrics tied to control effectiveness.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC2.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Information quality controls implemented across reporting systems. Data validation rules enforced at point of entry. SOC report confirmed information quality controls operating effectively.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC2.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Internal communication of control objectives via monthly security newsletter, team meetings, and intranet portal. Policy changes communicated with acknowledgment tracking.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC2.3": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "External communication procedures documented for customers, regulators, and auditors. Service status page published. Customer notification procedures for security events established.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC3.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Risk management objectives defined and aligned with trust services criteria. Risk appetite statement approved by management. Security objectives documented in service commitments.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC3.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Enterprise risk assessment performed annually covering all trust services categories. Risk register maintained with identified risks, likelihood, impact, and risk responses.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC3.3": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Fraud risk assessment conducted annually. Anti-fraud controls documented. Segregation of duties enforced for financial and system administration functions.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC3.4": {
+      "maturity": "defined",
+      "priority": "next",
+      "proof": "Change management process includes risk assessment component. Significant changes evaluated for impact on internal controls. Not all organizational changes trigger reassessment.",
+      "plan": "Implement automated triggers for control reassessment based on organizational and technology changes.",
+      "notes": ""
+    },
+    "CC4.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Ongoing monitoring via automated control testing and SIEM alerting. Separate evaluations through internal audit program. Service auditor assessment performed annually for SOC 2 Type II.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC4.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Control deficiency tracking in GRC platform. Remediation plans with target dates assigned to control owners. Monthly reporting to management on open deficiencies.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC5.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Control activities mapped to identified risks. Control testing results documented and reviewed. Risk-based approach to control selection validated by service auditor.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC5.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "General IT controls covering access management, change management, and operations documented and tested. Automated controls monitored continuously. Manual controls tested quarterly.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC5.3": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Control policies published in policy management system. Procedures documented with step-by-step instructions. Annual review cycle ensures currency.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC6.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Logical access security architecture documented. Firewall rules reviewed quarterly. IDS/IPS deployed at network boundaries. Cloud security groups configured per least privilege.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC6.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "User provisioning workflow integrated with HR system. Identity verification performed before credential issuance. Automated deprovisioning on termination. Service auditor confirmed no exceptions.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC6.3": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "RBAC model implemented. Access modifications require manager approval. Quarterly user access reviews for all in-scope systems. Segregation of duties enforced in access model.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC6.4": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Physical access controls at data center facilities (badge, biometric). Visitor management system with escort requirements. Access logs retained and reviewed monthly.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC6.5": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Media sanitization procedures following NIST 800-88. Certificates of destruction obtained for disposed hardware. Secure disposal vendor assessed annually.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC6.6": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Perimeter security controls include next-gen firewall, WAF, DDoS protection, and email security gateway. Threat intelligence feeds integrated. SOC monitors external threat indicators.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC6.7": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Data-in-transit encryption enforced (TLS 1.2+). DLP policies monitor data movement. Secure file transfer mechanisms provided for external sharing. USB restrictions enforced.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC6.8": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "EDR deployed on all endpoints. Email security with sandboxing for attachments. Application whitelisting on servers. Real-time malware detection with automated quarantine.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC7.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Vulnerability scanning weekly (infrastructure) and on-deployment (applications). Configuration drift detection automated. New vulnerability alerts from threat intelligence subscriptions.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC7.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "SIEM with 24/7 SOC monitoring. UEBA for anomaly detection. Network traffic analysis for malicious patterns. Alert correlation and triage within 15-minute SLA.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC7.3": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Security event evaluation criteria documented. Incident severity classification scheme (P1-P4). Escalation procedures for events meeting incident thresholds.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC7.4": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Incident response plan with playbooks for common incident types. Retainer with external IR firm for surge capacity. Tabletop exercises conducted semi-annually.",
+      "plan": "",
+      "notes": "Last tabletop exercise: Feb 2026 - ransomware scenario."
+    },
+    "CC7.5": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Recovery procedures documented for security incidents. Post-incident recovery validation performed. Business continuity plans invoked when incidents impact availability.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC8.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Change management process with CAB approval for production changes. Changes tested in staging environment. Rollback procedures documented. Emergency change process with post-implementation review.",
+      "plan": "",
+      "notes": "Service auditor tested 45 changes with no exceptions noted."
+    },
+    "CC9.1": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Business continuity and disaster recovery plans documented. DR testing semi-annually for critical systems. RTO/RPO targets defined and validated through testing.",
+      "plan": "",
+      "notes": ""
+    },
+    "CC9.2": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Vendor risk management program with risk-based assessment framework. Critical vendors assessed annually via security questionnaires and SOC report review. Contract provisions for security requirements.",
+      "plan": "Implement continuous vendor monitoring using security ratings service.",
+      "notes": ""
+    },
+    "A1.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Infrastructure capacity monitoring with automated alerting. Auto-scaling configured for cloud workloads. Capacity planning reviews conducted quarterly with growth projections.",
+      "plan": "",
+      "notes": ""
+    },
+    "A1.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Environmental controls at data center facilities (fire suppression, HVAC, power). Backup infrastructure with automated failover. Cloud-based DR with multi-region deployment.",
+      "plan": "",
+      "notes": ""
+    },
+    "A1.3": {
+      "maturity": "defined",
+      "priority": "next",
+      "proof": "Recovery plan testing conducted semi-annually. Results documented with identified improvements. Full recovery drill completed for Tier 1 systems only.",
+      "plan": "Extend recovery testing to all in-scope systems. Implement automated recovery testing for cloud workloads.",
+      "notes": ""
+    },
+    "C1.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Confidential information classification scheme implemented. Data inventory for confidential data maintained. Access controls enforce need-to-know for confidential information.",
+      "plan": "",
+      "notes": ""
+    },
+    "C1.2": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Secure disposal procedures for confidential information. Automated retention policies enforce deletion schedules. Disposal verification through audit sampling confirmed by service auditor.",
+      "plan": "",
+      "notes": ""
+    },
+    "PI1.1": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Processing specifications documented for each service. Data definitions and processing rules maintained in technical documentation. Service descriptions provided to customers.",
+      "plan": "",
+      "notes": ""
+    },
+    "PI1.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Input validation controls implemented across all customer-facing applications. Completeness checks for batch processing. Error handling procedures documented and tested.",
+      "plan": "",
+      "notes": ""
+    },
+    "PI1.3": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Processing controls include data integrity checks, transaction logging, and reconciliation procedures. Automated monitoring for processing anomalies.",
+      "plan": "",
+      "notes": ""
+    },
+    "PI1.4": {
+      "maturity": "defined",
+      "priority": "next",
+      "proof": "Output delivery controls documented. Report distribution restricted to authorized recipients. Timeliness monitoring for scheduled outputs.",
+      "plan": "Implement automated output validation checks for all customer-facing reports and data feeds.",
+      "notes": ""
+    },
+    "PI1.5": {
+      "maturity": "repeatable",
+      "priority": "med",
+      "proof": "Data storage controls in place for production systems. Archive and retention procedures documented. Some gaps in tracking items-in-processing across distributed systems.",
+      "plan": "Implement end-to-end data lineage tracking for processing pipelines.",
+      "notes": ""
+    },
+    "P1.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Privacy notice published on website and provided during data collection. Notice updated when privacy practices change. Notification procedures documented for material changes.",
+      "plan": "",
+      "notes": ""
+    },
+    "P1.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Privacy notice describes data types collected, purposes, retention periods, disclosure practices, and third-party sharing. Reviewed by legal and DPO quarterly.",
+      "plan": "",
+      "notes": ""
+    },
+    "P2.1": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Consent mechanisms implemented for data collection where required. Opt-in/opt-out choices documented and functional. Consent records maintained with timestamps.",
+      "plan": "",
+      "notes": ""
+    },
+    "P3.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Data collection limited to stated purposes per privacy notice. Data minimization principle applied in system design. Privacy impact assessments for new collection activities.",
+      "plan": "",
+      "notes": ""
+    },
+    "P3.2": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Explicit consent workflows implemented for sensitive data collection. Consent forms clearly state consequences of withholding consent. Consent obtained prior to collection.",
+      "plan": "",
+      "notes": ""
+    },
+    "P4.1": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Data use limited to purposes identified in privacy notice. Purpose limitation enforced through access controls and data governance policies. Regular audits verify compliance.",
+      "plan": "",
+      "notes": ""
+    },
+    "P4.2": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Retention schedules defined for all personal information categories. Automated retention policies enforce deletion timelines. Retention compliance monitored quarterly.",
+      "plan": "",
+      "notes": ""
+    },
+    "P4.3": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Secure disposal procedures for personal information. Automated purge processes for expired data. Disposal verification through periodic sampling and audit.",
+      "plan": "",
+      "notes": ""
+    },
+    "P5.1": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Data subject access request (DSAR) process documented. Self-service portal for data access. Requests fulfilled within regulatory timelines. Denial procedures with appeal mechanism.",
+      "plan": "",
+      "notes": ""
+    },
+    "P5.2": {
+      "maturity": "repeatable",
+      "priority": "next",
+      "proof": "Data correction process exists but relies on manual workflows. Third-party notification of corrections not fully automated.",
+      "plan": "Automate data correction workflows and implement automated notification to downstream third-party recipients.",
+      "notes": ""
+    },
+    "P6.1": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Third-party disclosure requires explicit consent where applicable. Consent verified before disclosure. Disclosure procedures documented with legal review.",
+      "plan": "",
+      "notes": ""
+    },
+    "P6.2": {
+      "maturity": "managed",
+      "priority": "working",
+      "proof": "Disclosure log maintained in data governance platform. All authorized disclosures recorded with date, recipient, purpose, and data categories. Quarterly review by DPO.",
+      "plan": "",
+      "notes": ""
+    },
+    "P6.3": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Breach notification procedures documented. Unauthorized disclosure tracking in incident management system. Breach register maintained with investigation outcomes.",
+      "plan": "",
+      "notes": ""
+    },
+    "P6.4": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Data processing agreements with all vendors handling personal information. Privacy requirements in vendor contracts. Annual compliance assessments for critical data processors.",
+      "plan": "",
+      "notes": ""
+    },
+    "P6.5": {
+      "maturity": "repeatable",
+      "priority": "med",
+      "proof": "Breach notification clauses in vendor contracts. Not all vendors have been assessed for notification capability. Incident response coordination with vendors is informal.",
+      "plan": "Conduct tabletop exercises with critical data processing vendors to validate notification procedures.",
+      "notes": ""
+    },
+    "P6.6": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Breach notification procedures aligned with regulatory requirements (GDPR 72-hour, state breach notification laws). Communication templates prepared. Legal counsel engaged for all notifications.",
+      "plan": "",
+      "notes": ""
+    },
+    "P6.7": {
+      "maturity": "repeatable",
+      "priority": "med",
+      "proof": "Data subject accounting requests handled manually. Partial automation for common data categories. Full accounting capability not yet available for all data stores.",
+      "plan": "Implement automated data mapping and accounting capability across all personal information repositories.",
+      "notes": ""
+    },
+    "P7.1": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Data quality controls implemented at collection points. Validation rules for key data fields. Periodic data quality assessments for personal information stores.",
+      "plan": "",
+      "notes": ""
+    },
+    "P8.1": {
+      "maturity": "defined",
+      "priority": "working",
+      "proof": "Privacy complaint handling process documented. Dedicated email for privacy inquiries. Complaints tracked to resolution with SLA. Compliance monitoring includes periodic privacy audits.",
+      "plan": "",
+      "notes": ""
+    }
+  }
+}
