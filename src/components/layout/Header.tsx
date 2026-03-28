@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { Modal } from './Modal'
-import { Download, Upload, RotateCcw, FileText, ChevronDown, Menu, MoreVertical, Check, Settings } from 'lucide-react'
+import { Download, Upload, RotateCcw, FileText, ChevronDown, Menu, MoreVertical, Check, Settings, HelpCircle } from 'lucide-react'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
 import { generatePdfReport } from '../../lib/report-pdf'
@@ -29,6 +29,8 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
   const [showReportMenu, setShowReportMenu] = useState(false)
   const [showOverflowMenu, setShowOverflowMenu] = useState(false)
   const [showFrameworkConfig, setShowFrameworkConfig] = useState(false)
+  const [showAbout, setShowAbout] = useState(false)
+  const [aboutTab, setAboutTab] = useState<'getting-started' | 'data' | 'about'>('getting-started')
   const [generating, setGenerating] = useState(false)
   const [savePulse, setSavePulse] = useState(false)
   const lastSavedRef = useRef(assessment.lastSaved)
@@ -199,6 +201,10 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
               <button onClick={() => { setShowResetConfirm(true); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-danger)' }}>
                 <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" /> Reset Assessment
               </button>
+              <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
+              <button onClick={() => { setShowAbout(true); setAboutTab('getting-started'); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+                <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" /> Help & About
+              </button>
             </div>
           </>
         )}
@@ -240,6 +246,72 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
         </div>
         <div className="flex justify-end">
           <button onClick={() => setShowFrameworkConfig(false)} className="type-sm px-3 py-1.5 rounded-lg" style={btnSecondary}>Done</button>
+        </div>
+      </Modal>
+      <Modal open={showAbout} onClose={() => setShowAbout(false)} wide label="Help and About">
+        {/* Tabs */}
+        <div className="flex gap-1 mb-4 p-0.5 rounded-lg" style={{ background: 'var(--color-surface-tint)', border: '1px solid var(--color-border-dim)' }}>
+          {([
+            { key: 'getting-started' as const, label: 'Getting Started' },
+            { key: 'data' as const, label: 'Your Data' },
+            { key: 'about' as const, label: 'About' },
+          ]).map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setAboutTab(tab.key)}
+              className="flex-1 type-sm font-medium px-3 py-1.5 rounded-md text-center"
+              style={{
+                background: aboutTab === tab.key ? 'var(--color-surface-overlay)' : 'transparent',
+                color: aboutTab === tab.key ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
+                boxShadow: aboutTab === tab.key ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+              }}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab content */}
+        {aboutTab === 'getting-started' && (
+          <div className="space-y-3">
+            <h3 className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>Getting Started</h3>
+            <div className="space-y-2 type-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>1. Configure your frameworks.</strong> Open the overflow menu (three dots) and select "Configure Frameworks" to choose which compliance standards you want to assess. Do this first — it determines what appears in the sidebar and cross-map.</p>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>2. Work through controls.</strong> Select a category from the sidebar to expand the control list. Rate each control's maturity level (0-5) and priority. Add evidence in the Proof field and remediation plans in the Plan field.</p>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>3. Use keyboard shortcuts.</strong> Press <kbd className="type-2xs px-1 py-0.5 rounded" style={{ background: 'var(--color-surface-tint)', border: '1px solid var(--color-border-dim)', fontFamily: 'var(--font-mono)' }}>J</kbd> / <kbd className="type-2xs px-1 py-0.5 rounded" style={{ background: 'var(--color-surface-tint)', border: '1px solid var(--color-border-dim)', fontFamily: 'var(--font-mono)' }}>K</kbd> to navigate between controls, and <kbd className="type-2xs px-1 py-0.5 rounded" style={{ background: 'var(--color-surface-tint)', border: '1px solid var(--color-border-dim)', fontFamily: 'var(--font-mono)' }}>0</kbd>-<kbd className="type-2xs px-1 py-0.5 rounded" style={{ background: 'var(--color-surface-tint)', border: '1px solid var(--color-border-dim)', fontFamily: 'var(--font-mono)' }}>5</kbd> to set maturity in the detail modal.</p>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>4. Track progress.</strong> Use the Dashboard for an overview, Gap Analysis to prioritize remediation, and the Heatmap for a visual snapshot. Save snapshots in History to track improvement over time.</p>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>5. Generate reports.</strong> Use the Report button to export PDF or Word documents for stakeholder presentations.</p>
+            </div>
+          </div>
+        )}
+
+        {aboutTab === 'data' && (
+          <div className="space-y-3">
+            <h3 className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>Your Data</h3>
+            <div className="space-y-2 type-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <div className="p-3 rounded-lg" style={{ background: 'var(--color-warning-dim)', border: '1px solid rgba(217,119,6,0.2)' }}>
+                <p className="font-medium" style={{ color: 'var(--color-warning)' }}>This is not a secure datastore.</p>
+                <p className="mt-1">All assessment data is stored in your browser's local storage. It is not encrypted, not backed up, and will be lost if you clear your browser data.</p>
+              </div>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>Export regularly.</strong> Use "Export JSON" from the overflow menu to save your assessment data to a file. This is the only way to ensure your work is preserved. Exported files include all assessment data and snapshots.</p>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>Import to restore.</strong> Use "Import JSON" to load a previously exported file. This will replace the current assessment for the active framework.</p>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>Snapshots are per-framework.</strong> Each framework maintains its own snapshot history. Snapshots capture the full state at a point in time for trend tracking.</p>
+              <p><strong style={{ color: 'var(--color-text-primary)' }}>Do not store sensitive data.</strong> Avoid entering passwords, API keys, or other secrets in proof or plan fields. Browser local storage is accessible to any script running on the same origin.</p>
+            </div>
+          </div>
+        )}
+
+        {aboutTab === 'about' && (
+          <div className="space-y-3">
+            <h3 className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>About</h3>
+            <div className="type-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <p>Built by <a href="https://www.greykit.com" target="_blank" rel="noopener noreferrer" className="font-medium" style={{ color: 'var(--color-accent)' }}>Greykit.com</a></p>
+            </div>
+          </div>
+        )}
+
+        <div className="flex justify-end mt-4">
+          <button onClick={() => setShowAbout(false)} className="type-sm px-3 py-1.5 rounded-lg" style={btnSecondary}>Close</button>
         </div>
       </Modal>
     </header>

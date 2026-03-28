@@ -72,12 +72,14 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
 
   return (
     <aside className="w-72 flex flex-col h-screen overflow-hidden border-r" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border-dim)' }} aria-label="Sidebar">
-      {/* Logo — accessible button */}
-      <button
-        className="px-5 py-4 text-left w-full"
-        onClick={() => onNavigate('dashboard')}
+      {/* Logo — link to greykit.com */}
+      <a
+        href="https://www.greykit.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="px-5 py-4 text-left w-full block"
         style={{ borderBottom: '1px solid var(--color-border-dim)' }}
-        aria-label="PumaGRC — Navigate to dashboard"
+        aria-label="PumaGRC — Visit greykit.com"
       >
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-accent-dim)', border: '1px solid var(--color-accent-glow)' }}>
@@ -85,10 +87,10 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
           </div>
           <div>
             <span className="block type-sm font-semibold" style={{ color: 'var(--color-text-primary)', letterSpacing: 'var(--tracking-label)' }}>PUMAGRC</span>
-            <span className="block type-label" style={{ color: 'var(--color-text-muted)' }}>Compliance Platform</span>
+            <span className="block type-label" style={{ color: 'var(--color-text-muted)' }}>Self Assessment Tool</span>
           </div>
         </div>
-      </button>
+      </a>
 
       {/* Framework selector */}
       <div className="px-3 py-3" style={{ borderBottom: '1px solid var(--color-border-dim)' }}>
