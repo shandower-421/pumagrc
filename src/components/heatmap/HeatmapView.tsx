@@ -94,7 +94,7 @@ export function HeatmapView({ onNavigate }: { onNavigate: (path: string) => void
                           const data = assessment.subcategories[sub.id]
                           const maturity = data?.maturity || MaturityLevel.NotAssessed
                           return (
-                            <button key={sub.id} type="button" aria-label={`${sub.id}: ${MATURITY_LABELS[maturity]}`} className="w-6 h-6 sm:w-7 sm:h-7 rounded cursor-pointer hover:ring-2 hover:ring-slate-400 hover:z-10 focus-visible:ring-2 focus-visible:ring-cyan-400" style={{ backgroundColor: MATURITY_HEX[maturity] }}
+                            <button key={sub.id} type="button" aria-label={`${sub.id}: ${MATURITY_LABELS[maturity]}`} className="w-6 h-6 sm:w-7 sm:h-7 rounded cursor-pointer heatmap-cell focus-visible:ring-2 focus-visible:ring-cyan-400" style={{ backgroundColor: MATURITY_HEX[maturity] }}
                               onClick={() => { setTooltip(null); setModalControl({ id: sub.id, description: sub.description }) }}
                               onMouseEnter={e => setTooltip(buildTooltipData(sub, data, e.currentTarget.getBoundingClientRect()))}
                               onMouseLeave={() => setTooltip(null)}
@@ -133,7 +133,7 @@ export function HeatmapView({ onNavigate }: { onNavigate: (path: string) => void
                           const data = assessment.subcategories[sub.id]
                           const maturity = data?.maturity || MaturityLevel.NotAssessed
                           return (
-                            <button key={sub.id} type="button" aria-label={`${sub.id}: ${MATURITY_LABELS[maturity]}`} className="w-6 h-6 sm:w-7 sm:h-7 rounded cursor-pointer hover:ring-2 hover:ring-slate-400 hover:z-10 focus-visible:ring-2 focus-visible:ring-cyan-400" style={{ backgroundColor: MATURITY_HEX[maturity] }}
+                            <button key={sub.id} type="button" aria-label={`${sub.id}: ${MATURITY_LABELS[maturity]}`} className="w-6 h-6 sm:w-7 sm:h-7 rounded cursor-pointer heatmap-cell focus-visible:ring-2 focus-visible:ring-cyan-400" style={{ backgroundColor: MATURITY_HEX[maturity] }}
                               onClick={() => { setTooltip(null); setModalControl({ id: sub.id, description: sub.description }) }}
                               onMouseEnter={e => setTooltip(buildTooltipData(sub, data, e.currentTarget.getBoundingClientRect()))}
                               onMouseLeave={() => setTooltip(null)}

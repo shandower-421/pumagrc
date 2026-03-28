@@ -116,11 +116,11 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
               <button
                 key={item.path}
                 onClick={() => onNavigate(item.path)}
-                className="w-full text-left px-3 py-2 type-sm font-medium rounded-lg flex items-center gap-2.5"
+                className="w-full text-left px-3 py-2 type-sm font-medium rounded-lg flex items-center gap-2.5 hover:bg-[var(--color-surface-tint)]"
                 aria-current={isActive ? 'page' : undefined}
                 style={{
                   color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
-                  background: isActive ? 'var(--color-accent-dim)' : 'transparent',
+                  background: isActive ? 'var(--color-accent-dim)' : undefined,
                   border: isActive ? '1px solid rgba(34, 211, 238, 0.15)' : '1px solid transparent',
                 }}
               >

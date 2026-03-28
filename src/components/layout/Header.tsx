@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { Modal } from './Modal'
 import { Download, Upload, RotateCcw, FileText, ChevronDown, Menu, MoreVertical, Check, Settings } from 'lucide-react'
 import { useAssessment } from '../../store/assessment-store'
@@ -30,6 +30,22 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
   const [showOverflowMenu, setShowOverflowMenu] = useState(false)
   const [showFrameworkConfig, setShowFrameworkConfig] = useState(false)
   const [generating, setGenerating] = useState(false)
+  const [savePulse, setSavePulse] = useState(false)
+  const lastSavedRef = useRef(assessment.lastSaved)
+
+  // Pulse the save indicator when lastSaved changes
+  const triggerSavePulse = useCallback(() => {
+    setSavePulse(true)
+    const timeout = setTimeout(() => setSavePulse(false), 450)
+    return () => clearTimeout(timeout)
+  }, [])
+
+  useEffect(() => {
+    if (assessment.lastSaved !== lastSavedRef.current) {
+      lastSavedRef.current = assessment.lastSaved
+      triggerSavePulse()
+    }
+  }, [assessment.lastSaved, triggerSavePulse])
 
   // Close dropdown on Escape
   useEffect(() => {
@@ -119,7 +135,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
 
       {/* Autosave indicator */}
       <span className="hidden sm:inline-flex items-center gap-1 type-2xs" style={{ color: 'var(--color-text-muted)' }}>
-        <Check className="w-3 h-3" style={{ color: 'var(--color-success)' }} />
+        <Check className={`w-3 h-3 ${savePulse ? 'animate-save-pulse' : ''}`} style={{ color: 'var(--color-success)' }} />
         Saved
       </span>
 
@@ -141,7 +157,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
         {showReportMenu && (
           <>
             <div className="fixed inset-0 z-40" onClick={() => setShowReportMenu(false)} />
-            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-44" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-44 animate-dropdown-in" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
               <button onClick={handlePdfReport} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <FileText className="w-4 h-4" aria-hidden="true" style={{ color: '#f87171' }} /> PDF Report
               </button>
@@ -168,7 +184,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
         {showOverflowMenu && (
           <>
             <div className="fixed inset-0 z-40" onClick={() => setShowOverflowMenu(false)} />
-            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-48" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-48 animate-dropdown-in" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
               <button onClick={() => { handleExport(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <Download className="w-3.5 h-3.5" aria-hidden="true" /> Export JSON
               </button>

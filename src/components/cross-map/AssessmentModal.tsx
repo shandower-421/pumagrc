@@ -73,6 +73,7 @@ export function AssessmentModal({ controlId, frameworkId, frameworkName, descrip
     <Modal open onClose={onClose} wide>
       {/* Header */}
       <div className="mb-4">
+        <p className="type-2xs font-medium mb-1.5 px-1.5 py-0.5 rounded inline-block" style={{ color: 'var(--color-accent)', background: 'var(--color-accent-dim)' }}>{frameworkName}</p>
         <div className="flex items-center gap-2 mb-1">
           <span className="type-sm type-mono font-semibold" style={{ color: 'var(--color-accent)' }}>{controlId}</span>
           {data.compensating && (
@@ -82,7 +83,6 @@ export function AssessmentModal({ controlId, frameworkId, frameworkName, descrip
           )}
         </div>
         <p className="type-sm" style={{ color: 'var(--color-text-secondary)' }}>{description}</p>
-        <p className="type-2xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{frameworkName}</p>
       </div>
 
       {/* Maturity scale bar */}

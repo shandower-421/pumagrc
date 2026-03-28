@@ -3,6 +3,7 @@ import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, Radar, P
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
 import { MaturityLevel, Priority, MATURITY_NUMERIC, PRIORITY_LABELS, getFunctionColors } from '../../types/assessment'
+import { useAnimatedNumber } from '../../hooks/useAnimatedNumber'
 
 const PRIORITY_CHART_COLORS: Record<Priority, string> = {
   [Priority.NotSet]: '#cbd5e1',
@@ -59,6 +60,12 @@ export function DashboardView() {
 
   const completionPct = Math.round((stats.assessed / stats.total) * 100)
 
+  // Animated counters
+  const animCompletion = useAnimatedNumber(completionPct, 500)
+  const animMaturity = useAnimatedNumber(stats.avgMaturity, 500, 1)
+  const animHighPriority = useAnimatedNumber(stats.highPriority, 400)
+  const animPlans = useAnimatedNumber(stats.withPlan, 400)
+
   return (
     <div className="p-4 sm:p-6 max-w-6xl">
       {/* Title */}
@@ -71,27 +78,27 @@ export function DashboardView() {
 
       {/* Summary Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <div className="p-4" style={{ ...cardStyle, borderLeft: '3px solid var(--color-accent)' }}>
+        <div className="p-4 card-interactive animate-stagger-in" style={{ ...cardStyle, borderLeft: '3px solid var(--color-accent)', animationDelay: '0ms' }}>
           <p className="type-label mb-2" style={{ color: 'var(--color-accent)' }}>Completion</p>
-          <p className="type-stat" style={{ color: 'var(--color-accent)' }}>{completionPct}%</p>
+          <p className="type-stat" style={{ color: 'var(--color-accent)' }}>{animCompletion}%</p>
           <p className="type-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>{stats.assessed} of {stats.total}</p>
           <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: 'var(--color-border-dim)' }}>
-            <div className="h-full rounded-full" style={{ width: `${completionPct}%`, background: 'var(--color-accent)' }} />
+            <div className={`h-full rounded-full animate-bar-fill ${completionPct === 100 ? 'shimmer-bar' : ''}`} style={{ width: `${completionPct}%`, background: 'var(--color-accent)' }} />
           </div>
         </div>
-        <div className="p-4" style={{ ...cardStyle, borderLeft: '3px solid var(--color-info)' }}>
+        <div className="p-4 card-interactive animate-stagger-in" style={{ ...cardStyle, borderLeft: '3px solid var(--color-info)', animationDelay: '30ms' }}>
           <p className="type-label mb-2" style={{ color: 'var(--color-info)' }}>Avg Maturity</p>
-          <p className="type-stat" style={{ color: stats.avgMaturity >= 3 ? 'var(--color-info)' : 'var(--color-text-primary)' }}>{stats.avgMaturity.toFixed(1)}</p>
+          <p className="type-stat" style={{ color: stats.avgMaturity >= 3 ? 'var(--color-info)' : 'var(--color-text-primary)' }}>{animMaturity}</p>
           <p className="type-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>out of 5.0</p>
         </div>
-        <div className="p-4" style={{ ...cardStyle, borderLeft: '3px solid var(--color-danger)' }}>
+        <div className="p-4 card-interactive animate-stagger-in" style={{ ...cardStyle, borderLeft: '3px solid var(--color-danger)', animationDelay: '60ms' }}>
           <p className="type-label mb-2" style={{ color: stats.highPriority > 0 ? 'var(--color-danger)' : 'var(--color-text-muted)' }}>High Priority</p>
-          <p className="type-stat" style={{ color: stats.highPriority > 0 ? 'var(--color-danger)' : 'var(--color-text-primary)' }}>{stats.highPriority}</p>
+          <p className="type-stat" style={{ color: stats.highPriority > 0 ? 'var(--color-danger)' : 'var(--color-text-primary)' }}>{animHighPriority}</p>
           <p className="type-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>need attention</p>
         </div>
-        <div className="p-4" style={{ ...cardStyle, borderLeft: '3px solid var(--color-success)' }}>
+        <div className="p-4 card-interactive animate-stagger-in" style={{ ...cardStyle, borderLeft: '3px solid var(--color-success)', animationDelay: '90ms' }}>
           <p className="type-label mb-2" style={{ color: stats.withPlan > 0 ? 'var(--color-success)' : 'var(--color-text-muted)' }}>Plans</p>
-          <p className="type-stat" style={{ color: stats.withPlan > 0 ? 'var(--color-success)' : 'var(--color-text-primary)' }}>{stats.withPlan}</p>
+          <p className="type-stat" style={{ color: stats.withPlan > 0 ? 'var(--color-success)' : 'var(--color-text-primary)' }}>{animPlans}</p>
           <p className="type-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>improvement plans</p>
         </div>
       </div>
@@ -108,7 +115,7 @@ export function DashboardView() {
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="p-4" style={cardStyle}>
+        <div className="p-4 card-interactive animate-stagger-in" style={{ ...cardStyle, animationDelay: '120ms' }}>
           <p className="type-label mb-4" style={{ color: 'var(--color-text-muted)' }}>Priority Breakdown</p>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
@@ -122,7 +129,7 @@ export function DashboardView() {
           </ResponsiveContainer>
         </div>
 
-        <div className="p-4 lg:col-span-2" style={cardStyle}>
+        <div className="p-4 lg:col-span-2 card-interactive animate-stagger-in" style={{ ...cardStyle, animationDelay: '150ms' }}>
           <p className="type-label mb-4" style={{ color: 'var(--color-text-muted)' }}>Maturity by Domain</p>
           <ResponsiveContainer width="100%" height={300}>
             <RadarChart data={radarData}>
