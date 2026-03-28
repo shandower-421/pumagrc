@@ -15,17 +15,12 @@ const NAV_ITEMS = [
   { path: 'heatmap', label: 'Heatmap', icon: Grid3x3 },
   { path: 'history', label: 'History', icon: Clock },
   { path: 'cross-map', label: 'Cross-Map', icon: GitCompare },
-  { path: 'custom-frameworks', label: 'Custom Frameworks', icon: Wrench },
 ]
 
 export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
   const { framework, setFramework, allFrameworks } = useFramework()
   const { assessment } = useAssessment()
-  const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {}
-    framework.data.forEach(fn => { initial[fn.id] = true })
-    return initial
-  })
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({})
 
   const functionColors = getFunctionColors(framework)
 
@@ -73,10 +68,7 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
   const handleFrameworkChange = (id: string) => {
     setFramework(id)
     onNavigate('dashboard')
-    const newExpanded: Record<string, boolean> = {}
-    const newFw = allFrameworks.find(f => f.id === id)
-    newFw?.data.forEach(fn => { newExpanded[fn.id] = true })
-    setExpanded(newExpanded)
+    setExpanded({})
   }
 
   return (
@@ -93,20 +85,20 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
             <Shield className="w-4 h-4" aria-hidden="true" style={{ color: 'var(--color-accent)' }} />
           </div>
           <div>
-            <span className="block text-sm font-semibold tracking-wide" style={{ color: 'var(--color-text-primary)', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>PUMAGRC</span>
-            <span className="block text-[10px] uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>Compliance Platform</span>
+            <span className="block type-sm font-semibold" style={{ color: 'var(--color-text-primary)', letterSpacing: 'var(--tracking-label)' }}>PUMAGRC</span>
+            <span className="block type-label" style={{ color: 'var(--color-text-muted)' }}>Compliance Platform</span>
           </div>
         </div>
       </button>
 
       {/* Framework selector */}
       <div className="px-3 py-3" style={{ borderBottom: '1px solid var(--color-border-dim)' }}>
-        <label htmlFor="framework-select" className="block text-[10px] uppercase tracking-widest mb-1.5 px-1" style={{ color: 'var(--color-text-muted)' }}>Framework</label>
+        <label htmlFor="framework-select" className="block type-label mb-1.5 px-1" style={{ color: 'var(--color-text-muted)' }}>Framework</label>
         <select
           id="framework-select"
           value={framework.id}
           onChange={e => handleFrameworkChange(e.target.value)}
-          className="w-full text-xs font-medium rounded-lg px-3 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          className="w-full type-sm font-medium rounded-lg px-3 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
           style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }}
         >
           {allFrameworks.map(fw => (
@@ -125,7 +117,7 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
               <button
                 key={item.path}
                 onClick={() => onNavigate(item.path)}
-                className="w-full text-left px-3 py-2 text-xs font-medium rounded-lg flex items-center gap-2.5"
+                className="w-full text-left px-3 py-2 type-sm font-medium rounded-lg flex items-center gap-2.5"
                 aria-current={isActive ? 'page' : undefined}
                 style={{
                   color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
@@ -142,7 +134,6 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
 
         {/* Framework tree */}
         <div className="mt-3 pt-3 px-2" style={{ borderTop: '1px solid var(--color-border-dim)' }}>
-          <p className="text-[10px] uppercase tracking-widest px-2 mb-2" style={{ color: 'var(--color-text-muted)' }} aria-hidden="true">Controls</p>
           {framework.data.map(fn => {
             const colors = functionColors[fn.id]
             const progress = getFunctionProgress(fn.id)
@@ -153,7 +144,7 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
                   onClick={() => toggleExpanded(fn.id)}
                   aria-expanded={expanded[fn.id]}
                   aria-label={`${fn.id} ${fn.name}, ${pct}% assessed`}
-                  className="w-full text-left px-2 py-1.5 text-xs font-medium rounded-md flex items-center justify-between group"
+                  className="w-full text-left px-2 py-1.5 type-sm font-medium rounded-md flex items-center justify-between group"
                   style={{ color: 'var(--color-text-secondary)' }}
                 >
                   <div className="flex items-center gap-2 min-w-0">
@@ -161,7 +152,7 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
                     <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${colors.bg}`} aria-hidden="true" />
                     <span className="truncate">{fn.id} — {fn.name}</span>
                   </div>
-                  <span className="text-[10px] font-mono shrink-0 ml-1" aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : 'var(--color-text-muted)' }}>{pct}%</span>
+                  <span className="type-2xs type-mono shrink-0 ml-1" aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : 'var(--color-text-muted)' }}>{pct}%</span>
                 </button>
                 {expanded[fn.id] && (
                   <div className="ml-3 pl-3" style={{ borderLeft: '1px solid var(--color-border-dim)' }} role="group" aria-label={`${fn.name} categories`}>
@@ -173,14 +164,14 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
                           key={cat.id}
                           onClick={() => onNavigate(`category/${cat.id}`)}
                           aria-current={isActive ? 'page' : undefined}
-                          className="w-full text-left px-2 py-1 text-[11px] rounded flex items-center justify-between"
+                          className="w-full text-left px-2 py-1 type-xs rounded flex items-center justify-between"
                           style={{
                             color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
                             background: isActive ? 'var(--color-accent-dim)' : 'transparent',
                           }}
                         >
                           <span className="truncate">{cat.id} {cat.name}</span>
-                          <span className="text-[10px] font-mono shrink-0 ml-1" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }}>{catProgress.assessed}/{catProgress.total}</span>
+                          <span className="type-2xs type-mono shrink-0 ml-1" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }}>{catProgress.assessed}/{catProgress.total}</span>
                         </button>
                       )
                     })}

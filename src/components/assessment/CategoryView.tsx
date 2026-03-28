@@ -23,13 +23,13 @@ export function CategoryView({ categoryId }: CategoryViewProps) {
     <div className="p-4 sm:p-6 max-w-4xl">
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-2">
-          <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${colors.bg} text-white`}>{fn.id}</span>
-          <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>{fn.name}</span>
+          <span className={`type-2xs type-mono font-semibold px-2 py-0.5 rounded ${colors.bg} text-white`}>{fn.id}</span>
+          <span className="type-label" style={{ color: 'var(--color-text-muted)' }}>{fn.name}</span>
         </div>
-        <h2 className="text-xl font-light" style={{ color: 'var(--color-text-primary)', fontFamily: "'Instrument Serif', serif" }}>
+        <h2 className="type-page-title" style={{ color: 'var(--color-text-primary)' }}>
           {category.id} — {category.name}
         </h2>
-        <p className="text-xs mt-1 font-mono" style={{ color: 'var(--color-text-muted)' }}>{category.subcategories.length} controls</p>
+        <p className="type-mono-sm mt-1" style={{ color: 'var(--color-text-muted)' }}>{category.subcategories.length} controls</p>
       </div>
 
       <div className="space-y-2">

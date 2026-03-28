@@ -59,12 +59,12 @@ export const MATURITY_LABELS: Record<MaturityLevel, string> = {
 }
 
 export const MATURITY_COLORS: Record<MaturityLevel, string> = {
-  [MaturityLevel.NotAssessed]: 'bg-gray-100 text-gray-500',
-  [MaturityLevel.AdHoc]: 'bg-red-100 text-red-700',
-  [MaturityLevel.Repeatable]: 'bg-orange-100 text-orange-700',
-  [MaturityLevel.Defined]: 'bg-yellow-100 text-yellow-700',
-  [MaturityLevel.Managed]: 'bg-blue-100 text-blue-700',
-  [MaturityLevel.Optimized]: 'bg-green-100 text-green-700',
+  [MaturityLevel.NotAssessed]: 'bg-slate-100 text-slate-500',
+  [MaturityLevel.AdHoc]: 'bg-red-50 text-red-700',
+  [MaturityLevel.Repeatable]: 'bg-amber-50 text-amber-700',
+  [MaturityLevel.Defined]: 'bg-yellow-50 text-yellow-700',
+  [MaturityLevel.Managed]: 'bg-sky-50 text-sky-700',
+  [MaturityLevel.Optimized]: 'bg-emerald-50 text-emerald-700',
 }
 
 export const PRIORITY_LABELS: Record<Priority, string> = {
@@ -77,12 +77,12 @@ export const PRIORITY_LABELS: Record<Priority, string> = {
 }
 
 export const PRIORITY_COLORS: Record<Priority, string> = {
-  [Priority.NotSet]: 'bg-gray-100 text-gray-500',
-  [Priority.Working]: 'bg-blue-100 text-blue-700',
-  [Priority.Next]: 'bg-purple-100 text-purple-700',
-  [Priority.High]: 'bg-red-100 text-red-700',
-  [Priority.Med]: 'bg-yellow-100 text-yellow-700',
-  [Priority.Low]: 'bg-gray-200 text-gray-600',
+  [Priority.NotSet]: 'bg-slate-100 text-slate-500',
+  [Priority.Working]: 'bg-sky-50 text-sky-700',
+  [Priority.Next]: 'bg-violet-50 text-violet-700',
+  [Priority.High]: 'bg-red-50 text-red-700',
+  [Priority.Med]: 'bg-amber-50 text-amber-700',
+  [Priority.Low]: 'bg-slate-100 text-slate-600',
 }
 
 export const MATURITY_NUMERIC: Record<MaturityLevel, number> = {

@@ -61,7 +61,7 @@ function AppContent() {
         </div>
 
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-          <Header onMenuToggle={() => setSidebarOpen(s => !s)} />
+          <Header onMenuToggle={() => setSidebarOpen(s => !s)} onNavigate={handleNavigate} />
           <main className="flex-1 overflow-y-auto" id="main-content">
             {content}
           </main>

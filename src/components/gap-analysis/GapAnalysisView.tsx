@@ -70,9 +70,9 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
 
   const getRowStyle = (row: GapRow) => {
     if (row.priority === Priority.High && MATURITY_NUMERIC[row.maturity] <= 1)
-      return { background: 'rgba(239, 68, 68, 0.08)' }
+      return { background: 'var(--color-danger-dim)' }
     if (row.priority === Priority.High || MATURITY_NUMERIC[row.maturity] <= 1)
-      return { background: 'rgba(234, 179, 8, 0.05)' }
+      return { background: 'var(--color-warning-dim)' }
     return {}
   }
 
@@ -80,10 +80,10 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
 
   return (
     <div className="p-4 sm:p-6 max-w-6xl">
-      <h2 className="text-xl font-light mb-1" style={{ color: 'var(--color-text-primary)', fontFamily: "'Instrument Serif', serif" }}>
+      <h2 className="type-page-title mb-1" style={{ color: 'var(--color-text-primary)' }}>
         Gap <span style={{ color: 'var(--color-accent)' }}>Analysis</span>
       </h2>
-      <p className="text-xs font-mono mb-4" style={{ color: 'var(--color-text-muted)' }}>
+      <p className="type-mono-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>
         {filtered.length} of {allRows.length} controls — sorted by gap severity
       </p>
 
@@ -93,14 +93,14 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
           { value: filterMaturity, set: setFilterMaturity, label: 'Filter by maturity', options: [['all', 'All Maturity'], ...Object.entries(MATURITY_LABELS)] },
           { value: filterPriority, set: setFilterPriority, label: 'Filter by priority', options: [['all', 'All Priorities'], ...Object.entries(PRIORITY_LABELS)] },
         ].map((filter, i) => (
-          <select key={i} value={filter.value} onChange={e => filter.set(e.target.value)} aria-label={filter.label} className="text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle}>
+          <select key={i} value={filter.value} onChange={e => filter.set(e.target.value)} aria-label={filter.label} className="type-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle}>
             {filter.options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
         ))}
       </div>
 
       <div className="rounded-xl overflow-x-auto" style={{ border: '1px solid var(--color-border-dim)' }}>
-        <table className="w-full text-xs">
+        <table className="w-full type-sm">
           <thead>
             <tr style={{ background: 'var(--color-surface-raised)', borderBottom: '1px solid var(--color-border-dim)' }}>
               {[
@@ -121,14 +121,14 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
           <tbody>
             {filtered.map(row => (
               <tr key={row.id} className="cursor-pointer hover:opacity-80" style={{ ...getRowStyle(row), borderBottom: '1px solid var(--color-border-dim)' }} onClick={() => onNavigate(`category/${row.categoryId}`)} onKeyDown={e => { if (e.key === 'Enter') onNavigate(`category/${row.categoryId}`) }} tabIndex={0} role="link" aria-label={`${row.id}: ${row.description}, maturity ${MATURITY_LABELS[row.maturity]}, priority ${PRIORITY_LABELS[row.priority]}`}>
-                <td className="px-3 py-2 font-mono font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{row.id}</td>
+                <td className="px-3 py-2 type-mono font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{row.id}</td>
                 <td className="px-3 py-2 max-w-md truncate" style={{ color: 'var(--color-text-muted)' }}>{row.description}</td>
                 <td className="px-3 py-2">
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-medium ${functionColors[row.functionId]?.bg || 'bg-slate-600'} text-white`}>{row.functionId}</span>
+                  <span className={`type-2xs px-1.5 py-0.5 rounded type-mono font-medium ${functionColors[row.functionId]?.bg || 'bg-slate-600'} text-white`}>{row.functionId}</span>
                 </td>
-                <td className="px-3 py-2 text-center"><span className={`text-[10px] px-2 py-0.5 rounded-full ${MATURITY_COLORS[row.maturity]}`}>{MATURITY_LABELS[row.maturity]}</span></td>
-                <td className="px-3 py-2 text-center"><span className={`text-[10px] px-2 py-0.5 rounded-full ${PRIORITY_COLORS[row.priority]}`}>{PRIORITY_LABELS[row.priority]}</span></td>
-                <td className="px-3 py-2 text-center font-mono font-bold" style={{ color: row.gapScore >= 20 ? 'var(--color-danger)' : 'var(--color-text-secondary)' }}>{row.gapScore}</td>
+                <td className="px-3 py-2 text-center"><span className={`type-2xs px-2 py-0.5 rounded-full ${MATURITY_COLORS[row.maturity]}`}>{MATURITY_LABELS[row.maturity]}</span></td>
+                <td className="px-3 py-2 text-center"><span className={`type-2xs px-2 py-0.5 rounded-full ${PRIORITY_COLORS[row.priority]}`}>{PRIORITY_LABELS[row.priority]}</span></td>
+                <td className="px-3 py-2 text-center type-mono font-semibold" style={{ color: row.gapScore >= 20 ? 'var(--color-danger)' : 'var(--color-text-secondary)' }}>{row.gapScore}</td>
                 <td className="px-3 py-2 text-center">{row.hasPlan ? <span style={{ color: 'var(--color-success)' }}>Yes</span> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}</td>
               </tr>
             ))}

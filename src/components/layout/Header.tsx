@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { Download, Upload, RotateCcw, FileText, ChevronDown, Menu } from 'lucide-react'
+import { Download, Upload, RotateCcw, FileText, ChevronDown, Menu, MoreVertical, Wrench } from 'lucide-react'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
 import { generatePdfReport } from '../../lib/report-pdf'
@@ -66,13 +66,14 @@ function Modal({ open, onClose, children }: { open: boolean; onClose: () => void
   )
 }
 
-export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
+export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void; onNavigate: (path: string) => void }) {
   const { assessment, importAssessment, resetAssessment } = useAssessment()
   const { framework } = useFramework()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [importError, setImportError] = useState<string | null>(null)
   const [showReportMenu, setShowReportMenu] = useState(false)
+  const [showOverflowMenu, setShowOverflowMenu] = useState(false)
   const [generating, setGenerating] = useState(false)
 
   // Close dropdown on Escape
@@ -157,7 +158,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
           aria-haspopup="true"
           aria-expanded={showReportMenu}
           aria-live="polite"
-          className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 type-sm font-medium px-3 py-1.5 rounded-lg disabled:opacity-50"
           style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent)', border: '1px solid rgba(34, 211, 238, 0.2)' }}
         >
           <FileText className="w-3.5 h-3.5" aria-hidden="true" />
@@ -168,10 +169,10 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
           <>
             <div className="fixed inset-0 z-40" onClick={() => setShowReportMenu(false)} />
             <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-44" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
-              <button onClick={handlePdfReport} role="menuitem" className="w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+              <button onClick={handlePdfReport} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <FileText className="w-4 h-4" aria-hidden="true" style={{ color: '#f87171' }} /> PDF Report
               </button>
-              <button onClick={handleDocxReport} role="menuitem" className="w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+              <button onClick={handleDocxReport} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <FileText className="w-4 h-4" aria-hidden="true" style={{ color: '#60a5fa' }} /> Word Document
               </button>
             </div>
@@ -179,30 +180,53 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
         )}
       </div>
 
-      <div className="w-px h-4" style={{ background: 'var(--color-border-default)' }} aria-hidden="true" />
-
-      <button onClick={handleExport} aria-label="Export assessment as JSON" className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg hover:opacity-80" style={btnSecondary}>
-        <Download className="w-3.5 h-3.5" aria-hidden="true" /> <span className="hidden sm:inline">Export</span>
-      </button>
-      <button onClick={() => fileInputRef.current?.click()} aria-label="Import assessment from JSON file" className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg hover:opacity-80" style={btnSecondary}>
-        <Upload className="w-3.5 h-3.5" aria-hidden="true" /> <span className="hidden sm:inline">Import</span>
-      </button>
+      {/* Overflow menu (Export, Import, Reset, Custom Frameworks) */}
+      <div className="relative">
+        <button
+          onClick={() => setShowOverflowMenu(!showOverflowMenu)}
+          aria-haspopup="true"
+          aria-expanded={showOverflowMenu}
+          aria-label="More actions"
+          className="p-1.5 rounded-lg hover:opacity-80"
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
+          <MoreVertical className="w-4 h-4" />
+        </button>
+        {showOverflowMenu && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setShowOverflowMenu(false)} />
+            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-48" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
+              <button onClick={() => { handleExport(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+                <Download className="w-3.5 h-3.5" aria-hidden="true" /> Export JSON
+              </button>
+              <button onClick={() => { fileInputRef.current?.click(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+                <Upload className="w-3.5 h-3.5" aria-hidden="true" /> Import JSON
+              </button>
+              <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
+              <button onClick={() => { onNavigate('custom-frameworks'); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+                <Wrench className="w-3.5 h-3.5" aria-hidden="true" /> Custom Frameworks
+              </button>
+              <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
+              <button onClick={() => { setShowResetConfirm(true); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-danger)' }}>
+                <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" /> Reset Assessment
+              </button>
+            </div>
+          </>
+        )}
+      </div>
       <input ref={fileInputRef} type="file" accept=".json" onChange={handleImport} className="hidden" aria-label="Import assessment file" />
-      <button onClick={() => setShowResetConfirm(true)} aria-label="Reset assessment" className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg hover:opacity-80" style={btnDanger}>
-        <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" /> <span className="hidden sm:inline">Reset</span>
-      </button>
 
       <Modal open={!!importError} onClose={() => setImportError(null)}>
-        <p className="text-sm mb-4" role="alert" style={{ color: 'var(--color-danger)' }}>{importError}</p>
-        <button onClick={() => setImportError(null)} className="text-xs px-3 py-1.5 rounded-lg" style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }}>OK</button>
+        <p className="type-body mb-4" role="alert" style={{ color: 'var(--color-danger)' }}>{importError}</p>
+        <button onClick={() => setImportError(null)} className="type-sm px-3 py-1.5 rounded-lg" style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }}>OK</button>
       </Modal>
 
       <Modal open={showResetConfirm} onClose={() => setShowResetConfirm(false)}>
         <h3 className="font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>Reset Assessment?</h3>
-        <p className="text-sm mb-4" style={{ color: 'var(--color-text-secondary)' }}>This will clear all data for {framework.name}. This cannot be undone.</p>
+        <p className="type-body mb-4" style={{ color: 'var(--color-text-secondary)' }}>This will clear all data for {framework.name}. This cannot be undone.</p>
         <div className="flex gap-2 justify-end">
-          <button onClick={() => setShowResetConfirm(false)} className="text-xs px-3 py-1.5 rounded-lg" style={btnSecondary}>Cancel</button>
-          <button onClick={() => { resetAssessment(); setShowResetConfirm(false) }} className="text-xs px-3 py-1.5 rounded-lg" style={{ background: 'rgba(248, 113, 113, 0.15)', color: 'var(--color-danger)', border: '1px solid rgba(248, 113, 113, 0.3)' }}>Reset</button>
+          <button onClick={() => setShowResetConfirm(false)} className="type-sm px-3 py-1.5 rounded-lg" style={btnSecondary}>Cancel</button>
+          <button onClick={() => { resetAssessment(); setShowResetConfirm(false) }} className="type-sm px-3 py-1.5 rounded-lg" style={{ background: 'rgba(248, 113, 113, 0.15)', color: 'var(--color-danger)', border: '1px solid rgba(248, 113, 113, 0.3)' }}>Reset</button>
         </div>
       </Modal>
     </header>
