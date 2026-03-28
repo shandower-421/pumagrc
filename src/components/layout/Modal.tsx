@@ -38,8 +38,8 @@ export function Modal({ open, onClose, children, wide }: { open: boolean; onClos
 
   if (!open) return null
   return (
-    <div className={modalOverlay} onClick={onClose} onKeyDown={handleKeyDown} role="dialog" aria-modal="true">
-      <div ref={dialogRef} className={`rounded-xl p-6 ${wide ? 'max-w-lg' : 'max-w-sm'} w-full mx-4 my-auto max-h-[calc(100vh-4rem)] overflow-y-auto`} style={modalCard} onClick={e => e.stopPropagation()}>
+    <div className={`${modalOverlay} animate-fade-in`} onClick={onClose} onKeyDown={handleKeyDown} role="dialog" aria-modal="true">
+      <div ref={dialogRef} className={`rounded-xl p-6 ${wide ? 'max-w-lg' : 'max-w-sm'} w-full mx-4 my-auto max-h-[calc(100vh-4rem)] overflow-y-auto animate-scale-in`} style={modalCard} onClick={e => e.stopPropagation()}>
         {children}
       </div>
     </div>

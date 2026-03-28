@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ChevronDown, ChevronRight, Shield, LayoutDashboard, AlertTriangle, Grid3x3, Clock, GitCompare } from 'lucide-react'
+import { ChevronRight, Shield, LayoutDashboard, AlertTriangle, Grid3x3, Clock, GitCompare } from 'lucide-react'
 import { useFramework } from '../../store/framework-context'
 import { useAssessment } from '../../store/assessment-store'
 import { MaturityLevel, getFunctionColors } from '../../types/assessment'
@@ -147,14 +147,14 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
                   style={{ color: 'var(--color-text-secondary)' }}
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    {expanded[fn.id] ? <ChevronDown className="w-3 h-3 shrink-0" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} /> : <ChevronRight className="w-3 h-3 shrink-0" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} />}
+                    <ChevronRight className="w-3 h-3 shrink-0 chevron-transition" aria-hidden="true" style={{ color: 'var(--color-text-muted)', transform: expanded[fn.id] ? 'rotate(90deg)' : 'rotate(0deg)' }} />
                     <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${colors.bg}`} aria-hidden="true" />
                     <span className="truncate">{fn.id} — {fn.name}</span>
                   </div>
                   <span className="type-2xs type-mono shrink-0 ml-1" aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : pct > 0 && pct < 50 ? 'var(--color-warning)' : 'var(--color-text-muted)' }}>{pct}%</span>
                 </button>
                 {expanded[fn.id] && (
-                  <div className="ml-3 pl-3" style={{ borderLeft: '1px solid var(--color-border-dim)' }} role="group" aria-label={`${fn.name} categories`}>
+                  <div className="ml-3 pl-3 animate-content-in" style={{ borderLeft: '1px solid var(--color-border-dim)' }} role="group" aria-label={`${fn.name} categories`}>
                     {fn.categories.map(cat => {
                       const catProgress = getCategoryProgress(cat.id)
                       const isActive = currentPath === `category/${cat.id}`

@@ -151,7 +151,7 @@ export function HeatmapView({ onNavigate }: { onNavigate: (path: string) => void
 
         {/* Enhanced tooltip */}
         {tooltip && (
-          <div className="fixed z-50 rounded-lg pointer-events-none" style={{ left: tooltip.x, top: tooltip.y, transform: 'translate(-50%, -100%)', background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-bright)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', minWidth: '200px', maxWidth: '280px' }}>
+          <div className="fixed z-50 rounded-lg pointer-events-none animate-tooltip-in" style={{ left: tooltip.x, top: tooltip.y, background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-bright)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', minWidth: '200px', maxWidth: '280px' }}>
             <div className="px-3 py-2">
               <div className="flex items-center gap-2 mb-1">
                 <span className="type-sm type-mono font-semibold" style={{ color: 'var(--color-accent)' }}>{tooltip.id}</span>

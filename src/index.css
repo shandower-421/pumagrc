@@ -216,6 +216,66 @@ button, a, select, input, textarea,
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ─── Animation utilities ─── */
+
+/* Modal backdrop */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal card */
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Tooltip */
+@keyframes tooltip-in {
+  from { opacity: 0; transform: translate(-50%, -100%) scale(0.97); }
+  to { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
+
+/* Content reveal */
+@keyframes content-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.animate-scale-in {
+  animation: scale-in 250ms cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.animate-tooltip-in {
+  animation: tooltip-in 150ms cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.animate-content-in {
+  animation: content-in 200ms cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+/* Chevron rotation */
+.chevron-transition {
+  transition: transform 150ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Smooth expand/collapse */
+.expand-panel {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 200ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.expand-panel[data-open="true"] {
+  max-height: 800px;
+  opacity: 1;
+}
+
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
