@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Camera, Trash2 } from 'lucide-react'
+import { Camera, Trash2, HelpCircle } from 'lucide-react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useAssessment, type Snapshot } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
@@ -15,6 +15,7 @@ export function HistoryView() {
   const [label, setLabel] = useState('')
   const [compareA, setCompareA] = useState<string | null>(null)
   const [compareB, setCompareB] = useState<string | null>(null)
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
 
   const handleSave = () => {
     if (!label.trim()) return
@@ -25,10 +26,16 @@ export function HistoryView() {
   }
 
   const handleDelete = (id: string) => {
-    deleteSnapshot(id)
+    setPendingDeleteId(id)
+  }
+
+  const confirmDelete = () => {
+    if (!pendingDeleteId) return
+    deleteSnapshot(pendingDeleteId)
     setSnapshots(getSnapshots())
-    if (compareA === id) setCompareA(null)
-    if (compareB === id) setCompareB(null)
+    if (compareA === pendingDeleteId) setCompareA(null)
+    if (compareB === pendingDeleteId) setCompareB(null)
+    setPendingDeleteId(null)
   }
 
   const trendData = useMemo(() => {
@@ -112,7 +119,9 @@ export function HistoryView() {
           <table className="w-full type-sm">
             <thead>
               <tr style={{ background: 'var(--color-surface-raised)', borderBottom: '1px solid var(--color-border-dim)' }}>
-                <th className="text-left px-3 py-2.5 font-medium" style={{ color: 'var(--color-text-muted)' }}>Compare</th>
+                <th className="text-left px-3 py-2.5 font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                  <span className="inline-flex items-center gap-1">Compare <span title="Select A and B to compare two snapshots side by side"><HelpCircle className="w-3 h-3" style={{ opacity: 0.4 }} /></span></span>
+                </th>
                 <th className="text-left px-3 py-2.5 font-medium" style={{ color: 'var(--color-text-muted)' }}>Date</th>
                 <th className="text-left px-3 py-2.5 font-medium" style={{ color: 'var(--color-text-muted)' }}>Label</th>
                 <th className="text-center px-3 py-2.5 font-medium" style={{ color: 'var(--color-text-muted)' }}>Avg Maturity</th>
@@ -172,6 +181,22 @@ export function HistoryView() {
               ))}</tbody>
             </table>
           ) : <p className="type-sm text-center py-4" style={{ color: 'var(--color-text-muted)' }}>No changes between these snapshots.</p>}
+        </div>
+      )}
+
+      {/* Delete confirmation */}
+      {pendingDeleteId && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in" onClick={() => setPendingDeleteId(null)}>
+          <div className="rounded-xl p-6 max-w-xs w-full animate-scale-in" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 16px 48px rgba(0,0,0,0.12)' }} onClick={e => e.stopPropagation()}>
+            <h3 className="font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>Delete Snapshot?</h3>
+            <p className="type-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>
+              This will permanently remove "{snapshots.find(s => s.id === pendingDeleteId)?.label}". This cannot be undone.
+            </p>
+            <div className="flex gap-2 justify-end">
+              <button onClick={() => setPendingDeleteId(null)} className="type-sm px-3 py-1.5 rounded-lg" style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-secondary)', border: '1px solid var(--color-border-default)' }}>Cancel</button>
+              <button onClick={confirmDelete} className="type-sm px-3 py-1.5 rounded-lg" style={{ background: 'rgba(248, 113, 113, 0.15)', color: 'var(--color-danger)', border: '1px solid rgba(248, 113, 113, 0.3)' }}>Delete</button>
+            </div>
+          </div>
         </div>
       )}
 

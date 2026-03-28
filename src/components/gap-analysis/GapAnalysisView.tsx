@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowUpDown, Info } from 'lucide-react'
+import { ArrowUpDown, HelpCircle, Search } from 'lucide-react'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
 import { AssessmentModal } from '../cross-map/AssessmentModal'
@@ -103,7 +103,8 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
         ))}
       </div>
 
-      <div className="rounded-xl overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0" style={{ border: '1px solid var(--color-border-dim)' }}>
+      {/* Desktop table */}
+      <div className="hidden sm:block rounded-xl overflow-x-auto" style={{ border: '1px solid var(--color-border-dim)' }}>
         <table className="w-full type-sm">
           <thead>
             <tr style={{ background: 'var(--color-surface-raised)', borderBottom: '1px solid var(--color-border-dim)' }}>
@@ -113,11 +114,15 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
                 { label: 'Domain', field: null, align: 'left' },
                 { label: 'Maturity', field: 'maturity' as const, align: 'center' },
                 { label: 'Priority', field: 'priority' as const, align: 'center' },
-                { label: 'Gap', field: 'gapScore' as const, align: 'center', tooltip: 'Gap = (5 - maturity) x (priority + 1). Higher = more urgent.' },
+                { label: 'Gap', field: 'gapScore' as const, align: 'center', tooltip: true },
                 { label: 'Plan', field: null, align: 'center' },
               ].map((col, i) => (
                 <th key={i} scope="col" className={`px-3 py-2.5 font-medium ${col.field ? 'cursor-pointer hover:opacity-80' : ''}`} style={{ color: 'var(--color-text-muted)', textAlign: col.align as any }} onClick={col.field ? () => toggleSort(col.field!) : undefined} onKeyDown={col.field ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSort(col.field!) } } : undefined} tabIndex={col.field ? 0 : undefined} aria-sort={col.field && sortField === col.field ? (sortDir === 'asc' ? 'ascending' : 'descending') : undefined}>
-                  <span className="inline-flex items-center gap-1">{col.label} {col.field && <ArrowUpDown className="w-2.5 h-2.5" aria-hidden="true" />} {(col as any).tooltip && <span title={(col as any).tooltip}><Info className="w-2.5 h-2.5" aria-hidden="true" style={{ opacity: 0.5 }} /></span>}</span>
+                  <span className="inline-flex items-center gap-1">
+                    {col.label}
+                    {col.field && <ArrowUpDown className="w-2.5 h-2.5" aria-hidden="true" />}
+                    {col.tooltip && <span title="Gap = (5 − maturity) × (priority + 1). Higher = more urgent."><HelpCircle className="w-3 h-3" aria-hidden="true" style={{ opacity: 0.4 }} /></span>}
+                  </span>
                 </th>
               ))}
             </tr>
@@ -144,6 +149,46 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
           </tbody>
         </table>
       </div>
+
+      {/* Mobile card layout */}
+      <div className="sm:hidden space-y-2">
+        {filtered.length === 0 ? (
+          <div className="rounded-xl p-6 text-center" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
+            <Search className="w-6 h-6 mx-auto mb-2" style={{ color: 'var(--color-text-muted)' }} />
+            <p className="type-sm" style={{ color: 'var(--color-text-muted)' }}>No controls match your filters.</p>
+          </div>
+        ) : filtered.map(row => (
+          <button
+            key={row.id}
+            onClick={() => setModalControl({ id: row.id, description: row.description })}
+            className="w-full text-left rounded-lg p-3 space-y-1.5"
+            style={{ ...getRowStyle(row), background: getRowStyle(row).background || 'var(--color-surface-card)', border: '1px solid var(--color-border-dim)' }}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="type-xs type-mono font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{row.id}</span>
+                <span className={`type-2xs px-1.5 py-0.5 rounded type-mono font-medium ${functionColors[row.functionId]?.bg || 'bg-slate-600'} text-white`}>{row.functionId}</span>
+              </div>
+              <span className="type-mono type-xs font-semibold shrink-0" style={{ color: row.gapScore >= 20 ? 'var(--color-danger)' : 'var(--color-text-secondary)' }}>Gap {row.gapScore}</span>
+            </div>
+            <p className="type-xs" style={{ color: 'var(--color-text-muted)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{row.description}</p>
+            <div className="flex items-center gap-2">
+              <span className={`type-2xs px-2 py-0.5 rounded-full ${MATURITY_COLORS[row.maturity]}`}>{MATURITY_LABELS[row.maturity]}</span>
+              <span className={`type-2xs px-2 py-0.5 rounded-full ${PRIORITY_COLORS[row.priority]}`}>{PRIORITY_LABELS[row.priority]}</span>
+              {row.hasPlan && <span className="type-2xs" style={{ color: 'var(--color-success)' }}>Has plan</span>}
+              {row.compensating && <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#4f46e5' }} title="Compensating control" />}
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Desktop empty state */}
+      {filtered.length === 0 && (
+        <div className="hidden sm:block rounded-xl p-6 text-center" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
+          <Search className="w-6 h-6 mx-auto mb-2" style={{ color: 'var(--color-text-muted)' }} />
+          <p className="type-sm" style={{ color: 'var(--color-text-muted)' }}>No controls match your filters. Try broadening your criteria.</p>
+        </div>
+      )}
 
       {modalControl && (
         <AssessmentModal

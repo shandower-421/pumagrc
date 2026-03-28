@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { Grid3x3 } from 'lucide-react'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
 import { MaturityLevel, MATURITY_LABELS, MATURITY_HEX, PRIORITY_LABELS, getFunctionColors } from '../../types/assessment'
@@ -43,6 +44,10 @@ export function HeatmapView({ onNavigate }: { onNavigate: (path: string) => void
   const [groupBy, setGroupBy] = useState<'function' | 'category'>('function')
   const [modalControl, setModalControl] = useState<{ id: string; description: string } | null>(null)
 
+  const assessedCount = useMemo(() => {
+    return Object.values(assessment.subcategories).filter(v => v.maturity !== MaturityLevel.NotAssessed).length
+  }, [assessment])
+
   return (
     <div className="p-4 sm:p-6 max-w-7xl">
       <div className="flex items-center justify-between mb-6">
@@ -73,6 +78,14 @@ export function HeatmapView({ onNavigate }: { onNavigate: (path: string) => void
           </div>
         ))}
       </div>
+
+      {assessedCount === 0 && (
+        <div className="rounded-xl p-6 text-center mb-4" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
+          <Grid3x3 className="w-7 h-7 mx-auto mb-2" style={{ color: 'var(--color-accent)' }} />
+          <p className="type-body font-medium mb-1" style={{ color: 'var(--color-text-primary)' }}>Your heatmap is empty</p>
+          <p className="type-sm" style={{ color: 'var(--color-text-muted)', maxWidth: '340px', margin: '0 auto' }}>Click any cell below to assess a control, or start from a category in the sidebar. Colors will appear as you rate maturity levels.</p>
+        </div>
+      )}
 
       <div className="space-y-3 relative">
         {groupBy === 'function' ? (

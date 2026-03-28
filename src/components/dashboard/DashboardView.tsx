@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts'
+import { ClipboardList } from 'lucide-react'
+import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
 import { MaturityLevel, Priority, MATURITY_NUMERIC, PRIORITY_LABELS, getFunctionColors } from '../../types/assessment'
@@ -76,6 +77,17 @@ export function DashboardView() {
         <p className="type-sm mt-1" style={{ color: 'var(--color-text-muted)' }}>{framework.description}</p>
       </div>
 
+      {/* Empty state */}
+      {stats.assessed === 0 && (
+        <div className="rounded-xl p-8 text-center mb-6" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
+          <ClipboardList className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--color-accent)' }} />
+          <p className="type-body font-medium mb-1" style={{ color: 'var(--color-text-primary)' }}>Start your assessment</p>
+          <p className="type-sm mb-1" style={{ color: 'var(--color-text-muted)', maxWidth: '360px', margin: '0 auto' }}>
+            Pick a category from the sidebar to begin assessing controls. Your dashboard will populate as you go.
+          </p>
+        </div>
+      )}
+
       {/* Summary Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <div className="p-4 card-interactive animate-stagger-in" style={{ ...cardStyle, borderLeft: '3px solid var(--color-accent)', animationDelay: '0ms' }}>
@@ -103,35 +115,26 @@ export function DashboardView() {
         </div>
       </div>
 
-      {/* Secondary stats */}
-      {stats.compensating > 0 && (
-        <div className="flex items-center gap-4 mb-6 px-1">
-          <span className="inline-flex items-center gap-1.5 type-sm" style={{ color: '#4f46e5' }}>
-            <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: '#4f46e5' }} />
-            {stats.compensating} compensating {stats.compensating === 1 ? 'control' : 'controls'}
-          </span>
-        </div>
-      )}
-
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {/* Charts — side by side on desktop */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
         <div className="p-4 card-interactive animate-stagger-in" style={{ ...cardStyle, animationDelay: '120ms' }}>
           <p className="type-label mb-4" style={{ color: 'var(--color-text-muted)' }}>Priority Breakdown</p>
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={260}>
             <PieChart>
-              <Pie data={priorityData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={50} label={({ name, value }) => `${name}: ${value}`} labelLine={{ stroke: 'var(--color-text-muted)' }}>
+              <Pie data={priorityData} dataKey="value" nameKey="name" cx="50%" cy="45%" outerRadius={75} innerRadius={42} label={({ value }) => value} labelLine={false}>
                 {priorityData.map((entry, i) => (
                   <Cell key={i} fill={entry.fill} />
                 ))}
               </Pie>
               <Tooltip contentStyle={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', borderRadius: 8, color: 'var(--color-text-primary)' }} />
+              <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 'var(--text-2xs)', color: 'var(--color-text-muted)' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="p-4 lg:col-span-2 card-interactive animate-stagger-in" style={{ ...cardStyle, animationDelay: '150ms' }}>
+        <div className="p-4 card-interactive animate-stagger-in" style={{ ...cardStyle, animationDelay: '150ms' }}>
           <p className="type-label mb-4" style={{ color: 'var(--color-text-muted)' }}>Maturity by Domain</p>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={260}>
             <RadarChart data={radarData}>
               <PolarGrid stroke="var(--color-border-dim)" />
               <PolarAngleAxis dataKey="function" tick={{ fontSize: 11, fill: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)' }} />
@@ -142,6 +145,14 @@ export function DashboardView() {
           </ResponsiveContainer>
         </div>
       </div>
+
+      {/* Secondary stats */}
+      {stats.compensating > 0 && (
+        <div className="p-3 rounded-lg inline-flex items-center gap-2 type-sm" style={{ background: 'rgba(79,70,229,0.05)', border: '1px solid rgba(79,70,229,0.12)', color: '#4f46e5' }}>
+          <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: '#4f46e5' }} />
+          {stats.compensating} compensating {stats.compensating === 1 ? 'control' : 'controls'}
+        </div>
+      )}
     </div>
   )
 }

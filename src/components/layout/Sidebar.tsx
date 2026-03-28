@@ -143,11 +143,11 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
                   onClick={() => toggleExpanded(fn.id)}
                   aria-expanded={expanded[fn.id]}
                   aria-label={`${fn.id} ${fn.name}, ${pct}% assessed`}
-                  className="w-full text-left px-2 py-1.5 type-sm font-medium rounded-md flex items-center justify-between group"
+                  className="w-full text-left px-2 py-2 type-sm font-medium rounded-md flex items-center justify-between group"
                   style={{ color: 'var(--color-text-secondary)' }}
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <ChevronRight className="w-3 h-3 shrink-0 chevron-transition" aria-hidden="true" style={{ color: 'var(--color-text-muted)', transform: expanded[fn.id] ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+                    <ChevronRight className="w-3.5 h-3.5 shrink-0 chevron-transition" aria-hidden="true" style={{ color: 'var(--color-text-muted)', transform: expanded[fn.id] ? 'rotate(90deg)' : 'rotate(0deg)' }} />
                     <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${colors.bg}`} aria-hidden="true" />
                     <span className="truncate">{fn.id} — {fn.name}</span>
                   </div>
