@@ -303,10 +303,16 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
 
         {aboutTab === 'about' && (
           <div className="space-y-3">
-            <h3 className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>About</h3>
-            <div className="type-sm" style={{ color: 'var(--color-text-secondary)' }}>
-              <p>Built by <a href="https://www.greykit.com" target="_blank" rel="noopener noreferrer" className="font-medium" style={{ color: 'var(--color-accent)' }}>Greykit.com</a></p>
+            <div>
+              <h3 className="font-semibold" style={{ color: 'var(--color-text-primary)' }}>PumaGRC</h3>
+              <p className="type-sm" style={{ color: 'var(--color-text-muted)' }}>Self-Assessment Assistant</p>
             </div>
+            <p className="type-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              This tool is provided as-is, with no warranties or guarantees of any kind. Use it at your own risk. I am not responsible for how you use this tool, any decisions you make based on its output, the accuracy of its results, any bugs or security vulnerabilities, or the safety and security of any data you enter into it. This tool does not provide professional advice. By using it, you accept full responsibility for any outcomes that result from your use.
+            </p>
+            <p className="type-sm">
+              Built by <a href="https://www.greykit.com" target="_blank" rel="noopener noreferrer" className="font-medium" style={{ color: 'var(--color-accent)' }}>Greykit.com</a>
+            </p>
           </div>
         )}
 

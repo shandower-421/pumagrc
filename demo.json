@@ -1,0 +1,2872 @@
+{
+  "assessment": {
+    "version": "1.1",
+    "lastSaved": "2026-03-28T19:55:54.276Z",
+    "subcategories": {
+      "GV.OC-01": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Documented in Information Security Policy v4.1, approved by Board Jan 2026. Annual review cycle established.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000001",
+            "text": "Reviewed with IT governance team. Policy gaps identified in remote work section.",
+            "timestamp": "2026-03-15T10:30:00Z",
+            "resolved": false
+          },
+          {
+            "id": "1711000002",
+            "text": "Updated policy to include BYOD requirements per legal review.",
+            "timestamp": "2026-03-20T14:15:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "GV.OC-02": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Stakeholder register maintained in Archer GRC. Quarterly review with business unit leaders. Last review: Feb 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000003",
+            "text": "Completed quarterly review with compliance team. No material changes needed.",
+            "timestamp": "2026-03-10T09:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "GV.OC-03": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Regulatory compliance tracking maintained. SOX, GLBA, CCPA, and state privacy law requirements mapped to controls.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.OC-04": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Business impact analysis completed Nov 2025. RTOs and RPOs defined for all Tier 1 applications. DR testing scheduled for Q2 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.OC-05": {
+        "maturity": "managed",
+        "priority": "not-set",
+        "compensating": false,
+        "proof": "Vendor risk assessments completed for all critical vendors using standardized questionnaire. 12 vendors assessed in Q1 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.RM-01": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Risk register maintained in Archer GRC. 47 risks documented with owners, treatment plans, and review dates. Board reviewed Dec 2025.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000004",
+            "text": "Risk register updated with 3 new entries from Q1 threat landscape review.",
+            "timestamp": "2026-03-12T11:00:00Z",
+            "resolved": false
+          },
+          {
+            "id": "1711000005",
+            "text": "Meeting with board risk committee scheduled for Apr 15. Preparing cybersecurity risk briefing.",
+            "timestamp": "2026-03-25T09:00:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "GV.RM-02": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Risk appetite statement approved by Board of Directors, Dec 2025. Quantitative thresholds defined for cyber risk categories.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1774727745034",
+            "text": "Test",
+            "timestamp": "2026-03-28T19:55:45.034Z",
+            "resolved": true
+          }
+        ]
+      },
+      "GV.RM-03": {
+        "maturity": "optimized",
+        "priority": "not-set",
+        "compensating": false,
+        "proof": "Cybersecurity risks integrated into enterprise risk management framework. Monthly reporting to CRO. Quarterly board briefing.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.RM-04": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Risk treatment options documented per ISO 31000 methodology. Accept, mitigate, transfer, avoid criteria established.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.RM-05": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Cross-functional risk communication established via monthly ISC meetings. Escalation paths defined in RACI matrix.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.RM-06": {
+        "maturity": "optimized",
+        "priority": "not-set",
+        "compensating": false,
+        "proof": "Risk scoring methodology documented using FAIR framework. Automated risk calculations in Archer GRC platform.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.RM-07": {
+        "maturity": "defined",
+        "priority": "med",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.RR-01": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "CISO reports to CRO with direct Board access. Cybersecurity governance charter reviewed annually. Culture assessment conducted via survey.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.RR-02": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "RACI matrix for cybersecurity responsibilities documented and communicated. Role-based access aligned with organizational structure.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000006",
+            "text": "Shared draft with CISO for final approval. Expecting sign-off by Mar 28.",
+            "timestamp": "2026-03-22T15:00:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "GV.RR-03": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Cybersecurity budget approved at $4.2M for FY2026. Headcount: 18 FTEs plus 6 contractors. Budget tracked monthly.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.RR-04": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Background checks performed for all new hires via Sterling. Rescreening every 3 years for privileged access holders.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000007",
+            "text": "Coordinated with HR on background check process update. New vendor contract signed.",
+            "timestamp": "2026-03-18T10:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "GV.PO-01": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Documented in Information Security Policy v4.1, approved by Board Jan 2026. Annual review cycle established.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.PO-02": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Policy review cycle: annual minimum, ad-hoc for regulatory changes. Change log maintained. Last update: Jan 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.OV-01": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Security metrics dashboard reviewed monthly by CISO. KPIs include MTTD, MTTR, patch compliance, and phishing click rate.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.OV-02": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "SOC 2 Type II report obtained annually. Most recent report dated Nov 2025 with no exceptions noted.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.OV-03": {
+        "maturity": "optimized",
+        "priority": "not-set",
+        "compensating": false,
+        "proof": "Quarterly cybersecurity performance reviews conducted by CISO. Annual independent assessment by external firm.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.SC-01": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "Supply chain risk assessment process established. Critical vendors reviewed annually. SLA monitoring via Vendor Risk Management platform.",
+        "plan": "Enhance third-party risk monitoring with continuous assessment tool (SecurityScorecard). Contract pending legal review.",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.SC-02": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000008",
+            "text": "Vendor assessment questionnaire sent to 5 critical suppliers. 3 responses received.",
+            "timestamp": "2026-03-14T13:30:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "GV.SC-03": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.SC-04": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Migrate from manual asset inventory to ServiceNow CMDB. Phase 1 (servers) by Apr 2026, Phase 2 (endpoints) by Jun 2026.",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.SC-05": {
+        "maturity": "defined",
+        "priority": "med",
+        "compensating": false,
+        "proof": "NDA requirements documented in vendor onboarding process. Legal review required for all third-party agreements.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.SC-06": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.SC-07": {
+        "maturity": "repeatable",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "Enhance third-party risk monitoring with continuous assessment tool (SecurityScorecard). Contract pending legal review.",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.SC-08": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": true,
+        "proof": "Compensating control documented in exception register. Approved by CISO and risk committee. Annual review scheduled.",
+        "plan": "Develop and test ransomware-specific incident response playbook by Apr 2026. Draft under legal review.",
+        "notes": "Compensating control: Network segmentation and enhanced monitoring substitute for full implementation. WAF and IPS provide equivalent protection at the network boundary.",
+        "activityLog": []
+      },
+      "GV.SC-09": {
+        "maturity": "not-assessed",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "GV.SC-10": {
+        "maturity": "not-assessed",
+        "priority": "low",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.AM-01": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": false,
+        "proof": "Asset inventory maintained in ServiceNow CMDB. Hardware: 2,847 devices tracked. Software: 312 applications cataloged.",
+        "plan": "Migrate from manual asset inventory to ServiceNow CMDB. Phase 1 (servers) by Apr 2026, Phase 2 (endpoints) by Jun 2026.",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000009",
+            "text": "Updated asset inventory to include recently provisioned cloud workloads (37 new instances).",
+            "timestamp": "2026-03-17T11:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "ID.AM-02": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "Configuration baselines defined using CIS benchmarks. Compliance scanning via Tenable.sc. 94% compliance rate as of Mar 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.AM-03": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Implement zero-trust network architecture by Q4 2026. Zscaler ZPA selected. Proof of concept underway.",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000010",
+            "text": "Network segmentation review completed. Recommended additional micro-segmentation for PCI scope.",
+            "timestamp": "2026-03-19T14:00:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "ID.AM-04": {
+        "maturity": "defined",
+        "priority": "med",
+        "compensating": false,
+        "proof": "Vendor risk assessments completed for all critical vendors using standardized questionnaire. 12 vendors assessed in Q1 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.AM-05": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Data classification policy implemented. Four tiers: Public, Internal, Confidential, Restricted. Labels applied via Microsoft Purview.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.AM-07": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Deploy data loss prevention (DLP) solution across endpoints by May 2026. Pilot group selected for Phase 1.",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.AM-08": {
+        "maturity": "repeatable",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "Migrate from manual asset inventory to ServiceNow CMDB. Phase 1 (servers) by Apr 2026, Phase 2 (endpoints) by Jun 2026.",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-01": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Vulnerability scanning via Qualys runs weekly on all external-facing assets. Monthly for internal. SLA: Critical <7 days, High <30 days.",
+        "plan": "Automate vulnerability remediation workflow via ServiceNow integration. Target: reduce MTTR from 28 to 14 days by Jun 2026.",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000011",
+            "text": "Penetration test findings remediation progress: 8 of 10 findings closed. 2 remaining on track for Apr 2026.",
+            "timestamp": "2026-03-21T10:00:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "ID.RA-02": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Threat intelligence feeds integrated from FS-ISAC and Recorded Future. Weekly threat briefing for security team.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-03": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Risk register maintained in Archer GRC. 47 risks documented with owners, treatment plans, and review dates. Board reviewed Dec 2025.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-04": {
+        "maturity": "defined",
+        "priority": "med",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-05": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Risk scoring methodology documented using FAIR framework. Automated risk calculations in Archer GRC platform.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-06": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-07": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": false,
+        "proof": "Change management board meets weekly. All production changes require CAB approval. Emergency change process documented and tested.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-08": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Vulnerability scanning via Qualys runs weekly on all external-facing assets. Monthly for internal. SLA: Critical <7 days, High <30 days.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-09": {
+        "maturity": "managed",
+        "priority": "not-set",
+        "compensating": false,
+        "proof": "Supply chain risk assessment process established. Critical vendors reviewed annually. SLA monitoring via Vendor Risk Management platform.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.RA-10": {
+        "maturity": "defined",
+        "priority": "med",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.IM-01": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "SOC 2 Type II report obtained annually. Most recent report dated Nov 2025 with no exceptions noted.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.IM-02": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "Penetration testing conducted annually by external firm (NCC Group). Last test: Jan 2026. 3 High, 7 Medium findings. All remediated.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000012",
+            "text": "Third-party pen test report received. Reviewing findings with application development team.",
+            "timestamp": "2026-03-08T09:30:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "ID.IM-03": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "",
+        "plan": "Complete ISO 27001 certification audit by Q4 2026. Gap assessment findings being addressed per remediation plan.",
+        "notes": "",
+        "activityLog": []
+      },
+      "ID.IM-04": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "Incident response plan documented (IRP v3.2). Tabletop exercise conducted Dec 2025 with executive team participation.",
+        "plan": "Establish 24/7 SOC capability by Q3 2026. Evaluating MDR providers (Arctic Wolf, Expel). RFP in progress.",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000013",
+            "text": "Reviewed incident response playbook with legal counsel. Updated breach notification timeline.",
+            "timestamp": "2026-03-16T14:30:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "PR.AA-01": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "AWS IAM policies enforce MFA for all privileged accounts. CloudTrail logs verified. Last audit: Feb 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000014",
+            "text": "Access review escalation: 2 orphaned privileged accounts found and disabled.",
+            "timestamp": "2026-03-11T10:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "PR.AA-02": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Identity governance program includes joiner/mover/leaver automation. Provisioning via Okta Workflows. Average onboarding: 4 hours.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.AA-03": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "AWS IAM policies enforce MFA for all privileged accounts. CloudTrail logs verified. Last audit: Feb 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.AA-04": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Cryptographic standards documented: AES-256 for data at rest, TLS 1.3 for transit, RSA-4096 for digital signatures.",
+        "plan": "Roll out FIDO2/WebAuthn passwordless authentication for all employees by Q4 2026. Pilot with IT team in Apr 2026.",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.AA-05": {
+        "maturity": "optimized",
+        "priority": "not-set",
+        "compensating": false,
+        "proof": "Quarterly access reviews conducted via SailPoint IGA. Q1 2026 review completed with 3 exceptions remediated.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000015",
+            "text": "SSO integration completed for 3 additional SaaS applications. Total SSO coverage now at 89%.",
+            "timestamp": "2026-03-13T16:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "PR.AA-06": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Physical access controlled via HID badge readers at all entry points. Visitor logs maintained. CCTV at perimeter and server rooms.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.AT-01": {
+        "maturity": "optimized",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Security awareness training delivered via KnowBe4. 98% completion rate for Q1 2026. Phishing simulation failure rate: 3.2%.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000016",
+            "text": "Training module updated to reflect new phishing tactics. Deployed to LMS.",
+            "timestamp": "2026-03-07T11:00:00Z",
+            "resolved": true
+          },
+          {
+            "id": "1711000017",
+            "text": "Completed annual security awareness training refresh. 97% completion. Escalating remaining 3%.",
+            "timestamp": "2026-03-24T09:00:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "PR.AT-02": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Personnel security training includes insider threat awareness module. Completion tracked via HR system. Annual refresher required.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.DS-01": {
+        "maturity": "optimized",
+        "priority": "not-set",
+        "compensating": false,
+        "proof": "Encryption at rest via AWS KMS (AES-256). TLS 1.3 enforced for all external traffic. Certificate management automated via ACM.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.DS-02": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Cryptographic standards documented: AES-256 for data at rest, TLS 1.3 for transit, RSA-4096 for digital signatures.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.DS-10": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "DLP policies configured in Microsoft 365 for SSN, credit card, and PII patterns. 23 policy violations investigated in Q1 2026.",
+        "plan": "Deploy data loss prevention (DLP) solution across endpoints by May 2026. Pilot group selected for Phase 1.",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.DS-11": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": false,
+        "proof": "Backup strategy: daily incremental, weekly full. Offsite replication to AWS us-west-2. Restoration tested quarterly.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000018",
+            "text": "Backup restoration test completed successfully. RTO achieved within target (4 hrs).",
+            "timestamp": "2026-03-05T15:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "PR.PS-01": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Configuration baselines defined using CIS benchmarks. Compliance scanning via Tenable.sc. 94% compliance rate as of Mar 2026.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000019",
+            "text": "Configuration drift detected on 4 production servers. Auto-remediation via Ansible triggered.",
+            "timestamp": "2026-03-20T10:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "PR.PS-02": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "Change management board meets weekly. All production changes require CAB approval. Emergency change process documented and tested.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.PS-03": {
+        "maturity": "repeatable",
+        "priority": "med",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.PS-04": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Log aggregation via Elastic Stack. Retention: 1 year for security events, 90 days for application logs. Tamper detection enabled.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.PS-05": {
+        "maturity": "managed",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Endpoint protection via CrowdStrike Falcon deployed to 99.7% of managed endpoints. Auto-update enabled. EDR alerts reviewed daily.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.PS-06": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "Secure coding standards based on OWASP Top 10. Static analysis via Checkmarx integrated into CI/CD pipeline.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.IR-01": {
+        "maturity": "defined",
+        "priority": "working",
+        "compensating": false,
+        "proof": "Network segmentation implemented via Palo Alto NGFWs. DMZ, production, dev, and corporate zones defined. Firewall rules reviewed semi-annually.",
+        "plan": "Implement zero-trust network architecture by Q4 2026. Zscaler ZPA selected. Proof of concept underway.",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000020",
+            "text": "Firewall rule review completed. 12 legacy rules deprecated. Documentation updated.",
+            "timestamp": "2026-03-09T14:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "PR.IR-02": {
+        "maturity": "managed",
+        "priority": "not-set",
+        "compensating": false,
+        "proof": "Physical access controlled via HID badge readers at all entry points. Visitor logs maintained. CCTV at perimeter and server rooms.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "PR.IR-03": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": true,
+        "proof": "Compensating control documented in exception register. Approved by CISO and risk committee. Annual review scheduled.",
+        "plan": "Conduct full BCP/DR tabletop exercise by end of Q2 2026. Scenario development in progress with business units.",
+        "notes": "Compensating control: Third-party managed service provides equivalent capability. SLA guarantees 99.9% availability with contractual security requirements.",
+        "activityLog": [
+          {
+            "id": "1711000021",
+            "text": "DR failover test for Tier 1 apps completed. Identified DNS propagation delay issue. Fix in progress.",
+            "timestamp": "2026-03-22T11:00:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "PR.IR-04": {
+        "maturity": "defined",
+        "priority": "med",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.CM-01": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "SIEM (Splunk) deployed across all production environments. 90-day log retention policy enforced. Alert rules reviewed quarterly.",
+        "plan": "Upgrade SIEM to Splunk Enterprise Security by Q2 2026. Additional use cases for insider threat detection planned.",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.CM-02": {
+        "maturity": "repeatable",
+        "priority": "next",
+        "compensating": false,
+        "proof": "Physical access controlled via HID badge readers at all entry points. Visitor logs maintained. CCTV at perimeter and server rooms.",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.CM-03": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Implement SOAR platform (Palo Alto XSOAR) by Q3 2026. Integration with SIEM and ticketing system planned.",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.CM-06": {
+        "maturity": "repeatable",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.CM-09": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "Endpoint protection via CrowdStrike Falcon deployed to 99.7% of managed endpoints. Auto-update enabled. EDR alerts reviewed daily.",
+        "plan": "Deploy CrowdStrike EDR to all endpoints by Q2 2026. Budget approved ($180K). POC completed.",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.AE-02": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Upgrade SIEM to Splunk Enterprise Security by Q2 2026. Additional use cases for insider threat detection planned.",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.AE-03": {
+        "maturity": "ad-hoc",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "Implement SOAR platform (Palo Alto XSOAR) by Q3 2026. Integration with SIEM and ticketing system planned.",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.AE-04": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Establish 24/7 SOC capability by Q3 2026. Evaluating MDR providers (Arctic Wolf, Expel). RFP in progress.",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.AE-06": {
+        "maturity": "repeatable",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000022",
+            "text": "Patching SLA breach for 2 critical systems. Escalated to VP of Infrastructure.",
+            "timestamp": "2026-03-18T16:00:00Z",
+            "resolved": false
+          }
+        ]
+      },
+      "DE.AE-07": {
+        "maturity": "defined",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "Establish formal threat intelligence program by Q3 2026. Subscriptions to FS-ISAC and Recorded Future approved.",
+        "notes": "",
+        "activityLog": []
+      },
+      "DE.AE-08": {
+        "maturity": "defined",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Establish 24/7 SOC capability by Q3 2026. Evaluating MDR providers (Arctic Wolf, Expel). RFP in progress.",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.MA-01": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "Incident response plan documented (IRP v3.2). Tabletop exercise conducted Dec 2025 with executive team participation.",
+        "plan": "Establish 24/7 SOC capability by Q3 2026. Evaluating MDR providers (Arctic Wolf, Expel). RFP in progress.",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.MA-02": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Implement SOAR platform (Palo Alto XSOAR) by Q3 2026. Integration with SIEM and ticketing system planned.",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.MA-03": {
+        "maturity": "not-assessed",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.MA-04": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.MA-05": {
+        "maturity": "repeatable",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "Develop and test ransomware-specific incident response playbook by Apr 2026. Draft under legal review.",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.AN-03": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.AN-06": {
+        "maturity": "repeatable",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.AN-07": {
+        "maturity": "not-assessed",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.AN-08": {
+        "maturity": "ad-hoc",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.CO-02": {
+        "maturity": "repeatable",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000023",
+            "text": "Reviewed incident response playbook with legal counsel. Updated breach notification timeline.",
+            "timestamp": "2026-03-23T10:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "RS.CO-03": {
+        "maturity": "ad-hoc",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.MI-01": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Implement SOAR platform (Palo Alto XSOAR) by Q3 2026. Integration with SIEM and ticketing system planned.",
+        "notes": "",
+        "activityLog": []
+      },
+      "RS.MI-02": {
+        "maturity": "not-assessed",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Deploy network detection and response (NDR) solution by Q3 2026. Evaluating Darktrace and Vectra AI.",
+        "notes": "",
+        "activityLog": []
+      },
+      "RC.RP-01": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "Conduct full BCP/DR tabletop exercise by end of Q2 2026. Scenario development in progress with business units.",
+        "notes": "",
+        "activityLog": []
+      },
+      "RC.RP-02": {
+        "maturity": "not-assessed",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RC.RP-03": {
+        "maturity": "repeatable",
+        "priority": "next",
+        "compensating": false,
+        "proof": "Backup strategy: daily incremental, weekly full. Offsite replication to AWS us-west-2. Restoration tested quarterly.",
+        "plan": "",
+        "notes": "",
+        "activityLog": [
+          {
+            "id": "1711000024",
+            "text": "Backup restoration test completed successfully. RTO achieved within target (4 hrs).",
+            "timestamp": "2026-03-19T15:00:00Z",
+            "resolved": true
+          }
+        ]
+      },
+      "RC.RP-04": {
+        "maturity": "ad-hoc",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RC.RP-05": {
+        "maturity": "not-assessed",
+        "priority": "next",
+        "compensating": true,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RC.RP-06": {
+        "maturity": "ad-hoc",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RC.CO-03": {
+        "maturity": "not-assessed",
+        "priority": "high",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      },
+      "RC.CO-04": {
+        "maturity": "ad-hoc",
+        "priority": "next",
+        "compensating": false,
+        "proof": "",
+        "plan": "",
+        "notes": "",
+        "activityLog": []
+      }
+    }
+  },
+  "snapshots": [
+    {
+      "id": "2025-07-15T10:00:00.000Z",
+      "label": "Initial Baseline",
+      "date": "2025-07-15T10:00:00.000Z",
+      "avgMaturity": 0.46,
+      "assessed": 28,
+      "total": 106,
+      "subcategories": {
+        "GV.OC-01": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "GV.OC-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OC-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.OC-04": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "GV.OC-05": {
+          "maturity": "repeatable",
+          "priority": "not-set"
+        },
+        "GV.RM-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RM-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RM-03": {
+          "maturity": "defined",
+          "priority": "not-set"
+        },
+        "GV.RM-04": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "GV.RM-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RM-06": {
+          "maturity": "defined",
+          "priority": "not-set"
+        },
+        "GV.RM-07": {
+          "maturity": "ad-hoc",
+          "priority": "med"
+        },
+        "GV.RR-01": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "GV.RR-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RR-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RR-04": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.PO-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.PO-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.OV-01": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "GV.OV-02": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "GV.OV-03": {
+          "maturity": "repeatable",
+          "priority": "not-set"
+        },
+        "GV.SC-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "GV.SC-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "GV.SC-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-06": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-07": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-08": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-09": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-10": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-02": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "ID.AM-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-05": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "ID.AM-07": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "ID.AM-08": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "ID.RA-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-03": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "ID.RA-04": {
+          "maturity": "ad-hoc",
+          "priority": "med"
+        },
+        "ID.RA-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-06": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-07": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-08": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-09": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-10": {
+          "maturity": "not-assessed",
+          "priority": "med"
+        },
+        "ID.IM-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.IM-02": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "ID.IM-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.IM-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.AA-01": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.AA-02": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "PR.AA-03": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.AA-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.AA-05": {
+          "maturity": "defined",
+          "priority": "not-set"
+        },
+        "PR.AA-06": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.AT-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.AT-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.DS-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.DS-02": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.DS-10": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.DS-11": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "PR.PS-01": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "PR.PS-02": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "PR.PS-03": {
+          "maturity": "not-assessed",
+          "priority": "med"
+        },
+        "PR.PS-04": {
+          "maturity": "not-assessed",
+          "priority": "working"
+        },
+        "PR.PS-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.PS-06": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "PR.IR-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.IR-02": {
+          "maturity": "ad-hoc",
+          "priority": "not-set"
+        },
+        "PR.IR-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "PR.IR-04": {
+          "maturity": "ad-hoc",
+          "priority": "med"
+        },
+        "DE.CM-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.CM-02": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "DE.CM-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "DE.CM-06": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "DE.CM-09": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.AE-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "DE.AE-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "DE.AE-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "DE.AE-06": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "DE.AE-07": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "DE.AE-08": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RS.MA-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RS.MA-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RS.AN-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.AN-06": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.AN-07": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.AN-08": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.CO-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.CO-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RS.MI-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RS.MI-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RC.RP-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RC.RP-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RC.RP-06": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RC.CO-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RC.CO-04": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        }
+      }
+    },
+    {
+      "id": "2025-10-01T14:00:00.000Z",
+      "label": "Q3 2025 Review",
+      "date": "2025-10-01T14:00:00.000Z",
+      "avgMaturity": 1.05,
+      "assessed": 49,
+      "total": 106,
+      "subcategories": {
+        "GV.OC-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OC-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OC-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.OC-04": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "GV.OC-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RM-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RM-02": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "GV.RM-03": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "GV.RM-04": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.RM-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RM-06": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "GV.RM-07": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RR-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RR-02": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "GV.RR-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RR-04": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.PO-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.PO-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.OV-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OV-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OV-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-01": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "GV.SC-02": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "GV.SC-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-05": {
+          "maturity": "ad-hoc",
+          "priority": "med"
+        },
+        "GV.SC-06": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "GV.SC-07": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-08": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "GV.SC-09": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "GV.SC-10": {
+          "maturity": "not-assessed",
+          "priority": "low"
+        },
+        "ID.AM-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-02": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "ID.AM-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-04": {
+          "maturity": "repeatable",
+          "priority": "med"
+        },
+        "ID.AM-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-07": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-08": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "ID.RA-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.RA-03": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "ID.RA-04": {
+          "maturity": "ad-hoc",
+          "priority": "med"
+        },
+        "ID.RA-05": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "ID.RA-06": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "ID.RA-07": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "ID.RA-08": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-09": {
+          "maturity": "repeatable",
+          "priority": "not-set"
+        },
+        "ID.RA-10": {
+          "maturity": "repeatable",
+          "priority": "med"
+        },
+        "ID.IM-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.IM-02": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "ID.IM-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.IM-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.AA-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.AA-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.AA-03": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.AA-04": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.AA-05": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "PR.AA-06": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.AT-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.AT-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.DS-01": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "PR.DS-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.DS-10": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "PR.DS-11": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "PR.PS-01": {
+          "maturity": "ad-hoc",
+          "priority": "working"
+        },
+        "PR.PS-02": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "PR.PS-03": {
+          "maturity": "ad-hoc",
+          "priority": "med"
+        },
+        "PR.PS-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.PS-05": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.PS-06": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.IR-01": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.IR-02": {
+          "maturity": "repeatable",
+          "priority": "not-set"
+        },
+        "PR.IR-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.IR-04": {
+          "maturity": "ad-hoc",
+          "priority": "med"
+        },
+        "DE.CM-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.CM-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "DE.CM-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.CM-06": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "DE.CM-09": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.AE-02": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "DE.AE-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "DE.AE-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.AE-06": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "DE.AE-07": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "DE.AE-08": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.MA-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RS.MA-05": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.AN-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.AN-06": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "RS.AN-07": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.AN-08": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.CO-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RS.CO-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.MI-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MI-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RC.RP-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RC.RP-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-05": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RC.RP-06": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RC.CO-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.CO-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        }
+      }
+    },
+    {
+      "id": "2026-01-10T09:00:00.000Z",
+      "label": "Q4 2025 Review",
+      "date": "2026-01-10T09:00:00.000Z",
+      "avgMaturity": 1.61,
+      "assessed": 70,
+      "total": 106,
+      "subcategories": {
+        "GV.OC-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OC-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.OC-03": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.OC-04": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OC-05": {
+          "maturity": "defined",
+          "priority": "not-set"
+        },
+        "GV.RM-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.RM-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.RM-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.RM-04": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.RM-05": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.RM-06": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "GV.RM-07": {
+          "maturity": "repeatable",
+          "priority": "med"
+        },
+        "GV.RR-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.RR-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.RR-03": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.RR-04": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.PO-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.PO-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OV-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OV-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.OV-03": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "GV.SC-01": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "GV.SC-02": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "GV.SC-03": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "GV.SC-04": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "GV.SC-05": {
+          "maturity": "repeatable",
+          "priority": "med"
+        },
+        "GV.SC-06": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "GV.SC-07": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "GV.SC-08": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "GV.SC-09": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "GV.SC-10": {
+          "maturity": "not-assessed",
+          "priority": "low"
+        },
+        "ID.AM-01": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.AM-02": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "ID.AM-03": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "ID.AM-04": {
+          "maturity": "repeatable",
+          "priority": "med"
+        },
+        "ID.AM-05": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "ID.AM-07": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "ID.AM-08": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "ID.RA-01": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "ID.RA-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.RA-03": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "ID.RA-04": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "ID.RA-05": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.RA-06": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "ID.RA-07": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "ID.RA-08": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "ID.RA-09": {
+          "maturity": "defined",
+          "priority": "not-set"
+        },
+        "ID.RA-10": {
+          "maturity": "repeatable",
+          "priority": "med"
+        },
+        "ID.IM-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.IM-02": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "ID.IM-03": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "ID.IM-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "PR.AA-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.AA-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.AA-03": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.AA-04": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.AA-05": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "PR.AA-06": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.AT-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.AT-02": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.DS-01": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "PR.DS-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "PR.DS-10": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "PR.DS-11": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "PR.PS-01": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.PS-02": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "PR.PS-03": {
+          "maturity": "ad-hoc",
+          "priority": "med"
+        },
+        "PR.PS-04": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.PS-05": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.PS-06": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "PR.IR-01": {
+          "maturity": "repeatable",
+          "priority": "working"
+        },
+        "PR.IR-02": {
+          "maturity": "defined",
+          "priority": "not-set"
+        },
+        "PR.IR-03": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "PR.IR-04": {
+          "maturity": "repeatable",
+          "priority": "med"
+        },
+        "DE.CM-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.CM-02": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "DE.CM-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.CM-06": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "DE.CM-09": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.AE-02": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "DE.AE-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "DE.AE-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "DE.AE-06": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "DE.AE-07": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "DE.AE-08": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.MA-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-05": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "RS.AN-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.AN-06": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "RS.AN-07": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.AN-08": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.CO-02": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "RS.CO-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.MI-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MI-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-01": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-03": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RC.RP-04": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-05": {
+          "maturity": "not-assessed",
+          "priority": "not-set"
+        },
+        "RC.RP-06": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RC.CO-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.CO-04": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        }
+      }
+    },
+    {
+      "id": "2026-03-20T11:00:00.000Z",
+      "label": "Q1 2026 Review",
+      "date": "2026-03-20T11:00:00.000Z",
+      "avgMaturity": 2.69,
+      "assessed": 97,
+      "total": 106,
+      "subcategories": {
+        "GV.OC-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.OC-02": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "GV.OC-03": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "GV.OC-04": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.OC-05": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "GV.RM-01": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "GV.RM-02": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.RM-03": {
+          "maturity": "optimized",
+          "priority": "not-set"
+        },
+        "GV.RM-04": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.RM-05": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.RM-06": {
+          "maturity": "optimized",
+          "priority": "not-set"
+        },
+        "GV.RM-07": {
+          "maturity": "defined",
+          "priority": "med"
+        },
+        "GV.RR-01": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "GV.RR-02": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.RR-03": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.RR-04": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "GV.PO-01": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "GV.PO-02": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.OV-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.OV-02": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "GV.OV-03": {
+          "maturity": "optimized",
+          "priority": "not-set"
+        },
+        "GV.SC-01": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "GV.SC-02": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "GV.SC-03": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "GV.SC-04": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "GV.SC-05": {
+          "maturity": "defined",
+          "priority": "med"
+        },
+        "GV.SC-06": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "GV.SC-07": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "GV.SC-08": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "GV.SC-09": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "GV.SC-10": {
+          "maturity": "not-assessed",
+          "priority": "low"
+        },
+        "ID.AM-01": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "ID.AM-02": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "ID.AM-03": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "ID.AM-04": {
+          "maturity": "defined",
+          "priority": "med"
+        },
+        "ID.AM-05": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.AM-07": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "ID.AM-08": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "ID.RA-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.RA-02": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "ID.RA-03": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.RA-04": {
+          "maturity": "defined",
+          "priority": "med"
+        },
+        "ID.RA-05": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "ID.RA-06": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "ID.RA-07": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "ID.RA-08": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.RA-09": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "ID.RA-10": {
+          "maturity": "defined",
+          "priority": "med"
+        },
+        "ID.IM-01": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "ID.IM-02": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "ID.IM-03": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "ID.IM-04": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "PR.AA-01": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "PR.AA-02": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.AA-03": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "PR.AA-04": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.AA-05": {
+          "maturity": "optimized",
+          "priority": "not-set"
+        },
+        "PR.AA-06": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.AT-01": {
+          "maturity": "optimized",
+          "priority": "working"
+        },
+        "PR.AT-02": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.DS-01": {
+          "maturity": "optimized",
+          "priority": "not-set"
+        },
+        "PR.DS-02": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.DS-10": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "PR.DS-11": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "PR.PS-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.PS-02": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "PR.PS-03": {
+          "maturity": "repeatable",
+          "priority": "med"
+        },
+        "PR.PS-04": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.PS-05": {
+          "maturity": "managed",
+          "priority": "working"
+        },
+        "PR.PS-06": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "PR.IR-01": {
+          "maturity": "defined",
+          "priority": "working"
+        },
+        "PR.IR-02": {
+          "maturity": "managed",
+          "priority": "not-set"
+        },
+        "PR.IR-03": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "PR.IR-04": {
+          "maturity": "defined",
+          "priority": "med"
+        },
+        "DE.CM-01": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "DE.CM-02": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "DE.CM-03": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "DE.CM-06": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "DE.CM-09": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "DE.AE-02": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "DE.AE-03": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "DE.AE-04": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "DE.AE-06": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "DE.AE-07": {
+          "maturity": "defined",
+          "priority": "next"
+        },
+        "DE.AE-08": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.MA-01": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "RS.MA-02": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "RS.MA-03": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RS.MA-04": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "RS.MA-05": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "RS.AN-03": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "RS.AN-06": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "RS.AN-07": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RS.AN-08": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "RS.CO-02": {
+          "maturity": "repeatable",
+          "priority": "high"
+        },
+        "RS.CO-03": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "RS.MI-01": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "RS.MI-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-01": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "RC.RP-02": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.RP-03": {
+          "maturity": "repeatable",
+          "priority": "next"
+        },
+        "RC.RP-04": {
+          "maturity": "ad-hoc",
+          "priority": "high"
+        },
+        "RC.RP-05": {
+          "maturity": "not-assessed",
+          "priority": "next"
+        },
+        "RC.RP-06": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        },
+        "RC.CO-03": {
+          "maturity": "not-assessed",
+          "priority": "high"
+        },
+        "RC.CO-04": {
+          "maturity": "ad-hoc",
+          "priority": "next"
+        }
+      }
+    }
+  ]
+}
