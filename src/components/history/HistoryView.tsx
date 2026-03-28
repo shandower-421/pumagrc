@@ -82,7 +82,7 @@ export function HistoryView() {
           <p className="type-mono-sm mt-0.5" style={{ color: 'var(--color-text-muted)' }}>Save snapshots to track maturity improvement over time</p>
         </div>
         <button onClick={() => setShowSaveDialog(true)} className="inline-flex items-center gap-1.5 type-sm font-medium px-3 py-2 rounded-lg" style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent)', border: '1px solid rgba(34,211,238,0.2)' }}>
-          <Camera className="w-4 h-4" /> Save Snapshot
+          <Camera className="w-4 h-4" aria-hidden="true" /> Save Snapshot
         </button>
       </div>
 
@@ -142,7 +142,7 @@ export function HistoryView() {
                   <td className="px-3 py-2 font-medium" style={{ color: 'var(--color-text-primary)' }}>{s.label}</td>
                   <td className="px-3 py-2 text-center type-mono" style={{ color: 'var(--color-accent)' }}>{s.avgMaturity.toFixed(1)}</td>
                   <td className="px-3 py-2 text-center type-mono" style={{ color: 'var(--color-text-secondary)' }}>{Math.round((s.assessed / s.total) * 100)}%</td>
-                  <td className="px-3 py-2 text-center"><button onClick={() => handleDelete(s.id)} className="hover:opacity-80" style={{ color: 'var(--color-text-muted)' }}><Trash2 className="w-3.5 h-3.5" /></button></td>
+                  <td className="px-3 py-2 text-center"><button onClick={() => handleDelete(s.id)} aria-label={`Delete snapshot ${s.label}`} className="hover:opacity-80" style={{ color: 'var(--color-text-muted)' }}><Trash2 className="w-3.5 h-3.5" aria-hidden="true" /></button></td>
                 </tr>
               ))}
             </tbody>
@@ -155,11 +155,11 @@ export function HistoryView() {
         </div>
       ) : (
         <div className="rounded-xl p-8 text-center mb-6" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
-          <Camera className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--color-accent)' }} />
+          <Camera className="w-8 h-8 mx-auto mb-3" aria-hidden="true" style={{ color: 'var(--color-accent)' }} />
           <p className="type-body font-medium mb-1" style={{ color: 'var(--color-text-primary)' }}>Track your compliance journey</p>
           <p className="type-sm mb-4" style={{ color: 'var(--color-text-muted)', maxWidth: '360px', margin: '0 auto' }}>Save snapshots at key milestones to visualize maturity improvement over time. Compare any two snapshots to see exactly what changed.</p>
           <button onClick={() => setShowSaveDialog(true)} className="inline-flex items-center gap-1.5 type-sm font-medium px-4 py-2 rounded-lg" style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent)', border: '1px solid var(--color-accent-glow)' }}>
-            <Camera className="w-3.5 h-3.5" /> Save First Snapshot
+            <Camera className="w-3.5 h-3.5" aria-hidden="true" /> Save First Snapshot
           </button>
         </div>
       )}
@@ -210,7 +210,7 @@ export function HistoryView() {
           <div className="rounded-xl p-6 max-w-sm w-full" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 16px 48px rgba(0,0,0,0.12)' }} onClick={e => e.stopPropagation()}>
             <h3 className="font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>Save Snapshot</h3>
             <p className="type-sm mb-3" style={{ color: 'var(--color-text-muted)' }}>Capture current assessment state for trend tracking.</p>
-            <input type="text" value={label} onChange={e => setLabel(e.target.value)} placeholder="e.g., Q1 2026 Assessment" autoFocus onKeyDown={e => e.key === 'Enter' && handleSave()} className="w-full type-sm rounded-lg px-3 py-2 mb-3 focus:outline-none" style={{ background: 'var(--color-surface)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }} />
+            <input type="text" value={label} onChange={e => setLabel(e.target.value)} placeholder="e.g., Q1 2026 Assessment" aria-label="Snapshot label" autoFocus onKeyDown={e => e.key === 'Enter' && handleSave()} className="w-full type-sm rounded-lg px-3 py-2 mb-3 focus:outline-none" style={{ background: 'var(--color-surface)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }} />
             <div className="flex gap-2 justify-end">
               <button onClick={() => setShowSaveDialog(false)} className="type-sm px-3 py-1.5 rounded-lg" style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-secondary)', border: '1px solid var(--color-border-default)' }}>Cancel</button>
               <button onClick={handleSave} disabled={!label.trim()} className="type-sm px-3 py-1.5 rounded-lg disabled:opacity-50" style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent)', border: '1px solid rgba(34,211,238,0.2)' }}>Save</button>

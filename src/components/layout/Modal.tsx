@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, type ReactNode } from 'react'
+import { useRef, useEffect, useCallback, useId, type ReactNode } from 'react'
 
 const modalOverlay = "fixed inset-0 bg-black/60 flex items-center justify-center z-50 overflow-y-auto py-8"
 const modalCard = {
@@ -7,9 +7,10 @@ const modalCard = {
   boxShadow: '0 16px 48px rgba(0,0,0,0.12)',
 }
 
-export function Modal({ open, onClose, children, wide }: { open: boolean; onClose: () => void; children: ReactNode; wide?: boolean }) {
+export function Modal({ open, onClose, children, wide, label }: { open: boolean; onClose: () => void; children: ReactNode; wide?: boolean; label?: string }) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const previousFocus = useRef<HTMLElement | null>(null)
+  const labelId = useId()
 
   useEffect(() => {
     if (open) {
@@ -38,8 +39,9 @@ export function Modal({ open, onClose, children, wide }: { open: boolean; onClos
 
   if (!open) return null
   return (
-    <div className={`${modalOverlay} animate-fade-in`} onClick={onClose} onKeyDown={handleKeyDown} role="dialog" aria-modal="true">
+    <div className={`${modalOverlay} animate-fade-in`} onClick={onClose} onKeyDown={handleKeyDown} role="dialog" aria-modal="true" aria-label={label || undefined} aria-labelledby={!label ? labelId : undefined}>
       <div ref={dialogRef} className={`rounded-xl p-6 ${wide ? 'max-w-lg' : 'max-w-sm'} w-full mx-4 my-auto max-h-[calc(100vh-4rem)] overflow-y-auto animate-scale-in`} style={modalCard} onClick={e => e.stopPropagation()}>
+        {!label && <span id={labelId} className="sr-only">Dialog</span>}
         {children}
       </div>
     </div>

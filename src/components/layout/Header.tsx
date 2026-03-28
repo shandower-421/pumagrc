@@ -148,7 +148,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
           aria-expanded={showReportMenu}
           aria-live="polite"
           className="inline-flex items-center gap-1.5 type-sm font-medium px-3 py-1.5 rounded-lg disabled:opacity-50"
-          style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent)', border: '1px solid rgba(34, 211, 238, 0.2)' }}
+          style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent)', border: '1px solid var(--color-accent-glow)' }}
         >
           <FileText className="w-3.5 h-3.5" aria-hidden="true" />
           {generating ? 'Generating...' : 'Report'}
@@ -159,10 +159,10 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
             <div className="fixed inset-0 z-40" onClick={() => setShowReportMenu(false)} />
             <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-44 animate-dropdown-in" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
               <button onClick={handlePdfReport} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
-                <FileText className="w-4 h-4" aria-hidden="true" style={{ color: '#f87171' }} /> PDF Report
+                <FileText className="w-4 h-4" aria-hidden="true" style={{ color: 'var(--color-danger)' }} /> PDF Report
               </button>
               <button onClick={handleDocxReport} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
-                <FileText className="w-4 h-4" aria-hidden="true" style={{ color: '#60a5fa' }} /> Word Document
+                <FileText className="w-4 h-4" aria-hidden="true" style={{ color: 'var(--color-info)' }} /> Word Document
               </button>
             </div>
           </>
@@ -205,12 +205,12 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
       </div>
       <input ref={fileInputRef} type="file" accept=".json" onChange={handleImport} className="hidden" aria-label="Import assessment file" />
 
-      <Modal open={!!importError} onClose={() => setImportError(null)}>
+      <Modal open={!!importError} onClose={() => setImportError(null)} label="Import error">
         <p className="type-body mb-4" role="alert" style={{ color: 'var(--color-danger)' }}>{importError}</p>
         <button onClick={() => setImportError(null)} className="type-sm px-3 py-1.5 rounded-lg" style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }}>OK</button>
       </Modal>
 
-      <Modal open={showResetConfirm} onClose={() => setShowResetConfirm(false)}>
+      <Modal open={showResetConfirm} onClose={() => setShowResetConfirm(false)} label="Reset assessment">
         <h3 className="font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>Reset Assessment?</h3>
         <p className="type-body mb-4" style={{ color: 'var(--color-text-secondary)' }}>This will clear all data for {framework.name}. This cannot be undone.</p>
         <div className="flex gap-2 justify-end">
@@ -219,7 +219,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
         </div>
       </Modal>
 
-      <Modal open={showFrameworkConfig} onClose={() => setShowFrameworkConfig(false)}>
+      <Modal open={showFrameworkConfig} onClose={() => setShowFrameworkConfig(false)} label="Configure frameworks">
         <h3 className="font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>Configure Frameworks</h3>
         <p className="type-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>Choose which frameworks appear in the selector and cross-map. Assessment data is preserved when a framework is hidden.</p>
         <div className="space-y-1.5 mb-4">

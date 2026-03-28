@@ -141,7 +141,7 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
                 <td className="px-3 py-2 text-center">
                   <span className="inline-flex items-center gap-1" title={row.planText || undefined}>
                     {row.hasPlan ? <span style={{ color: 'var(--color-success)' }}>Yes</span> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
-                    {row.compensating && <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#4f46e5' }} title="Compensating control" />}
+                    {row.compensating && <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-indigo)' }} title="Compensating control" />}
                   </span>
                 </td>
               </tr>
@@ -154,7 +154,7 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
       <div className="sm:hidden space-y-2">
         {filtered.length === 0 ? (
           <div className="rounded-xl p-6 text-center" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
-            <Search className="w-6 h-6 mx-auto mb-2" style={{ color: 'var(--color-text-muted)' }} />
+            <Search className="w-6 h-6 mx-auto mb-2" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} />
             <p className="type-sm" style={{ color: 'var(--color-text-muted)' }}>No controls match your filters.</p>
           </div>
         ) : filtered.map(row => (
@@ -176,7 +176,7 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
               <span className={`type-2xs px-2 py-0.5 rounded-full ${MATURITY_COLORS[row.maturity]}`}>{MATURITY_LABELS[row.maturity]}</span>
               <span className={`type-2xs px-2 py-0.5 rounded-full ${PRIORITY_COLORS[row.priority]}`}>{PRIORITY_LABELS[row.priority]}</span>
               {row.hasPlan && <span className="type-2xs" style={{ color: 'var(--color-success)' }}>Has plan</span>}
-              {row.compensating && <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#4f46e5' }} title="Compensating control" />}
+              {row.compensating && <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-indigo)' }} title="Compensating control" />}
             </div>
           </button>
         ))}
@@ -185,7 +185,7 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
       {/* Desktop empty state */}
       {filtered.length === 0 && (
         <div className="hidden sm:block rounded-xl p-6 text-center" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
-          <Search className="w-6 h-6 mx-auto mb-2" style={{ color: 'var(--color-text-muted)' }} />
+          <Search className="w-6 h-6 mx-auto mb-2" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} />
           <p className="type-sm" style={{ color: 'var(--color-text-muted)' }}>No controls match your filters. Try broadening your criteria.</p>
         </div>
       )}

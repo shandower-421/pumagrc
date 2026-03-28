@@ -80,7 +80,7 @@ export function DashboardView() {
       {/* Empty state */}
       {stats.assessed === 0 && (
         <div className="rounded-xl p-8 text-center mb-6" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
-          <ClipboardList className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--color-accent)' }} />
+          <ClipboardList className="w-8 h-8 mx-auto mb-3" aria-hidden="true" style={{ color: 'var(--color-accent)' }} />
           <p className="type-body font-medium mb-1" style={{ color: 'var(--color-text-primary)' }}>Start your assessment</p>
           <p className="type-sm mb-1" style={{ color: 'var(--color-text-muted)', maxWidth: '360px', margin: '0 auto' }}>
             Pick a category from the sidebar to begin assessing controls. Your dashboard will populate as you go.
@@ -148,8 +148,8 @@ export function DashboardView() {
 
       {/* Secondary stats */}
       {stats.compensating > 0 && (
-        <div className="p-3 rounded-lg inline-flex items-center gap-2 type-sm" style={{ background: 'rgba(79,70,229,0.05)', border: '1px solid rgba(79,70,229,0.12)', color: '#4f46e5' }}>
-          <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: '#4f46e5' }} />
+        <div className="p-3 rounded-lg inline-flex items-center gap-2 type-sm" style={{ background: 'var(--color-indigo-dim)', border: '1px solid var(--color-indigo-border)', color: 'var(--color-indigo)' }}>
+          <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-indigo)' }} />
           {stats.compensating} compensating {stats.compensating === 1 ? 'control' : 'controls'}
         </div>
       )}

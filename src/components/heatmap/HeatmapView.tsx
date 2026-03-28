@@ -5,14 +5,11 @@ import { useFramework } from '../../store/framework-context'
 import { MaturityLevel, MATURITY_LABELS, MATURITY_HEX, PRIORITY_LABELS, getFunctionColors } from '../../types/assessment'
 import { AssessmentModal } from '../cross-map/AssessmentModal'
 
-const MATURITY_LEGEND: { level: MaturityLevel; label: string; color: string }[] = [
-  { level: MaturityLevel.NotAssessed, label: 'Not Assessed', color: '#cbd5e1' },
-  { level: MaturityLevel.AdHoc, label: 'Ad-Hoc', color: '#ef4444' },
-  { level: MaturityLevel.Repeatable, label: 'Repeatable', color: '#f59e0b' },
-  { level: MaturityLevel.Defined, label: 'Defined', color: '#eab308' },
-  { level: MaturityLevel.Managed, label: 'Managed', color: '#0284c7' },
-  { level: MaturityLevel.Optimized, label: 'Optimized', color: '#059669' },
-]
+const MATURITY_LEGEND = Object.values(MaturityLevel).map(level => ({
+  level,
+  label: MATURITY_LABELS[level],
+  color: MATURITY_HEX[level],
+}))
 
 interface TooltipData {
   id: string
@@ -81,7 +78,7 @@ export function HeatmapView({ onNavigate }: { onNavigate: (path: string) => void
 
       {assessedCount === 0 && (
         <div className="rounded-xl p-6 text-center mb-4" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
-          <Grid3x3 className="w-7 h-7 mx-auto mb-2" style={{ color: 'var(--color-accent)' }} />
+          <Grid3x3 className="w-7 h-7 mx-auto mb-2" aria-hidden="true" style={{ color: 'var(--color-accent)' }} />
           <p className="type-body font-medium mb-1" style={{ color: 'var(--color-text-primary)' }}>Your heatmap is empty</p>
           <p className="type-sm" style={{ color: 'var(--color-text-muted)', maxWidth: '340px', margin: '0 auto' }}>Click any cell below to assess a control, or start from a category in the sidebar. Colors will appear as you rate maturity levels.</p>
         </div>
@@ -164,7 +161,7 @@ export function HeatmapView({ onNavigate }: { onNavigate: (path: string) => void
 
         {/* Enhanced tooltip */}
         {tooltip && (
-          <div className="fixed z-50 rounded-lg pointer-events-none animate-tooltip-in" style={{ left: tooltip.x, top: tooltip.y, background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-bright)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', minWidth: '200px', maxWidth: '280px' }}>
+          <div role="tooltip" className="fixed z-50 rounded-lg pointer-events-none animate-tooltip-in" style={{ left: tooltip.x, top: tooltip.y, background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-bright)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', minWidth: '200px', maxWidth: '280px' }}>
             <div className="px-3 py-2">
               <div className="flex items-center gap-2 mb-1">
                 <span className="type-sm type-mono font-semibold" style={{ color: 'var(--color-accent)' }}>{tooltip.id}</span>

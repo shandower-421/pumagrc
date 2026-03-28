@@ -71,7 +71,7 @@ const badgeColors: Record<string, string> = {
 }
 
 const statBorders: Record<string, string> = { iso27001: 'rgba(37,99,235,0.2)', soc2: 'rgba(124,58,237,0.2)', cmmc: 'rgba(22,163,74,0.2)', pci_dss: 'rgba(217,119,6,0.2)', hipaa: 'rgba(225,29,72,0.2)' }
-const statColors: Record<string, string> = { iso27001: '#2563eb', soc2: '#7c3aed', cmmc: '#16a34a', pci_dss: '#d97706', hipaa: '#e11d48' }
+const statColors: Record<string, string> = { iso27001: 'var(--color-fw-iso)', soc2: 'var(--color-fw-soc2)', cmmc: 'var(--color-fw-cmmc)', pci_dss: 'var(--color-fw-pci)', hipaa: 'var(--color-fw-hipaa)' }
 
 const MAP_KEY_TO_FRAMEWORK_ID: Record<MapKey, string> = { iso27001: 'iso-27001', soc2: 'soc2', cmmc: 'cmmc', pci_dss: 'pci-dss', hipaa: 'hipaa' }
 
@@ -140,7 +140,7 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
       <div className="flex items-center justify-between mb-1.5">
         <h2 className="type-page-title" style={{ color: 'var(--color-text-primary)' }}>Cross-Framework <span style={{ color: 'var(--color-accent)' }}>Mapping</span></h2>
         <div className="flex items-center gap-2">
-          <ArrowRightLeft className="w-3.5 h-3.5" style={{ color: 'var(--color-text-muted)' }} />
+          <ArrowRightLeft className="w-3.5 h-3.5" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} />
           <select value={anchorFramework} onChange={e => { setAnchorFramework(e.target.value); setFilterFunction('all'); setFilterFramework('all') }} aria-label="Select anchor framework" className="type-sm font-medium rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle}>
             {mappableEnabled.map(fw => <option key={fw.id} value={fw.id}>Anchor: {fw.shortName}</option>)}
           </select>
@@ -200,7 +200,7 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
 
       <div className="flex gap-3 mb-4">
         <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: 'var(--color-text-muted)' }} />
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} />
           <input type="text" placeholder="Search controls..." value={search} onChange={e => setSearch(e.target.value)} aria-label="Search controls" className="w-full type-sm rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle} />
         </div>
         <select value={filterFunction} onChange={e => setFilterFunction(e.target.value)} className="type-sm rounded-lg px-2.5 py-1.5" style={selectStyle}>
@@ -212,7 +212,7 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
       <div className="flex items-center justify-between mb-3">
         <p className="type-2xs type-mono" style={{ color: 'var(--color-text-muted)' }}>{filteredRows.length} of {stats.total} controls</p>
         <button onClick={() => setShowStatus(s => !s)} className="inline-flex items-center gap-1.5 type-sm font-medium px-3 py-1.5 rounded-lg" style={{ color: showStatus ? '#fff' : 'var(--color-text-secondary)', background: showStatus ? 'var(--color-accent)' : 'var(--color-surface-raised)', border: `1px solid ${showStatus ? 'var(--color-accent)' : 'var(--color-border-default)'}` }}>
-          {showStatus ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+          {showStatus ? <Eye className="w-3.5 h-3.5" aria-hidden="true" /> : <EyeOff className="w-3.5 h-3.5" aria-hidden="true" />}
           {showStatus ? 'Maturity View' : 'Show Maturity'}
         </button>
       </div>

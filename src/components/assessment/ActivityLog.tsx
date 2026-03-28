@@ -50,16 +50,18 @@ export function ActivityLog({ entries, onAdd, onToggleResolved }: ActivityLogPro
           onChange={e => setDraft(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter') handleAdd() }}
           placeholder="Add a note..."
+          aria-label="Add a note"
           className="flex-1 type-sm rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 placeholder:opacity-30"
           style={{ background: 'var(--color-surface)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }}
         />
         <button
           onClick={handleAdd}
           disabled={!draft.trim()}
+          aria-label="Add note"
           className="px-2 py-1.5 rounded-lg disabled:opacity-30"
           style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent)', border: '1px solid var(--color-accent-glow)' }}
         >
-          <Plus className="w-3.5 h-3.5" />
+          <Plus className="w-3.5 h-3.5" aria-hidden="true" />
         </button>
       </div>
 
@@ -80,9 +82,9 @@ export function ActivityLog({ entries, onAdd, onToggleResolved }: ActivityLogPro
                   background: entry.resolved ? 'var(--color-success)' : 'transparent',
                   color: entry.resolved ? '#fff' : 'transparent',
                 }}
-                title={entry.resolved ? 'Mark as unresolved' : 'Mark as resolved'}
+                aria-label={entry.resolved ? 'Mark as unresolved' : 'Mark as resolved'}
               >
-                <Check className="w-2.5 h-2.5" />
+                <Check className="w-2.5 h-2.5" aria-hidden="true" />
               </button>
               <div className="flex-1 min-w-0">
                 <p
