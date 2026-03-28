@@ -147,6 +147,11 @@ export function HistoryView() {
               ))}
             </tbody>
           </table>
+          {((compareA && !compareB) || (!compareA && compareB)) && (
+            <div className="px-4 py-2 type-2xs" style={{ color: 'var(--color-text-muted)', background: 'var(--color-surface-tint)', borderTop: '1px solid var(--color-border-dim)' }}>
+              Select a second snapshot ({compareA ? 'B' : 'A'}) to compare changes.
+            </div>
+          )}
         </div>
       ) : (
         <div className="rounded-xl p-8 text-center mb-6" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>

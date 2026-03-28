@@ -264,6 +264,17 @@ button:active:not(:disabled),
   animation: content-in 200ms cubic-bezier(0.25, 1, 0.5, 1) both;
 }
 
+/* Milestone glow for 100% */
+@keyframes milestone-glow {
+  0% { text-shadow: none; }
+  50% { text-shadow: 0 0 6px rgba(5, 150, 105, 0.5); }
+  100% { text-shadow: none; }
+}
+
+.milestone-complete {
+  animation: milestone-glow 1.5s cubic-bezier(0.25, 1, 0.5, 1) 0.3s 1 both;
+}
+
 /* Chevron rotation */
 .chevron-transition {
   transition: transform 150ms cubic-bezier(0.25, 1, 0.5, 1);

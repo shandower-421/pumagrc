@@ -16,7 +16,7 @@ const PRIORITY_WEIGHT: Record<Priority, number> = {
 
 interface GapRow {
   id: string; description: string; functionId: string; functionName: string; categoryId: string
-  maturity: MaturityLevel; priority: Priority; gapScore: number; hasPlan: boolean; compensating: boolean
+  maturity: MaturityLevel; priority: Priority; gapScore: number; hasPlan: boolean; planText: string; compensating: boolean
 }
 
 export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => void }) {
@@ -40,7 +40,7 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
           return {
             id: sub.id, description: sub.description, functionId: fn.id, functionName: fn.name, categoryId: cat.id,
             maturity: data?.maturity || MaturityLevel.NotAssessed, priority: data?.priority || Priority.NotSet,
-            gapScore: (5 - maturityScore) * (priorityScore + 1), hasPlan: (data?.plan || '').trim().length > 0, compensating: data?.compensating || false,
+            gapScore: (5 - maturityScore) * (priorityScore + 1), hasPlan: (data?.plan || '').trim().length > 0, planText: (data?.plan || '').trim(), compensating: data?.compensating || false,
           }
         })
       )
@@ -130,7 +130,7 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
           <tbody>
             {filtered.map(row => (
               <tr key={row.id} className="cursor-pointer hover:opacity-80" style={{ ...getRowStyle(row), borderBottom: '1px solid var(--color-border-dim)' }} onClick={() => setModalControl({ id: row.id, description: row.description })} onKeyDown={e => { if (e.key === 'Enter') setModalControl({ id: row.id, description: row.description }) }} tabIndex={0} role="button" aria-label={`${row.id}: ${row.description}, maturity ${MATURITY_LABELS[row.maturity]}, priority ${PRIORITY_LABELS[row.priority]}`}>
-                <td className="px-3 py-2 type-mono font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{row.id}</td>
+                <td className="px-3 py-2 type-mono font-semibold whitespace-nowrap" style={{ color: 'var(--color-text-secondary)' }}>{row.id}</td>
                 <td className="px-3 py-2 max-w-md truncate" style={{ color: 'var(--color-text-muted)' }}>{row.description}</td>
                 <td className="px-3 py-2">
                   <span className={`type-2xs px-1.5 py-0.5 rounded type-mono font-medium ${functionColors[row.functionId]?.bg || 'bg-slate-600'} text-white`}>{row.functionId}</span>
@@ -139,7 +139,7 @@ export function GapAnalysisView({ onNavigate }: { onNavigate: (path: string) => 
                 <td className="px-3 py-2 text-center"><span className={`type-2xs px-2 py-0.5 rounded-full ${PRIORITY_COLORS[row.priority]}`}>{PRIORITY_LABELS[row.priority]}</span></td>
                 <td className="px-3 py-2 text-center type-mono font-semibold" style={{ color: row.gapScore >= 20 ? 'var(--color-danger)' : 'var(--color-text-secondary)' }}>{row.gapScore}</td>
                 <td className="px-3 py-2 text-center">
-                  <span className="inline-flex items-center gap-1">
+                  <span className="inline-flex items-center gap-1" title={row.planText || undefined}>
                     {row.hasPlan ? <span style={{ color: 'var(--color-success)' }}>Yes</span> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
                     {row.compensating && <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#4f46e5' }} title="Compensating control" />}
                   </span>

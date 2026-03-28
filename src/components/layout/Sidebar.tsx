@@ -151,7 +151,7 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
                     <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${colors.bg}`} aria-hidden="true" />
                     <span className="truncate">{fn.id} — {fn.name}</span>
                   </div>
-                  <span className="type-2xs type-mono shrink-0 ml-1" aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : pct > 0 && pct < 50 ? 'var(--color-warning)' : 'var(--color-text-muted)' }}>{pct}%</span>
+                  <span className={`type-2xs type-mono shrink-0 ml-1 ${pct === 100 ? 'milestone-complete' : ''}`} aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : pct > 0 && pct < 50 ? 'var(--color-warning)' : 'var(--color-text-muted)' }}>{pct}%</span>
                 </button>
                 {expanded[fn.id] && (
                   <div className="ml-3 pl-3 animate-content-in" style={{ borderLeft: '1px solid var(--color-border-dim)' }} role="group" aria-label={`${fn.name} categories`}>

@@ -61,8 +61,18 @@ export function CategoryView({ categoryId }: CategoryViewProps) {
           {category.id} — {category.name}
         </h2>
         <div className="flex items-center gap-3 mt-1">
-          <p className="type-mono-sm" style={{ color: 'var(--color-text-muted)' }}>{assessed}/{category.subcategories.length} assessed</p>
-          <span className="type-2xs hidden sm:inline" style={{ color: 'var(--color-text-muted)' }}>J/K to navigate</span>
+          <p className="type-mono-sm" style={{ color: assessed === category.subcategories.length ? 'var(--color-success)' : 'var(--color-text-muted)' }}>
+            {assessed}/{category.subcategories.length} assessed
+            {assessed === category.subcategories.length && ' — Complete'}
+          </p>
+          <span className="type-2xs hidden sm:inline-flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}>
+            <kbd className="type-2xs px-1 py-0.5 rounded" style={{ background: 'var(--color-surface-tint)', border: '1px solid var(--color-border-dim)', fontFamily: 'var(--font-mono)' }}>J</kbd>
+            <kbd className="type-2xs px-1 py-0.5 rounded" style={{ background: 'var(--color-surface-tint)', border: '1px solid var(--color-border-dim)', fontFamily: 'var(--font-mono)' }}>K</kbd>
+            to navigate
+          </span>
+        </div>
+        <div className="mt-2 h-1 rounded-full overflow-hidden" style={{ background: 'var(--color-border-dim)', maxWidth: '280px' }}>
+          <div className={`h-full rounded-full ${assessed === category.subcategories.length ? 'animate-bar-fill shimmer-bar' : 'animate-bar-fill'}`} style={{ width: `${Math.round((assessed / category.subcategories.length) * 100)}%`, background: assessed === category.subcategories.length ? 'var(--color-success)' : 'var(--color-accent)' }} />
         </div>
       </div>
 

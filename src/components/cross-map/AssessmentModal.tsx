@@ -114,8 +114,15 @@ export function AssessmentModal({ controlId, frameworkId, frameworkName, descrip
             )
           })}
         </div>
-        <p className="type-2xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-          {MATURITY_LABELS[data.maturity]} — {MATURITY_DESCRIPTIONS[data.maturity]}
+        <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
+          {MATURITY_LEVELS.map((level, i) => (
+            <span key={level} className="type-2xs" style={{ color: data.maturity === level ? 'var(--color-text-primary)' : 'var(--color-text-muted)', fontWeight: data.maturity === level ? 600 : 400, opacity: data.maturity === level ? 1 : 0.6 }}>
+              {i === 0 ? 'N/A' : i}: {MATURITY_LABELS[level]}
+            </span>
+          ))}
+        </div>
+        <p className="type-2xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
+          {MATURITY_DESCRIPTIONS[data.maturity]}
         </p>
       </div>
 
