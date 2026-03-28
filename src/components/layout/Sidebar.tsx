@@ -92,18 +92,28 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
 
       {/* Framework selector */}
       <div className="px-3 py-3" style={{ borderBottom: '1px solid var(--color-border-dim)' }}>
-        <label htmlFor="framework-select" className="block type-label mb-1.5 px-1" style={{ color: 'var(--color-text-muted)' }}>Framework</label>
-        <select
-          id="framework-select"
-          value={framework.id}
-          onChange={e => handleFrameworkChange(e.target.value)}
-          className="w-full type-sm font-medium rounded-lg px-3 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
-          style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }}
-        >
-          {enabledFrameworks.map(fw => (
-            <option key={fw.id} value={fw.id}>{fw.name}</option>
-          ))}
-        </select>
+        <p className="type-label mb-1.5 px-1" style={{ color: 'var(--color-text-muted)' }} id="fw-group-label">Framework</p>
+        <div role="radiogroup" aria-labelledby="fw-group-label" className="space-y-0.5">
+          {enabledFrameworks.map(fw => {
+            const isActive = framework.id === fw.id
+            return (
+              <button
+                key={fw.id}
+                role="radio"
+                aria-checked={isActive}
+                onClick={() => handleFrameworkChange(fw.id)}
+                className="w-full text-left px-3 py-1.5 type-sm font-medium rounded-md flex items-center gap-2"
+                style={{
+                  color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                  background: isActive ? 'var(--color-accent-dim)' : undefined,
+                  borderLeft: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
+                }}
+              >
+                {fw.shortName}
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       <nav className="flex-1 overflow-y-auto py-2" aria-label="Main navigation">
