@@ -12,7 +12,7 @@ export function CategoryView({ categoryId }: CategoryViewProps) {
   const category = fn?.categories.find(c => c.id === categoryId)
 
   if (!fn || !category) {
-    return <div className="p-8 text-slate-500">Category not found.</div>
+    return <div className="p-8" style={{ color: 'var(--color-text-muted)' }}>Category not found.</div>
   }
 
   const functionColors = getFunctionColors(framework)
@@ -20,15 +20,16 @@ export function CategoryView({ categoryId }: CategoryViewProps) {
   const cardColor = `${colors.light} ${colors.text}`
 
   return (
-    <div className="p-6 max-w-4xl">
+    <div className="p-4 sm:p-6 max-w-4xl">
       <div className="mb-6">
-        <div className="flex items-center gap-2 mb-1">
-          <span className={`text-xs font-semibold px-2 py-0.5 rounded ${colors.bg} text-white`}>
-            {fn.id} - {fn.name}
-          </span>
+        <div className="flex items-center gap-2 mb-2">
+          <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${colors.bg} text-white`}>{fn.id}</span>
+          <span className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>{fn.name}</span>
         </div>
-        <h2 className="text-xl font-semibold text-slate-900">{category.id} - {category.name}</h2>
-        <p className="text-sm text-slate-500 mt-1">{category.subcategories.length} controls</p>
+        <h2 className="text-xl font-light" style={{ color: 'var(--color-text-primary)', fontFamily: "'Instrument Serif', serif" }}>
+          {category.id} — {category.name}
+        </h2>
+        <p className="text-xs mt-1 font-mono" style={{ color: 'var(--color-text-muted)' }}>{category.subcategories.length} controls</p>
       </div>
 
       <div className="space-y-2">

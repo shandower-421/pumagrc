@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { ChevronDown, ChevronRight, Shield } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { ChevronDown, ChevronRight, Shield, LayoutDashboard, AlertTriangle, Grid3x3, Clock, GitCompare, Wrench } from 'lucide-react'
 import { useFramework } from '../../store/framework-context'
 import { useAssessment } from '../../store/assessment-store'
 import { MaturityLevel, getFunctionColors } from '../../types/assessment'
@@ -8,6 +8,15 @@ interface SidebarProps {
   currentPath: string
   onNavigate: (path: string) => void
 }
+
+const NAV_ITEMS = [
+  { path: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { path: 'gap-analysis', label: 'Gap Analysis', icon: AlertTriangle },
+  { path: 'heatmap', label: 'Heatmap', icon: Grid3x3 },
+  { path: 'history', label: 'History', icon: Clock },
+  { path: 'cross-map', label: 'Cross-Map', icon: GitCompare },
+  { path: 'custom-frameworks', label: 'Custom Frameworks', icon: Wrench },
+]
 
 export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
   const { framework, setFramework, allFrameworks } = useFramework()
@@ -19,6 +28,19 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
   })
 
   const functionColors = getFunctionColors(framework)
+
+  // Update document title on navigation
+  useEffect(() => {
+    const viewName = currentPath === 'dashboard' ? 'Dashboard'
+      : currentPath === 'gap-analysis' ? 'Gap Analysis'
+      : currentPath === 'heatmap' ? 'Heatmap'
+      : currentPath === 'history' ? 'History'
+      : currentPath === 'cross-map' ? 'Cross-Map'
+      : currentPath === 'custom-frameworks' ? 'Custom Frameworks'
+      : currentPath.startsWith('category/') ? currentPath.replace('category/', '')
+      : 'Dashboard'
+    document.title = `${viewName} — PumaGRC`
+  }, [currentPath])
 
   const toggleExpanded = (id: string) => {
     setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
@@ -51,7 +73,6 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
   const handleFrameworkChange = (id: string) => {
     setFramework(id)
     onNavigate('dashboard')
-    // Reset expanded state for new framework
     const newExpanded: Record<string, boolean> = {}
     const newFw = allFrameworks.find(f => f.id === id)
     newFw?.data.forEach(fn => { newExpanded[fn.id] = true })
@@ -59,26 +80,34 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
   }
 
   return (
-    <aside className="w-72 bg-slate-900 text-white flex flex-col h-screen overflow-hidden">
-      <div
-        className="p-4 border-b border-slate-700 cursor-pointer hover:bg-slate-800 transition-colors"
+    <aside className="w-72 flex flex-col h-screen overflow-hidden border-r" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border-dim)' }} aria-label="Sidebar">
+      {/* Logo — accessible button */}
+      <button
+        className="px-5 py-4 text-left w-full"
         onClick={() => onNavigate('dashboard')}
+        style={{ borderBottom: '1px solid var(--color-border-dim)' }}
+        aria-label="PumaGRC — Navigate to dashboard"
       >
-        <div className="flex items-center gap-2">
-          <Shield className="w-6 h-6 text-blue-400" />
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-accent-dim)', border: '1px solid var(--color-accent-glow)' }}>
+            <Shield className="w-4 h-4" aria-hidden="true" style={{ color: 'var(--color-accent)' }} />
+          </div>
           <div>
-            <h1 className="text-base font-semibold tracking-tight">PumaGRC</h1>
-            <p className="text-xs text-slate-400">Compliance Self-Assessment</p>
+            <span className="block text-sm font-semibold tracking-wide" style={{ color: 'var(--color-text-primary)', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.1em' }}>PUMAGRC</span>
+            <span className="block text-[10px] uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>Compliance Platform</span>
           </div>
         </div>
-      </div>
+      </button>
 
       {/* Framework selector */}
-      <div className="px-3 py-2 border-b border-slate-700">
+      <div className="px-3 py-3" style={{ borderBottom: '1px solid var(--color-border-dim)' }}>
+        <label htmlFor="framework-select" className="block text-[10px] uppercase tracking-widest mb-1.5 px-1" style={{ color: 'var(--color-text-muted)' }}>Framework</label>
         <select
+          id="framework-select"
           value={framework.id}
           onChange={e => handleFrameworkChange(e.target.value)}
-          className="w-full text-sm bg-slate-800 text-white border border-slate-600 rounded-md px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full text-xs font-medium rounded-lg px-3 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }}
         >
           {allFrameworks.map(fw => (
             <option key={fw.id} value={fw.id}>{fw.name}</option>
@@ -86,51 +115,56 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
         </select>
       </div>
 
-      <nav className="flex-1 overflow-y-auto py-2">
-        <button
-          onClick={() => onNavigate('dashboard')}
-          className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-            currentPath === 'dashboard' ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-800'
-          }`}
-        >
-          Dashboard
-        </button>
-        <button
-          onClick={() => onNavigate('gap-analysis')}
-          className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-            currentPath === 'gap-analysis' ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-800'
-          }`}
-        >
-          Gap Analysis
-        </button>
-        <button
-          onClick={() => onNavigate('cross-map')}
-          className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-            currentPath === 'cross-map' ? 'bg-slate-700 text-white' : 'text-slate-300 hover:bg-slate-800'
-          }`}
-        >
-          Cross-Map
-        </button>
+      <nav className="flex-1 overflow-y-auto py-2" aria-label="Main navigation">
+        {/* Nav links */}
+        <div className="px-2 space-y-0.5">
+          {NAV_ITEMS.map(item => {
+            const isActive = currentPath === item.path
+            const Icon = item.icon
+            return (
+              <button
+                key={item.path}
+                onClick={() => onNavigate(item.path)}
+                className="w-full text-left px-3 py-2 text-xs font-medium rounded-lg flex items-center gap-2.5"
+                aria-current={isActive ? 'page' : undefined}
+                style={{
+                  color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                  background: isActive ? 'var(--color-accent-dim)' : 'transparent',
+                  border: isActive ? '1px solid rgba(34, 211, 238, 0.15)' : '1px solid transparent',
+                }}
+              >
+                <Icon className="w-3.5 h-3.5" aria-hidden="true" style={{ opacity: isActive ? 1 : 0.5 }} />
+                {item.label}
+              </button>
+            )
+          })}
+        </div>
 
-        <div className="border-t border-slate-700 mt-2 pt-2">
+        {/* Framework tree */}
+        <div className="mt-3 pt-3 px-2" style={{ borderTop: '1px solid var(--color-border-dim)' }}>
+          <p className="text-[10px] uppercase tracking-widest px-2 mb-2" style={{ color: 'var(--color-text-muted)' }} aria-hidden="true">Controls</p>
           {framework.data.map(fn => {
             const colors = functionColors[fn.id]
             const progress = getFunctionProgress(fn.id)
+            const pct = progress.total > 0 ? Math.round((progress.assessed / progress.total) * 100) : 0
             return (
-              <div key={fn.id}>
+              <div key={fn.id} className="mb-0.5">
                 <button
                   onClick={() => toggleExpanded(fn.id)}
-                  className="w-full text-left px-4 py-2 text-sm font-medium hover:bg-slate-800 transition-colors flex items-center justify-between"
+                  aria-expanded={expanded[fn.id]}
+                  aria-label={`${fn.id} ${fn.name}, ${pct}% assessed`}
+                  className="w-full text-left px-2 py-1.5 text-xs font-medium rounded-md flex items-center justify-between group"
+                  style={{ color: 'var(--color-text-secondary)' }}
                 >
-                  <div className="flex items-center gap-2">
-                    {expanded[fn.id] ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-                    <span className={`inline-block w-2 h-2 rounded-full ${colors.bg}`} />
-                    <span>{fn.id} - {fn.name}</span>
+                  <div className="flex items-center gap-2 min-w-0">
+                    {expanded[fn.id] ? <ChevronDown className="w-3 h-3 shrink-0" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} /> : <ChevronRight className="w-3 h-3 shrink-0" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} />}
+                    <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${colors.bg}`} aria-hidden="true" />
+                    <span className="truncate">{fn.id} — {fn.name}</span>
                   </div>
-                  <span className="text-xs text-slate-500">{progress.assessed}/{progress.total}</span>
+                  <span className="text-[10px] font-mono shrink-0 ml-1" aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : 'var(--color-text-muted)' }}>{pct}%</span>
                 </button>
                 {expanded[fn.id] && (
-                  <div className="ml-4">
+                  <div className="ml-3 pl-3" style={{ borderLeft: '1px solid var(--color-border-dim)' }} role="group" aria-label={`${fn.name} categories`}>
                     {fn.categories.map(cat => {
                       const catProgress = getCategoryProgress(cat.id)
                       const isActive = currentPath === `category/${cat.id}`
@@ -138,12 +172,15 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
                         <button
                           key={cat.id}
                           onClick={() => onNavigate(`category/${cat.id}`)}
-                          className={`w-full text-left px-4 py-1.5 text-xs transition-colors flex items-center justify-between ${
-                            isActive ? 'bg-slate-700 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-300'
-                          }`}
+                          aria-current={isActive ? 'page' : undefined}
+                          className="w-full text-left px-2 py-1 text-[11px] rounded flex items-center justify-between"
+                          style={{
+                            color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
+                            background: isActive ? 'var(--color-accent-dim)' : 'transparent',
+                          }}
                         >
                           <span className="truncate">{cat.id} {cat.name}</span>
-                          <span className="text-slate-500 ml-1 shrink-0">{catProgress.assessed}/{catProgress.total}</span>
+                          <span className="text-[10px] font-mono shrink-0 ml-1" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }}>{catProgress.assessed}/{catProgress.total}</span>
                         </button>
                       )
                     })}

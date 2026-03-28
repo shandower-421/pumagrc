@@ -1,199 +1,172 @@
 import { useMemo, useState } from 'react'
-import { Search } from 'lucide-react'
+import { Search, ArrowRightLeft } from 'lucide-react'
 import { CROSS_MAP } from '../../data/cross-map'
 import { FRAMEWORKS } from '../../data/frameworks'
 
-const FRAMEWORK_INFO: Record<string, { label: string; key: 'iso27001' | 'soc2' | 'cmmc' }> = {
+type MapKey = 'iso27001' | 'soc2' | 'cmmc'
+
+const FRAMEWORK_MAP: Record<string, { label: string; key: MapKey }> = {
+  'nist-csf-2': { label: 'NIST CSF 2.0', key: 'iso27001' },
   'iso-27001': { label: 'ISO 27001:2022', key: 'iso27001' },
   'soc2': { label: 'SOC 2 (TSC)', key: 'soc2' },
   'cmmc': { label: 'CMMC 2.0', key: 'cmmc' },
 }
 
-const NIST_FRAMEWORK = FRAMEWORKS.find(f => f.id === 'nist-csf-2')!
+const MAPPABLE_FRAMEWORKS = FRAMEWORKS.filter(f => FRAMEWORK_MAP[f.id])
 
-function getNistDescription(id: string): string {
-  for (const fn of NIST_FRAMEWORK.data) {
-    for (const cat of fn.categories) {
-      for (const sub of cat.subcategories) {
-        if (sub.id === id) return sub.description
-      }
-    }
-  }
+function getDescription(frameworkId: string, controlId: string): string {
+  const fw = FRAMEWORKS.find(f => f.id === frameworkId)
+  if (!fw) return ''
+  for (const fn of fw.data) for (const cat of fn.categories) for (const sub of cat.subcategories) if (sub.id === controlId) return sub.description
   return ''
 }
 
-function getNistFunction(id: string): string {
-  for (const fn of NIST_FRAMEWORK.data) {
-    for (const cat of fn.categories) {
-      for (const sub of cat.subcategories) {
-        if (sub.id === id) return fn.id
-      }
-    }
-  }
+function getFunctionId(frameworkId: string, controlId: string): string {
+  const fw = FRAMEWORKS.find(f => f.id === frameworkId)
+  if (!fw) return ''
+  for (const fn of fw.data) for (const cat of fn.categories) for (const sub of cat.subcategories) if (sub.id === controlId) return fn.id
   return ''
 }
+
+interface ReverseRow { id: string; description: string; functionId: string; mappedNist: string[]; mappedOther: Record<MapKey, string[]> }
+
+function buildReverseMap(anchorId: string): ReverseRow[] {
+  const anchorKey = FRAMEWORK_MAP[anchorId]?.key
+  if (!anchorKey || anchorId === 'nist-csf-2') return []
+  const fw = FRAMEWORKS.find(f => f.id === anchorId)
+  if (!fw) return []
+  const allControls = fw.data.flatMap(fn => fn.categories.flatMap(cat => cat.subcategories.map(sub => ({ ...sub, functionId: fn.id }))))
+  return allControls.map(control => {
+    const mappedNist = CROSS_MAP.filter(m => m[anchorKey].includes(control.id)).map(m => m.nist)
+    const mappedOther: Record<MapKey, string[]> = { iso27001: [], soc2: [], cmmc: [] }
+    const otherKeys = (['iso27001', 'soc2', 'cmmc'] as MapKey[]).filter(k => k !== anchorKey)
+    for (const nistId of mappedNist) {
+      const mapping = CROSS_MAP.find(m => m.nist === nistId)
+      if (mapping) for (const key of otherKeys) for (const id of mapping[key]) if (!mappedOther[key].includes(id)) mappedOther[key].push(id)
+    }
+    return { id: control.id, description: control.description, functionId: control.functionId, mappedNist, mappedOther }
+  })
+}
+
+const badgeColors: Record<string, string> = {
+  iso27001: 'bg-blue-900/50 text-blue-300 border border-blue-800/50',
+  soc2: 'bg-purple-900/50 text-purple-300 border border-purple-800/50',
+  cmmc: 'bg-green-900/50 text-green-300 border border-green-800/50',
+  nist: 'bg-slate-800/50 text-slate-300 border border-slate-700/50',
+}
+
+const statBorders: Record<string, string> = { iso27001: 'rgba(59,130,246,0.3)', soc2: 'rgba(168,85,247,0.3)', cmmc: 'rgba(34,197,94,0.3)' }
+const statColors: Record<string, string> = { iso27001: '#60a5fa', soc2: '#a78bfa', cmmc: '#4ade80' }
 
 export function CrossMapView() {
   const [search, setSearch] = useState('')
+  const [anchorFramework, setAnchorFramework] = useState('nist-csf-2')
   const [filterFunction, setFilterFunction] = useState<string>('all')
   const [filterFramework, setFilterFramework] = useState<string>('all')
 
-  const rows = useMemo(() => {
-    let data = CROSS_MAP.map(m => ({
-      ...m,
-      description: getNistDescription(m.nist),
-      functionId: getNistFunction(m.nist),
-    }))
+  const isNistAnchor = anchorFramework === 'nist-csf-2'
+  const anchorFw = FRAMEWORKS.find(f => f.id === anchorFramework)
+  const targetKeys = (['iso27001', 'soc2', 'cmmc'] as MapKey[]).filter(k => isNistAnchor || k !== FRAMEWORK_MAP[anchorFramework]?.key)
+  const targetLabels: Record<MapKey, string> = { iso27001: 'ISO 27001', soc2: 'SOC 2', cmmc: 'CMMC' }
 
-    if (filterFunction !== 'all') {
-      data = data.filter(r => r.functionId === filterFunction)
-    }
+  const forwardRows = useMemo(() => isNistAnchor ? CROSS_MAP.map(m => ({ ...m, id: m.nist, description: getDescription('nist-csf-2', m.nist), functionId: getFunctionId('nist-csf-2', m.nist) })) : [], [isNistAnchor])
+  const reverseRows = useMemo(() => isNistAnchor ? [] : buildReverseMap(anchorFramework), [isNistAnchor, anchorFramework])
+  const rows = isNistAnchor ? forwardRows : reverseRows
 
-    if (filterFramework !== 'all') {
-      const key = FRAMEWORK_INFO[filterFramework]?.key
-      if (key) {
-        data = data.filter(r => r[key].length > 0)
-      }
-    }
-
-    if (search.trim()) {
-      const q = search.toLowerCase()
-      data = data.filter(r =>
-        r.nist.toLowerCase().includes(q) ||
-        r.description.toLowerCase().includes(q) ||
-        r.iso27001.some(id => id.toLowerCase().includes(q)) ||
-        r.soc2.some(id => id.toLowerCase().includes(q)) ||
-        r.cmmc.some(id => id.toLowerCase().includes(q))
-      )
-    }
-
+  const filteredRows = useMemo(() => {
+    let data = rows
+    if (filterFunction !== 'all') data = data.filter(r => r.functionId === filterFunction)
+    if (filterFramework !== 'all' && isNistAnchor) { const key = FRAMEWORK_MAP[filterFramework]?.key; if (key) data = data.filter(r => (r as any)[key]?.length > 0) }
+    if (search.trim()) { const q = search.toLowerCase(); data = data.filter(r => r.id.toLowerCase().includes(q) || r.description.toLowerCase().includes(q)) }
     return data
-  }, [search, filterFunction, filterFramework])
+  }, [rows, filterFunction, filterFramework, search, isNistAnchor])
 
   const stats = useMemo(() => {
-    const total = CROSS_MAP.length
-    const isoMapped = CROSS_MAP.filter(m => m.iso27001.length > 0).length
-    const soc2Mapped = CROSS_MAP.filter(m => m.soc2.length > 0).length
-    const cmmcMapped = CROSS_MAP.filter(m => m.cmmc.length > 0).length
-    return { total, isoMapped, soc2Mapped, cmmcMapped }
-  }, [])
+    const total = rows.length
+    if (isNistAnchor) return { total, iso: forwardRows.filter(r => r.iso27001.length > 0).length, soc2: forwardRows.filter(r => r.soc2.length > 0).length, cmmc: forwardRows.filter(r => r.cmmc.length > 0).length }
+    return { total, nist: reverseRows.filter(r => r.mappedNist.length > 0).length }
+  }, [rows, isNistAnchor, forwardRows, reverseRows])
+
+  const selectStyle = { background: 'var(--color-surface-raised)', color: 'var(--color-text-secondary)', border: '1px solid var(--color-border-default)' }
 
   return (
-    <div className="p-6 max-w-7xl">
-      <h2 className="text-xl font-semibold text-slate-900 mb-1">Cross-Framework Mapping</h2>
-      <p className="text-sm text-slate-500 mb-4">
-        Control mappings between NIST CSF 2.0 and other frameworks. Shows which controls satisfy requirements across multiple standards.
+    <div className="p-4 sm:p-6 max-w-7xl">
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-xl font-light" style={{ color: 'var(--color-text-primary)', fontFamily: "'Instrument Serif', serif" }}>Cross-Framework <span style={{ color: 'var(--color-accent)' }}>Mapping</span></h2>
+        <div className="flex items-center gap-2">
+          <ArrowRightLeft className="w-3.5 h-3.5" style={{ color: 'var(--color-text-muted)' }} />
+          <select value={anchorFramework} onChange={e => { setAnchorFramework(e.target.value); setFilterFunction('all'); setFilterFramework('all') }} aria-label="Select anchor framework" className="text-xs font-medium rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle}>
+            {MAPPABLE_FRAMEWORKS.map(fw => <option key={fw.id} value={fw.id}>Anchor: {fw.shortName}</option>)}
+          </select>
+        </div>
+      </div>
+      <p className="text-xs font-mono mb-4" style={{ color: 'var(--color-text-muted)' }}>
+        {isNistAnchor ? 'NIST CSF controls mapped to other frameworks' : `${anchorFw?.shortName} controls with reverse NIST and transitive mappings`}
       </p>
 
-      {/* Coverage Stats */}
-      <div className="grid grid-cols-4 gap-3 mb-6">
-        <div className="bg-white border border-slate-200 rounded-lg p-3">
-          <p className="text-xs font-medium text-slate-500 uppercase">NIST CSF Controls</p>
-          <p className="text-xl font-bold text-slate-900">{stats.total}</p>
+      <div className={`grid gap-3 mb-6 ${isNistAnchor ? 'grid-cols-4' : 'grid-cols-2'}`}>
+        <div className="p-3 rounded-xl" style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-border-dim)' }}>
+          <p className="text-[10px] font-mono font-medium uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>{anchorFw?.shortName} Controls</p>
+          <p className="text-xl font-light mt-1" style={{ color: 'var(--color-text-primary)', fontFamily: "'Instrument Serif', serif" }}>{stats.total}</p>
         </div>
-        <div className="bg-white border border-blue-200 rounded-lg p-3">
-          <p className="text-xs font-medium text-blue-600 uppercase">ISO 27001 Coverage</p>
-          <p className="text-xl font-bold text-blue-700">{Math.round((stats.isoMapped / stats.total) * 100)}%</p>
-          <p className="text-xs text-slate-400">{stats.isoMapped} of {stats.total} mapped</p>
-        </div>
-        <div className="bg-white border border-purple-200 rounded-lg p-3">
-          <p className="text-xs font-medium text-purple-600 uppercase">SOC 2 Coverage</p>
-          <p className="text-xl font-bold text-purple-700">{Math.round((stats.soc2Mapped / stats.total) * 100)}%</p>
-          <p className="text-xs text-slate-400">{stats.soc2Mapped} of {stats.total} mapped</p>
-        </div>
-        <div className="bg-white border border-green-200 rounded-lg p-3">
-          <p className="text-xs font-medium text-green-600 uppercase">CMMC Coverage</p>
-          <p className="text-xl font-bold text-green-700">{Math.round((stats.cmmcMapped / stats.total) * 100)}%</p>
-          <p className="text-xs text-slate-400">{stats.cmmcMapped} of {stats.total} mapped</p>
-        </div>
+        {isNistAnchor ? (
+          (['iso', 'soc2', 'cmmc'] as const).map(k => {
+            const key = k === 'iso' ? 'iso27001' : k
+            const val = (stats as any)[k]
+            return (
+              <div key={k} className="p-3 rounded-xl" style={{ background: 'var(--color-surface-card)', border: `1px solid ${statBorders[key]}` }}>
+                <p className="text-[10px] font-mono font-medium uppercase tracking-widest" style={{ color: statColors[key] }}>{targetLabels[key as MapKey]}</p>
+                <p className="text-xl font-light mt-1" style={{ color: statColors[key], fontFamily: "'Instrument Serif', serif" }}>{Math.round((val / stats.total) * 100)}%</p>
+                <p className="text-[10px] font-mono" style={{ color: 'var(--color-text-muted)' }}>{val} mapped</p>
+              </div>
+            )
+          })
+        ) : (
+          <div className="p-3 rounded-xl" style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-border-dim)' }}>
+            <p className="text-[10px] font-mono font-medium uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>Mapped to NIST</p>
+            <p className="text-xl font-light mt-1" style={{ color: 'var(--color-accent)', fontFamily: "'Instrument Serif', serif" }}>{Math.round(((stats as any).nist / stats.total) * 100)}%</p>
+          </div>
+        )}
       </div>
 
-      {/* Filters */}
       <div className="flex gap-3 mb-4">
         <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search controls..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full text-sm border border-slate-200 rounded-md pl-8 pr-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: 'var(--color-text-muted)' }} />
+          <input type="text" placeholder="Search controls..." value={search} onChange={e => setSearch(e.target.value)} aria-label="Search controls" className="w-full text-xs rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle} />
         </div>
-        <select
-          value={filterFunction}
-          onChange={e => setFilterFunction(e.target.value)}
-          className="text-sm border border-slate-200 rounded-md px-2.5 py-1.5 bg-white"
-        >
-          <option value="all">All NIST Functions</option>
-          {NIST_FRAMEWORK.data.map(fn => (
-            <option key={fn.id} value={fn.id}>{fn.id} - {fn.name}</option>
-          ))}
-        </select>
-        <select
-          value={filterFramework}
-          onChange={e => setFilterFramework(e.target.value)}
-          className="text-sm border border-slate-200 rounded-md px-2.5 py-1.5 bg-white"
-        >
-          <option value="all">All Frameworks</option>
-          <option value="iso-27001">Has ISO 27001 mapping</option>
-          <option value="soc2">Has SOC 2 mapping</option>
-          <option value="cmmc">Has CMMC mapping</option>
+        <select value={filterFunction} onChange={e => setFilterFunction(e.target.value)} className="text-xs rounded-lg px-2.5 py-1.5" style={selectStyle}>
+          <option value="all">All Domains</option>
+          {anchorFw?.data.map(fn => <option key={fn.id} value={fn.id}>{fn.id} — {fn.name}</option>)}
         </select>
       </div>
 
-      <p className="text-xs text-slate-400 mb-2">{rows.length} of {stats.total} controls shown</p>
+      <p className="text-[10px] font-mono mb-2" style={{ color: 'var(--color-text-muted)' }}>{filteredRows.length} of {stats.total} controls</p>
 
-      {/* Table */}
-      <div className="border border-slate-200 rounded-lg overflow-hidden overflow-x-auto">
-        <table className="w-full text-sm">
+      <div className="rounded-xl overflow-hidden overflow-x-auto" style={{ border: '1px solid var(--color-border-dim)' }}>
+        <table className="w-full text-xs">
           <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="text-left px-3 py-2 font-medium text-slate-600 w-20">NIST CSF</th>
-              <th className="text-left px-3 py-2 font-medium text-slate-600">Description</th>
-              <th className="text-left px-3 py-2 font-medium text-blue-600 w-40">ISO 27001</th>
-              <th className="text-left px-3 py-2 font-medium text-purple-600 w-36">SOC 2</th>
-              <th className="text-left px-3 py-2 font-medium text-green-600 w-44">CMMC</th>
+            <tr style={{ background: 'var(--color-surface-raised)', borderBottom: '1px solid var(--color-border-dim)' }}>
+              <th className="text-left px-3 py-2.5 font-medium w-24" style={{ color: 'var(--color-text-muted)' }}>{anchorFw?.shortName}</th>
+              <th className="text-left px-3 py-2.5 font-medium" style={{ color: 'var(--color-text-muted)' }}>Description</th>
+              {isNistAnchor ? targetKeys.map(k => <th key={k} className="text-left px-3 py-2.5 font-medium w-40" style={{ color: statColors[k] }}>{targetLabels[k]}</th>)
+                : <><th className="text-left px-3 py-2.5 font-medium w-40" style={{ color: 'var(--color-text-muted)' }}>NIST CSF</th>{targetKeys.map(k => <th key={k} className="text-left px-3 py-2.5 font-medium w-36" style={{ color: statColors[k] }}>{targetLabels[k]}</th>)}</>}
             </tr>
           </thead>
           <tbody>
-            {rows.map(row => (
-              <tr key={row.nist} className="border-b border-slate-100 hover:bg-slate-50">
-                <td className="px-3 py-2 font-mono text-xs font-semibold text-slate-700 whitespace-nowrap">{row.nist}</td>
-                <td className="px-3 py-2 text-slate-600 text-xs">{row.description}</td>
-                <td className="px-3 py-2">
-                  {row.iso27001.length > 0 ? (
-                    <div className="flex flex-wrap gap-1">
-                      {row.iso27001.map(id => (
-                        <span key={id} className="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-mono">{id}</span>
-                      ))}
-                    </div>
-                  ) : (
-                    <span className="text-slate-300 text-xs">—</span>
-                  )}
-                </td>
-                <td className="px-3 py-2">
-                  {row.soc2.length > 0 ? (
-                    <div className="flex flex-wrap gap-1">
-                      {row.soc2.map(id => (
-                        <span key={id} className="text-[10px] px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 font-mono">{id}</span>
-                      ))}
-                    </div>
-                  ) : (
-                    <span className="text-slate-300 text-xs">—</span>
-                  )}
-                </td>
-                <td className="px-3 py-2">
-                  {row.cmmc.length > 0 ? (
-                    <div className="flex flex-wrap gap-1">
-                      {row.cmmc.map(id => (
-                        <span key={id} className="text-[10px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-mono">{id}</span>
-                      ))}
-                    </div>
-                  ) : (
-                    <span className="text-slate-300 text-xs">—</span>
-                  )}
-                </td>
+            {filteredRows.map(row => (
+              <tr key={row.id} style={{ borderBottom: '1px solid var(--color-border-dim)' }} className="hover:opacity-80">
+                <td className="px-3 py-2 font-mono font-semibold whitespace-nowrap" style={{ color: 'var(--color-text-secondary)' }}>{row.id}</td>
+                <td className="px-3 py-2" style={{ color: 'var(--color-text-muted)' }}>{row.description}</td>
+                {isNistAnchor ? targetKeys.map(k => (
+                  <td key={k} className="px-3 py-2">
+                    {((row as any)[k] as string[])?.length > 0 ? <div className="flex flex-wrap gap-1">{((row as any)[k] as string[]).map((id: string, i: number) => <span key={`${k}-${i}`} className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${badgeColors[k]}`}>{id}</span>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
+                  </td>
+                )) : <>
+                  <td className="px-3 py-2">{(row as ReverseRow).mappedNist.length > 0 ? <div className="flex flex-wrap gap-1">{(row as ReverseRow).mappedNist.map((id, i) => <span key={`nist-${i}-${id}`} className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${badgeColors.nist}`}>{id}</span>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}</td>
+                  {targetKeys.map(k => (
+                    <td key={k} className="px-3 py-2">{(row as ReverseRow).mappedOther[k]?.length > 0 ? <div className="flex flex-wrap gap-1">{(row as ReverseRow).mappedOther[k].map((id, i) => <span key={`${k}-${i}`} className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${badgeColors[k]}`}>{id}</span>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}</td>
+                  ))}
+                </>}
               </tr>
             ))}
           </tbody>

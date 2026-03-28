@@ -5,21 +5,27 @@ import { useFramework } from '../../store/framework-context'
 import { MaturityLevel, Priority, MATURITY_LABELS, MATURITY_NUMERIC, getFunctionColors } from '../../types/assessment'
 
 const MATURITY_CHART_COLORS: Record<MaturityLevel, string> = {
-  [MaturityLevel.NotAssessed]: '#e5e7eb',
-  [MaturityLevel.AdHoc]: '#fca5a5',
-  [MaturityLevel.Repeatable]: '#fdba74',
-  [MaturityLevel.Defined]: '#fde047',
-  [MaturityLevel.Managed]: '#93c5fd',
-  [MaturityLevel.Optimized]: '#86efac',
+  [MaturityLevel.NotAssessed]: '#2a2d3a',
+  [MaturityLevel.AdHoc]: '#ef4444',
+  [MaturityLevel.Repeatable]: '#f97316',
+  [MaturityLevel.Defined]: '#eab308',
+  [MaturityLevel.Managed]: '#22d3ee',
+  [MaturityLevel.Optimized]: '#22c55e',
 }
 
 const PRIORITY_CHART_COLORS: Record<Priority, string> = {
-  [Priority.NotSet]: '#e5e7eb',
-  [Priority.Working]: '#93c5fd',
-  [Priority.Next]: '#c4b5fd',
-  [Priority.High]: '#fca5a5',
-  [Priority.Med]: '#fde047',
-  [Priority.Low]: '#d1d5db',
+  [Priority.NotSet]: '#2a2d3a',
+  [Priority.Working]: '#22d3ee',
+  [Priority.Next]: '#a78bfa',
+  [Priority.High]: '#ef4444',
+  [Priority.Med]: '#eab308',
+  [Priority.Low]: '#6b7280',
+}
+
+const cardStyle = {
+  background: 'var(--color-surface-card)',
+  border: '1px solid var(--color-border-dim)',
+  borderRadius: '12px',
 }
 
 export function DashboardView() {
@@ -33,11 +39,9 @@ export function DashboardView() {
     const assessed = entries.filter(e => e.maturity !== MaturityLevel.NotAssessed).length
     const withPlan = entries.filter(e => e.plan.trim().length > 0).length
     const highPriority = entries.filter(e => e.priority === Priority.High).length
-
     const avgMaturity = total > 0
       ? entries.reduce((sum, e) => sum + MATURITY_NUMERIC[e.maturity], 0) / total
       : 0
-
     return { total, assessed, withPlan, highPriority, avgMaturity }
   }, [assessment])
 
@@ -72,67 +76,79 @@ export function DashboardView() {
   const completionPct = Math.round((stats.assessed / stats.total) * 100)
 
   return (
-    <div className="p-6 max-w-6xl">
-      <h2 className="text-xl font-semibold text-slate-900 mb-1">{framework.name} Dashboard</h2>
-      <p className="text-sm text-slate-500 mb-6">{framework.description}</p>
+    <div className="p-4 sm:p-6 max-w-6xl">
+      {/* Title */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-light tracking-tight" style={{ color: 'var(--color-text-primary)', fontFamily: "'Instrument Serif', serif" }}>
+          {framework.name} <span style={{ color: 'var(--color-accent)' }}>Dashboard</span>
+        </h2>
+        <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>{framework.description}</p>
+      </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
-        <div className="bg-white border border-slate-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Completion</p>
-          <p className="text-2xl font-bold text-slate-900 mt-1">{completionPct}%</p>
-          <p className="text-xs text-slate-400">{stats.assessed} of {stats.total} assessed</p>
-          <div className="mt-2 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${completionPct}%` }} />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-8">
+        {[
+          { label: 'COMPLETION', value: `${completionPct}%`, sub: `${stats.assessed} of ${stats.total} assessed`, accent: completionPct >= 75, progress: completionPct },
+          { label: 'AVG MATURITY', value: stats.avgMaturity.toFixed(1), sub: 'out of 5.0', accent: stats.avgMaturity >= 3 },
+          { label: 'HIGH PRIORITY', value: stats.highPriority.toString(), sub: 'items need attention', danger: stats.highPriority > 0 },
+          { label: 'WITH PLANS', value: stats.withPlan.toString(), sub: 'improvement plans', success: stats.withPlan > 0 },
+        ].map((card, i) => (
+          <div key={i} className="p-4" style={cardStyle}>
+            <p className="text-[10px] font-medium uppercase tracking-widest mb-2" style={{ color: 'var(--color-text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>{card.label}</p>
+            <p className="text-3xl font-light" style={{
+              color: card.danger ? 'var(--color-danger)' : card.success ? 'var(--color-success)' : card.accent ? 'var(--color-accent)' : 'var(--color-text-primary)',
+              fontFamily: "'Instrument Serif', serif",
+            }}>{card.value}</p>
+            <p className="text-[11px] mt-1" style={{ color: 'var(--color-text-muted)' }}>{card.sub}</p>
+            {card.progress !== undefined && (
+              <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: 'var(--color-border-dim)' }}>
+                <div className="h-full rounded-full" style={{ width: `${card.progress}%`, background: 'var(--color-accent)', boxShadow: '0 0 8px var(--color-accent-glow)' }} />
+              </div>
+            )}
           </div>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Avg Maturity</p>
-          <p className="text-2xl font-bold text-slate-900 mt-1">{stats.avgMaturity.toFixed(1)}</p>
-          <p className="text-xs text-slate-400">out of 5.0</p>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">High Priority</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">{stats.highPriority}</p>
-          <p className="text-xs text-slate-400">items need attention</p>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-lg p-4">
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">With Plans</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">{stats.withPlan}</p>
-          <p className="text-xs text-slate-400">improvement plans</p>
-        </div>
+        ))}
       </div>
 
       {/* Per-function progress */}
-      <div className={`grid gap-3 mb-8`} style={{ gridTemplateColumns: `repeat(${Math.min(framework.data.length, 6)}, minmax(0, 1fr))` }}>
-        {framework.data.map(fn => {
-          const subs = fn.categories.flatMap(c => c.subcategories)
-          const assessed = subs.filter(s => assessment.subcategories[s.id]?.maturity !== MaturityLevel.NotAssessed).length
-          const pct = Math.round((assessed / subs.length) * 100)
-          const colors = functionColors[fn.id]
-          return (
-            <div key={fn.id} className={`border rounded-lg p-3 ${colors.border} ${colors.light}`}>
-              <p className={`text-xs font-semibold ${colors.text}`}>{fn.id}</p>
-              <p className="text-sm font-medium text-slate-700 truncate">{fn.name}</p>
-              <p className="text-xs text-slate-500 mt-1">{assessed}/{subs.length}</p>
-              <div className="mt-1 h-1 bg-white/60 rounded-full overflow-hidden">
-                <div className={`h-full ${colors.bg} rounded-full`} style={{ width: `${pct}%` }} />
+      <div className="mb-8" style={cardStyle}>
+        <div className="p-4 pb-3" style={{ borderBottom: '1px solid var(--color-border-dim)' }}>
+          <p className="text-[10px] font-medium uppercase tracking-widest" style={{ color: 'var(--color-text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>Domain Coverage</p>
+        </div>
+        <div className="p-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {framework.data.map(fn => {
+            const subs = fn.categories.flatMap(c => c.subcategories)
+            const assessed = subs.filter(s => assessment.subcategories[s.id]?.maturity !== MaturityLevel.NotAssessed).length
+            const pct = Math.round((assessed / subs.length) * 100)
+            const colors = functionColors[fn.id]
+            return (
+              <div key={fn.id} className="rounded-lg p-3" style={{ background: 'var(--color-surface-raised)', border: '1px solid var(--color-border-dim)' }}>
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className={`inline-block w-1.5 h-1.5 rounded-full ${colors.bg}`} />
+                  <p className="text-[10px] font-mono font-semibold" style={{ color: 'var(--color-text-secondary)' }}>{fn.id}</p>
+                </div>
+                <p className="text-xs truncate mb-1.5" style={{ color: 'var(--color-text-muted)' }}>{fn.name}</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: 'var(--color-border-dim)' }}>
+                    <div className={`h-full rounded-full ${colors.bg}`} style={{ width: `${pct}%`, opacity: 0.8 }} />
+                  </div>
+                  <span className="text-[10px] font-mono" style={{ color: pct === 100 ? 'var(--color-success)' : 'var(--color-text-muted)' }}>{assessed}/{subs.length}</span>
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-2 gap-6">
-        <div className="bg-white border border-slate-200 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">Maturity Distribution</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="p-4" style={cardStyle}>
+          <p className="text-[10px] font-medium uppercase tracking-widest mb-4" style={{ color: 'var(--color-text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>Maturity Distribution</p>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={maturityData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border-dim)" />
+              <XAxis dataKey="name" tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }} />
+              <YAxis tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }} />
+              <Tooltip contentStyle={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', borderRadius: 8, color: 'var(--color-text-primary)' }} />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                 {maturityData.map((entry, i) => (
                   <Cell key={i} fill={entry.fill} />
@@ -142,29 +158,29 @@ export function DashboardView() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-4">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">Priority Breakdown</h3>
+        <div className="p-4" style={cardStyle}>
+          <p className="text-[10px] font-medium uppercase tracking-widest mb-4" style={{ color: 'var(--color-text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>Priority Breakdown</p>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
-              <Pie data={priorityData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label={({ name, value }) => `${name}: ${value}`}>
+              <Pie data={priorityData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={50} label={({ name, value }) => `${name}: ${value}`} labelLine={{ stroke: 'var(--color-text-muted)' }}>
                 {priorityData.map((entry, i) => (
                   <Cell key={i} fill={entry.fill} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip contentStyle={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', borderRadius: 8, color: 'var(--color-text-primary)' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-4 col-span-2">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">Maturity by Domain</h3>
+        <div className="p-4 lg:col-span-2" style={cardStyle}>
+          <p className="text-[10px] font-medium uppercase tracking-widest mb-4" style={{ color: 'var(--color-text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>Maturity by Domain</p>
           <ResponsiveContainer width="100%" height={300}>
             <RadarChart data={radarData}>
-              <PolarGrid />
-              <PolarAngleAxis dataKey="function" tick={{ fontSize: 12 }} />
-              <PolarRadiusAxis angle={30} domain={[0, 5]} tick={{ fontSize: 10 }} />
-              <Radar name="Maturity" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.3} />
-              <Tooltip />
+              <PolarGrid stroke="var(--color-border-dim)" />
+              <PolarAngleAxis dataKey="function" tick={{ fontSize: 11, fill: 'var(--color-text-secondary)' }} />
+              <PolarRadiusAxis angle={30} domain={[0, 5]} tick={{ fontSize: 9, fill: 'var(--color-text-muted)' }} />
+              <Radar name="Maturity" dataKey="score" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.15} strokeWidth={2} />
+              <Tooltip contentStyle={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', borderRadius: 8, color: 'var(--color-text-primary)' }} />
             </RadarChart>
           </ResponsiveContainer>
         </div>

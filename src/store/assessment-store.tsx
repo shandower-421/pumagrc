@@ -1,5 +1,31 @@
-import { createContext, useContext, useReducer, useEffect, useRef, type ReactNode } from 'react'
-import { type Assessment, type SubcategoryAssessment, type FrameworkMeta, MaturityLevel, Priority } from '../types/assessment'
+import { createContext, useContext, useReducer, useEffect, useRef, useCallback, type ReactNode } from 'react'
+import { type Assessment, type SubcategoryAssessment, type FrameworkMeta, MaturityLevel, Priority, MATURITY_NUMERIC } from '../types/assessment'
+
+export interface Snapshot {
+  id: string
+  label: string
+  date: string
+  avgMaturity: number
+  assessed: number
+  total: number
+  subcategories: Record<string, { maturity: MaturityLevel; priority: Priority }>
+}
+
+function getSnapshotsKey(frameworkId: string) {
+  return `snapshots-${frameworkId}`
+}
+
+function loadSnapshots(frameworkId: string): Snapshot[] {
+  const stored = localStorage.getItem(getSnapshotsKey(frameworkId))
+  if (stored) {
+    try { return JSON.parse(stored) } catch { /* ignore */ }
+  }
+  return []
+}
+
+function saveSnapshots(frameworkId: string, snapshots: Snapshot[]) {
+  localStorage.setItem(getSnapshotsKey(frameworkId), JSON.stringify(snapshots))
+}
 
 const CURRENT_VERSION = '1.0'
 
@@ -91,6 +117,9 @@ interface AssessmentContextType {
   setField: (id: string, field: keyof SubcategoryAssessment, value: string) => void
   importAssessment: (data: Assessment) => void
   resetAssessment: () => void
+  saveSnapshot: (label: string) => void
+  deleteSnapshot: (id: string) => void
+  getSnapshots: () => Snapshot[]
 }
 
 const AssessmentContext = createContext<AssessmentContextType | null>(null)
@@ -134,8 +163,42 @@ export function AssessmentProvider({ children, framework }: { children: ReactNod
     dispatch({ type: 'RESET', framework })
   }
 
+  const saveSnapshot = useCallback((label: string) => {
+    const entries = Object.entries(assessment.subcategories)
+    const total = entries.length
+    const assessed = entries.filter(([, v]) => v.maturity !== MaturityLevel.NotAssessed).length
+    const avgMaturity = total > 0
+      ? entries.reduce((sum, [, v]) => sum + MATURITY_NUMERIC[v.maturity], 0) / total
+      : 0
+
+    const snapshot: Snapshot = {
+      id: new Date().toISOString(),
+      label,
+      date: new Date().toISOString(),
+      avgMaturity: Math.round(avgMaturity * 100) / 100,
+      assessed,
+      total,
+      subcategories: Object.fromEntries(
+        entries.map(([id, v]) => [id, { maturity: v.maturity, priority: v.priority }])
+      ),
+    }
+
+    const snapshots = loadSnapshots(framework.id)
+    snapshots.push(snapshot)
+    saveSnapshots(framework.id, snapshots)
+  }, [assessment, framework.id])
+
+  const deleteSnapshot = useCallback((id: string) => {
+    const snapshots = loadSnapshots(framework.id).filter(s => s.id !== id)
+    saveSnapshots(framework.id, snapshots)
+  }, [framework.id])
+
+  const getSnapshots = useCallback(() => {
+    return loadSnapshots(framework.id)
+  }, [framework.id])
+
   return (
-    <AssessmentContext.Provider value={{ assessment, setField, importAssessment, resetAssessment }}>
+    <AssessmentContext.Provider value={{ assessment, setField, importAssessment, resetAssessment, saveSnapshot, deleteSnapshot, getSnapshots }}>
       {children}
     </AssessmentContext.Provider>
   )
