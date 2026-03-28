@@ -3,75 +3,90 @@ import { type FrameworkMeta } from '../types/assessment'
 import { FRAMEWORKS } from '../data/frameworks'
 
 const STORAGE_KEY = 'active-framework'
-const CUSTOM_FRAMEWORKS_KEY = 'custom-frameworks'
+const ENABLED_FRAMEWORKS_KEY = 'enabled-frameworks'
 
-function loadCustomFrameworks(): FrameworkMeta[] {
-  const stored = localStorage.getItem(CUSTOM_FRAMEWORKS_KEY)
+function loadEnabledFrameworks(allIds: string[]): Set<string> {
+  const stored = localStorage.getItem(ENABLED_FRAMEWORKS_KEY)
   if (stored) {
-    try { return JSON.parse(stored) } catch { /* ignore */ }
+    try {
+      const parsed = JSON.parse(stored) as string[]
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const set = new Set(parsed)
+        // Auto-enable any newly added frameworks not yet in stored set
+        for (const id of allIds) {
+          if (!set.has(id) && !parsed.includes(id)) set.add(id)
+        }
+        return set
+      }
+    } catch { /* ignore */ }
   }
-  return []
+  return new Set(allIds)
 }
 
-function saveCustomFrameworks(frameworks: FrameworkMeta[]) {
-  localStorage.setItem(CUSTOM_FRAMEWORKS_KEY, JSON.stringify(frameworks))
+function saveEnabledFrameworks(enabled: Set<string>) {
+  localStorage.setItem(ENABLED_FRAMEWORKS_KEY, JSON.stringify([...enabled]))
 }
 
 interface FrameworkContextType {
   framework: FrameworkMeta
   setFramework: (id: string) => void
   allFrameworks: FrameworkMeta[]
-  addCustomFramework: (fw: FrameworkMeta) => void
-  deleteCustomFramework: (id: string) => void
-  isCustom: (id: string) => boolean
+  enabledFrameworks: FrameworkMeta[]
+  isFrameworkEnabled: (id: string) => boolean
+  toggleFramework: (id: string) => void
 }
 
 const FrameworkContext = createContext<FrameworkContextType | null>(null)
 
 export function FrameworkProvider({ children }: { children: ReactNode }) {
-  const [customFrameworks, setCustomFrameworks] = useState<FrameworkMeta[]>(loadCustomFrameworks)
+  const allFrameworks = FRAMEWORKS
+
+  const [enabledIds, setEnabledIds] = useState<Set<string>>(() =>
+    loadEnabledFrameworks(allFrameworks.map(f => f.id))
+  )
+
   const [frameworkId, setFrameworkId] = useState(() => {
     return localStorage.getItem(STORAGE_KEY) || FRAMEWORKS[0].id
   })
 
-  const allFrameworks = [...FRAMEWORKS, ...customFrameworks]
-  const framework = allFrameworks.find(f => f.id === frameworkId) || FRAMEWORKS[0]
+  const enabledFrameworks = allFrameworks.filter(f => enabledIds.has(f.id))
+  const framework = enabledFrameworks.find(f => f.id === frameworkId)
+    || enabledFrameworks[0]
+    || FRAMEWORKS[0]
 
   const setFramework = (id: string) => {
     setFrameworkId(id)
     localStorage.setItem(STORAGE_KEY, id)
   }
 
-  const addCustomFramework = useCallback((fw: FrameworkMeta) => {
-    setCustomFrameworks(prev => {
-      const updated = [...prev.filter(f => f.id !== fw.id), fw]
-      saveCustomFrameworks(updated)
-      return updated
-    })
-  }, [])
+  const isFrameworkEnabled = useCallback((id: string) => {
+    return enabledIds.has(id)
+  }, [enabledIds])
 
-  const deleteCustomFramework = useCallback((id: string) => {
-    setCustomFrameworks(prev => {
-      const updated = prev.filter(f => f.id !== id)
-      saveCustomFrameworks(updated)
-      return updated
+  const toggleFramework = useCallback((id: string) => {
+    setEnabledIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) {
+        if (next.size > 1) {
+          next.delete(id)
+          if (frameworkId === id) {
+            const firstEnabled = allFrameworks.find(f => next.has(f.id))
+            if (firstEnabled) {
+              setFrameworkId(firstEnabled.id)
+              localStorage.setItem(STORAGE_KEY, firstEnabled.id)
+            }
+          }
+        }
+      } else {
+        next.add(id)
+      }
+      saveEnabledFrameworks(next)
+      return next
     })
-    // Switch away if we're on the deleted framework
-    if (frameworkId === id) {
-      setFrameworkId(FRAMEWORKS[0].id)
-      localStorage.setItem(STORAGE_KEY, FRAMEWORKS[0].id)
-    }
-    // Clean up assessment data
-    localStorage.removeItem(`assessment-${id}`)
-    localStorage.removeItem(`snapshots-${id}`)
-  }, [frameworkId])
-
-  const isCustom = useCallback((id: string) => {
-    return !FRAMEWORKS.some(f => f.id === id)
-  }, [])
+  }, [frameworkId, allFrameworks])
 
   return (
-    <FrameworkContext.Provider value={{ framework, setFramework, allFrameworks, addCustomFramework, deleteCustomFramework, isCustom }}>
+    <FrameworkContext.Provider value={{ framework, setFramework, allFrameworks, enabledFrameworks, isFrameworkEnabled, toggleFramework }}>
       {children}
     </FrameworkContext.Provider>
   )

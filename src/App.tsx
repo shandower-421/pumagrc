@@ -10,7 +10,6 @@ import { GapAnalysisView } from './components/gap-analysis/GapAnalysisView'
 import { CrossMapView } from './components/cross-map/CrossMapView'
 import { HistoryView } from './components/history/HistoryView'
 import { HeatmapView } from './components/heatmap/HeatmapView'
-import { CustomFrameworkView } from './components/custom-framework/CustomFrameworkView'
 
 function AppContent() {
   const { hash, navigate } = useHash()
@@ -29,13 +28,11 @@ function AppContent() {
   } else if (hash === 'gap-analysis') {
     content = <GapAnalysisView onNavigate={handleNavigate} />
   } else if (hash === 'cross-map') {
-    content = <CrossMapView />
+    content = <CrossMapView onNavigate={handleNavigate} />
   } else if (hash === 'history') {
     content = <HistoryView />
   } else if (hash === 'heatmap') {
     content = <HeatmapView onNavigate={handleNavigate} />
-  } else if (hash === 'custom-frameworks') {
-    content = <CustomFrameworkView onNavigate={handleNavigate} />
   } else {
     content = <DashboardView />
   }

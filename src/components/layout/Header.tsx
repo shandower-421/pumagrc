@@ -1,5 +1,6 @@
-import { useRef, useState, useEffect, useCallback } from 'react'
-import { Download, Upload, RotateCcw, FileText, ChevronDown, Menu, MoreVertical, Wrench } from 'lucide-react'
+import { useRef, useState, useEffect } from 'react'
+import { Modal } from './Modal'
+import { Download, Upload, RotateCcw, FileText, ChevronDown, Menu, MoreVertical, Check, Settings } from 'lucide-react'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
 import { generatePdfReport } from '../../lib/report-pdf'
@@ -18,62 +19,16 @@ const btnDanger = {
   border: '1px solid rgba(248, 113, 113, 0.2)',
 }
 
-const modalOverlay = "fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-const modalCard = {
-  background: 'var(--color-surface-overlay)',
-  border: '1px solid var(--color-border-default)',
-  boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
-}
-
-function Modal({ open, onClose, children }: { open: boolean; onClose: () => void; children: React.ReactNode }) {
-  const dialogRef = useRef<HTMLDivElement>(null)
-  const previousFocus = useRef<HTMLElement | null>(null)
-
-  useEffect(() => {
-    if (open) {
-      previousFocus.current = document.activeElement as HTMLElement
-      // Focus first focusable element in dialog
-      setTimeout(() => {
-        const focusable = dialogRef.current?.querySelector<HTMLElement>('button, input, select, textarea, [tabindex]')
-        focusable?.focus()
-      }, 50)
-    } else if (previousFocus.current) {
-      previousFocus.current.focus()
-      previousFocus.current = null
-    }
-  }, [open])
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') { e.stopPropagation(); onClose() }
-    // Focus trap
-    if (e.key === 'Tab' && dialogRef.current) {
-      const focusables = dialogRef.current.querySelectorAll<HTMLElement>('button, input, select, textarea, [tabindex]:not([tabindex="-1"])')
-      if (focusables.length === 0) return
-      const first = focusables[0]
-      const last = focusables[focusables.length - 1]
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
-    }
-  }, [onClose])
-
-  if (!open) return null
-  return (
-    <div className={modalOverlay} onClick={onClose} onKeyDown={handleKeyDown} role="dialog" aria-modal="true">
-      <div ref={dialogRef} className="rounded-xl p-6 max-w-sm w-full mx-4" style={modalCard} onClick={e => e.stopPropagation()}>
-        {children}
-      </div>
-    </div>
-  )
-}
 
 export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void; onNavigate: (path: string) => void }) {
   const { assessment, importAssessment, resetAssessment } = useAssessment()
-  const { framework } = useFramework()
+  const { framework, allFrameworks, isFrameworkEnabled, toggleFramework } = useFramework()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [importError, setImportError] = useState<string | null>(null)
   const [showReportMenu, setShowReportMenu] = useState(false)
   const [showOverflowMenu, setShowOverflowMenu] = useState(false)
+  const [showFrameworkConfig, setShowFrameworkConfig] = useState(false)
   const [generating, setGenerating] = useState(false)
 
   // Close dropdown on Escape
@@ -87,7 +42,9 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
   const filePrefix = framework.id
 
   const handleExport = () => {
-    const blob = new Blob([JSON.stringify(assessment, null, 2)], { type: 'application/json' })
+    const snapshots = JSON.parse(localStorage.getItem(`snapshots-${framework.id}`) || '[]')
+    const exportData = { assessment, snapshots }
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -103,8 +60,18 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
     const reader = new FileReader()
     reader.onload = (ev) => {
       try {
-        const data = JSON.parse(ev.target?.result as string) as Assessment
-        if (!data.subcategories || typeof data.subcategories !== 'object') {
+        const raw = JSON.parse(ev.target?.result as string)
+        let data: Assessment
+        // New format: { assessment, snapshots }
+        if (raw.assessment && raw.assessment.subcategories) {
+          data = raw.assessment
+          if (Array.isArray(raw.snapshots)) {
+            localStorage.setItem(`snapshots-${framework.id}`, JSON.stringify(raw.snapshots))
+          }
+        // Legacy format: direct assessment object
+        } else if (raw.subcategories && typeof raw.subcategories === 'object') {
+          data = raw
+        } else {
           throw new Error('Invalid assessment format')
         }
         importAssessment(data)
@@ -150,6 +117,12 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
 
       <div className="flex-1" />
 
+      {/* Autosave indicator */}
+      <span className="hidden sm:inline-flex items-center gap-1 type-2xs" style={{ color: 'var(--color-text-muted)' }}>
+        <Check className="w-3 h-3" style={{ color: 'var(--color-success)' }} />
+        Saved
+      </span>
+
       {/* Report dropdown */}
       <div className="relative">
         <button
@@ -168,7 +141,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
         {showReportMenu && (
           <>
             <div className="fixed inset-0 z-40" onClick={() => setShowReportMenu(false)} />
-            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-44" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
+            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-44" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
               <button onClick={handlePdfReport} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <FileText className="w-4 h-4" aria-hidden="true" style={{ color: '#f87171' }} /> PDF Report
               </button>
@@ -195,7 +168,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
         {showOverflowMenu && (
           <>
             <div className="fixed inset-0 z-40" onClick={() => setShowOverflowMenu(false)} />
-            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-48" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
+            <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-48" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
               <button onClick={() => { handleExport(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <Download className="w-3.5 h-3.5" aria-hidden="true" /> Export JSON
               </button>
@@ -203,8 +176,8 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
                 <Upload className="w-3.5 h-3.5" aria-hidden="true" /> Import JSON
               </button>
               <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
-              <button onClick={() => { onNavigate('custom-frameworks'); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
-                <Wrench className="w-3.5 h-3.5" aria-hidden="true" /> Custom Frameworks
+              <button onClick={() => { setShowFrameworkConfig(true); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+                <Settings className="w-3.5 h-3.5" aria-hidden="true" /> Configure Frameworks
               </button>
               <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
               <button onClick={() => { setShowResetConfirm(true); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-danger)' }}>
@@ -227,6 +200,30 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
         <div className="flex gap-2 justify-end">
           <button onClick={() => setShowResetConfirm(false)} className="type-sm px-3 py-1.5 rounded-lg" style={btnSecondary}>Cancel</button>
           <button onClick={() => { resetAssessment(); setShowResetConfirm(false) }} className="type-sm px-3 py-1.5 rounded-lg" style={{ background: 'rgba(248, 113, 113, 0.15)', color: 'var(--color-danger)', border: '1px solid rgba(248, 113, 113, 0.3)' }}>Reset</button>
+        </div>
+      </Modal>
+
+      <Modal open={showFrameworkConfig} onClose={() => setShowFrameworkConfig(false)}>
+        <h3 className="font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>Configure Frameworks</h3>
+        <p className="type-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>Choose which frameworks appear in the selector and cross-map. Assessment data is preserved when a framework is hidden.</p>
+        <div className="space-y-1.5 mb-4">
+          {allFrameworks.map(fw => (
+            <label key={fw.id} className="flex items-center gap-3 px-2 py-1.5 rounded-lg cursor-pointer hover:opacity-90" style={{ background: isFrameworkEnabled(fw.id) ? 'var(--color-accent-dim)' : 'transparent' }}>
+              <input
+                type="checkbox"
+                checked={isFrameworkEnabled(fw.id)}
+                onChange={() => toggleFramework(fw.id)}
+                className="accent-cyan-500 rounded"
+              />
+              <div>
+                <span className="type-sm font-medium" style={{ color: isFrameworkEnabled(fw.id) ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>{fw.name}</span>
+                {fw.version && <span className="type-2xs ml-1.5" style={{ color: 'var(--color-text-muted)' }}>v{fw.version}</span>}
+              </div>
+            </label>
+          ))}
+        </div>
+        <div className="flex justify-end">
+          <button onClick={() => setShowFrameworkConfig(false)} className="type-sm px-3 py-1.5 rounded-lg" style={btnSecondary}>Done</button>
         </div>
       </Modal>
     </header>

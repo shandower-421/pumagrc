@@ -16,12 +16,21 @@ export enum Priority {
   Low = 'low',
 }
 
+export interface LogEntry {
+  id: string
+  text: string
+  timestamp: string
+  resolved: boolean
+}
+
 export interface SubcategoryAssessment {
   maturity: MaturityLevel
   priority: Priority
+  compensating: boolean
   proof: string
   plan: string
   notes: string
+  activityLog: LogEntry[]
 }
 
 export interface Assessment {
@@ -58,6 +67,24 @@ export const MATURITY_LABELS: Record<MaturityLevel, string> = {
   [MaturityLevel.Optimized]: 'Optimized',
 }
 
+export const MATURITY_DESCRIPTIONS: Record<MaturityLevel, string> = {
+  [MaturityLevel.NotAssessed]: 'Not yet evaluated',
+  [MaturityLevel.AdHoc]: '1 — Reactive, informal, undocumented processes',
+  [MaturityLevel.Repeatable]: '2 — Some processes documented and repeatable',
+  [MaturityLevel.Defined]: '3 — Standardized, documented policies in place',
+  [MaturityLevel.Managed]: '4 — Measured, monitored, and controlled',
+  [MaturityLevel.Optimized]: '5 — Continuously improving, fully integrated',
+}
+
+export const PRIORITY_DESCRIPTIONS: Record<Priority, string> = {
+  [Priority.NotSet]: 'Not yet prioritized',
+  [Priority.Working]: 'Control is in place and operating',
+  [Priority.Next]: 'Scheduled for upcoming work',
+  [Priority.High]: 'Urgent — address immediately',
+  [Priority.Med]: 'Important but not urgent',
+  [Priority.Low]: 'Address when resources allow',
+}
+
 export const MATURITY_COLORS: Record<MaturityLevel, string> = {
   [MaturityLevel.NotAssessed]: 'bg-slate-100 text-slate-500',
   [MaturityLevel.AdHoc]: 'bg-red-50 text-red-700',
@@ -69,20 +96,38 @@ export const MATURITY_COLORS: Record<MaturityLevel, string> = {
 
 export const PRIORITY_LABELS: Record<Priority, string> = {
   [Priority.NotSet]: 'Not Set',
-  [Priority.Working]: 'Working',
+  [Priority.Working]: 'Functional',
   [Priority.Next]: 'Next',
   [Priority.High]: 'High',
   [Priority.Med]: 'Med',
   [Priority.Low]: 'Low',
 }
 
+export const PRIORITY_HEX: Record<Priority, string> = {
+  [Priority.NotSet]: '#cbd5e1',
+  [Priority.High]: '#ef4444',
+  [Priority.Med]: '#f59e0b',
+  [Priority.Low]: '#eab308',
+  [Priority.Next]: '#0284c7',
+  [Priority.Working]: '#059669',
+}
+
 export const PRIORITY_COLORS: Record<Priority, string> = {
   [Priority.NotSet]: 'bg-slate-100 text-slate-500',
-  [Priority.Working]: 'bg-sky-50 text-sky-700',
-  [Priority.Next]: 'bg-violet-50 text-violet-700',
+  [Priority.Working]: 'bg-emerald-50 text-emerald-700',
+  [Priority.Next]: 'bg-sky-50 text-sky-700',
   [Priority.High]: 'bg-red-50 text-red-700',
   [Priority.Med]: 'bg-amber-50 text-amber-700',
-  [Priority.Low]: 'bg-slate-100 text-slate-600',
+  [Priority.Low]: 'bg-yellow-50 text-yellow-700',
+}
+
+export const MATURITY_HEX: Record<MaturityLevel, string> = {
+  [MaturityLevel.NotAssessed]: '#cbd5e1',
+  [MaturityLevel.AdHoc]: '#ef4444',
+  [MaturityLevel.Repeatable]: '#f59e0b',
+  [MaturityLevel.Defined]: '#eab308',
+  [MaturityLevel.Managed]: '#0284c7',
+  [MaturityLevel.Optimized]: '#059669',
 }
 
 export const MATURITY_NUMERIC: Record<MaturityLevel, number> = {

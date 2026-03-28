@@ -141,8 +141,12 @@ export function HistoryView() {
         </div>
       ) : (
         <div className="rounded-xl p-8 text-center mb-6" style={{ background: 'var(--color-surface-card)', border: '1px dashed var(--color-border-default)' }}>
-          <Camera className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--color-text-muted)' }} />
-          <p className="type-sm" style={{ color: 'var(--color-text-muted)' }}>No snapshots yet. Save your first snapshot to start tracking trends.</p>
+          <Camera className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--color-accent)' }} />
+          <p className="type-body font-medium mb-1" style={{ color: 'var(--color-text-primary)' }}>Track your compliance journey</p>
+          <p className="type-sm mb-4" style={{ color: 'var(--color-text-muted)', maxWidth: '360px', margin: '0 auto' }}>Save snapshots at key milestones to visualize maturity improvement over time. Compare any two snapshots to see exactly what changed.</p>
+          <button onClick={() => setShowSaveDialog(true)} className="inline-flex items-center gap-1.5 type-sm font-medium px-4 py-2 rounded-lg" style={{ background: 'var(--color-accent-dim)', color: 'var(--color-accent)', border: '1px solid var(--color-accent-glow)' }}>
+            <Camera className="w-3.5 h-3.5" /> Save First Snapshot
+          </button>
         </div>
       )}
 
@@ -173,7 +177,7 @@ export function HistoryView() {
 
       {showSaveDialog && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={() => setShowSaveDialog(false)}>
-          <div className="rounded-xl p-6 max-w-sm w-full" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 16px 48px rgba(0,0,0,0.5)' }} onClick={e => e.stopPropagation()}>
+          <div className="rounded-xl p-6 max-w-sm w-full" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 16px 48px rgba(0,0,0,0.12)' }} onClick={e => e.stopPropagation()}>
             <h3 className="font-semibold mb-2" style={{ color: 'var(--color-text-primary)' }}>Save Snapshot</h3>
             <p className="type-sm mb-3" style={{ color: 'var(--color-text-muted)' }}>Capture current assessment state for trend tracking.</p>
             <input type="text" value={label} onChange={e => setLabel(e.target.value)} placeholder="e.g., Q1 2026 Assessment" autoFocus onKeyDown={e => e.key === 'Enter' && handleSave()} className="w-full type-sm rounded-lg px-3 py-2 mb-3 focus:outline-none" style={{ background: 'var(--color-surface)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }} />

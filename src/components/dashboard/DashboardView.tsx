@@ -2,15 +2,15 @@ import { useMemo } from 'react'
 import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
-import { MaturityLevel, Priority, MATURITY_NUMERIC, getFunctionColors } from '../../types/assessment'
+import { MaturityLevel, Priority, MATURITY_NUMERIC, PRIORITY_LABELS, getFunctionColors } from '../../types/assessment'
 
 const PRIORITY_CHART_COLORS: Record<Priority, string> = {
   [Priority.NotSet]: '#cbd5e1',
-  [Priority.Working]: '#0284c7',
-  [Priority.Next]: '#7c3aed',
-  [Priority.High]: '#dc2626',
-  [Priority.Med]: '#d97706',
-  [Priority.Low]: '#94a3b8',
+  [Priority.Working]: '#059669',
+  [Priority.Next]: '#0284c7',
+  [Priority.High]: '#ef4444',
+  [Priority.Med]: '#f59e0b',
+  [Priority.Low]: '#eab308',
 }
 
 const cardStyle = {
@@ -30,16 +30,17 @@ export function DashboardView() {
     const assessed = entries.filter(e => e.maturity !== MaturityLevel.NotAssessed).length
     const withPlan = entries.filter(e => e.plan.trim().length > 0).length
     const highPriority = entries.filter(e => e.priority === Priority.High).length
+    const compensating = entries.filter(e => e.compensating).length
     const avgMaturity = total > 0
       ? entries.reduce((sum, e) => sum + MATURITY_NUMERIC[e.maturity], 0) / total
       : 0
-    return { total, assessed, withPlan, highPriority, avgMaturity }
+    return { total, assessed, withPlan, highPriority, compensating, avgMaturity }
   }, [assessment])
 
   const priorityData = useMemo(() => {
     return Object.values(Priority)
       .map(p => ({
-        name: p === Priority.NotSet ? 'Not Set' : p.charAt(0).toUpperCase() + p.slice(1),
+        name: PRIORITY_LABELS[p],
         value: Object.values(assessment.subcategories).filter(e => e.priority === p).length,
         fill: PRIORITY_CHART_COLORS[p],
       }))
@@ -61,7 +62,7 @@ export function DashboardView() {
   return (
     <div className="p-4 sm:p-6 max-w-6xl">
       {/* Title */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h2 className="type-dashboard-title" style={{ color: 'var(--color-text-primary)' }}>
           {framework.name} <span style={{ color: 'var(--color-accent)' }}>Dashboard</span>
         </h2>
@@ -69,7 +70,7 @@ export function DashboardView() {
       </div>
 
       {/* Summary Strip */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <div className="p-4" style={{ ...cardStyle, borderLeft: '3px solid var(--color-accent)' }}>
           <p className="type-label mb-2" style={{ color: 'var(--color-accent)' }}>Completion</p>
           <p className="type-stat" style={{ color: 'var(--color-accent)' }}>{completionPct}%</p>
@@ -94,6 +95,16 @@ export function DashboardView() {
           <p className="type-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>improvement plans</p>
         </div>
       </div>
+
+      {/* Secondary stats */}
+      {stats.compensating > 0 && (
+        <div className="flex items-center gap-4 mb-6 px-1">
+          <span className="inline-flex items-center gap-1.5 type-sm" style={{ color: '#4f46e5' }}>
+            <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: '#4f46e5' }} />
+            {stats.compensating} compensating {stats.compensating === 1 ? 'control' : 'controls'}
+          </span>
+        </div>
+      )}
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

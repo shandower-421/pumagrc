@@ -1,15 +1,21 @@
 import { useMemo, useState } from 'react'
-import { Search, ArrowRightLeft } from 'lucide-react'
+import { Search, ArrowRightLeft, Eye, EyeOff } from 'lucide-react'
 import { CROSS_MAP } from '../../data/cross-map'
 import { FRAMEWORKS } from '../../data/frameworks'
+import { useFramework } from '../../store/framework-context'
+import { useAssessment } from '../../store/assessment-store'
+import { MATURITY_HEX, type MaturityLevel } from '../../types/assessment'
+import { AssessmentModal } from './AssessmentModal'
 
-type MapKey = 'iso27001' | 'soc2' | 'cmmc'
+type MapKey = 'iso27001' | 'soc2' | 'cmmc' | 'pci_dss' | 'hipaa'
 
 const FRAMEWORK_MAP: Record<string, { label: string; key: MapKey }> = {
   'nist-csf-2': { label: 'NIST CSF 2.0', key: 'iso27001' },
   'iso-27001': { label: 'ISO 27001:2022', key: 'iso27001' },
   'soc2': { label: 'SOC 2 (TSC)', key: 'soc2' },
   'cmmc': { label: 'CMMC 2.0', key: 'cmmc' },
+  'pci-dss': { label: 'PCI DSS 4.0.1', key: 'pci_dss' },
+  'hipaa': { label: 'HIPAA Security Rule', key: 'hipaa' },
 }
 
 const MAPPABLE_FRAMEWORKS = FRAMEWORKS.filter(f => FRAMEWORK_MAP[f.id])
@@ -28,6 +34,13 @@ function getFunctionId(frameworkId: string, controlId: string): string {
   return ''
 }
 
+function getCategoryId(frameworkId: string, controlId: string): string {
+  const fw = FRAMEWORKS.find(f => f.id === frameworkId)
+  if (!fw) return ''
+  for (const fn of fw.data) for (const cat of fn.categories) for (const sub of cat.subcategories) if (sub.id === controlId) return cat.id
+  return ''
+}
+
 interface ReverseRow { id: string; description: string; functionId: string; mappedNist: string[]; mappedOther: Record<MapKey, string[]> }
 
 function buildReverseMap(anchorId: string): ReverseRow[] {
@@ -38,8 +51,8 @@ function buildReverseMap(anchorId: string): ReverseRow[] {
   const allControls = fw.data.flatMap(fn => fn.categories.flatMap(cat => cat.subcategories.map(sub => ({ ...sub, functionId: fn.id }))))
   return allControls.map(control => {
     const mappedNist = CROSS_MAP.filter(m => m[anchorKey].includes(control.id)).map(m => m.nist)
-    const mappedOther: Record<MapKey, string[]> = { iso27001: [], soc2: [], cmmc: [] }
-    const otherKeys = (['iso27001', 'soc2', 'cmmc'] as MapKey[]).filter(k => k !== anchorKey)
+    const mappedOther: Record<MapKey, string[]> = { iso27001: [], soc2: [], cmmc: [], pci_dss: [], hipaa: [] }
+    const otherKeys = (['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa'] as MapKey[]).filter(k => k !== anchorKey)
     for (const nistId of mappedNist) {
       const mapping = CROSS_MAP.find(m => m.nist === nistId)
       if (mapping) for (const key of otherKeys) for (const id of mapping[key]) if (!mappedOther[key].includes(id)) mappedOther[key].push(id)
@@ -52,22 +65,49 @@ const badgeColors: Record<string, string> = {
   iso27001: 'bg-blue-50 text-blue-700 border border-blue-200',
   soc2: 'bg-purple-50 text-purple-700 border border-purple-200',
   cmmc: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+  pci_dss: 'bg-amber-50 text-amber-700 border border-amber-200',
+  hipaa: 'bg-rose-50 text-rose-700 border border-rose-200',
   nist: 'bg-slate-100 text-slate-600 border border-slate-200',
 }
 
-const statBorders: Record<string, string> = { iso27001: 'rgba(37,99,235,0.2)', soc2: 'rgba(124,58,237,0.2)', cmmc: 'rgba(22,163,74,0.2)' }
-const statColors: Record<string, string> = { iso27001: '#2563eb', soc2: '#7c3aed', cmmc: '#16a34a' }
+const statBorders: Record<string, string> = { iso27001: 'rgba(37,99,235,0.2)', soc2: 'rgba(124,58,237,0.2)', cmmc: 'rgba(22,163,74,0.2)', pci_dss: 'rgba(217,119,6,0.2)', hipaa: 'rgba(225,29,72,0.2)' }
+const statColors: Record<string, string> = { iso27001: '#2563eb', soc2: '#7c3aed', cmmc: '#16a34a', pci_dss: '#d97706', hipaa: '#e11d48' }
 
-export function CrossMapView() {
+const MAP_KEY_TO_FRAMEWORK_ID: Record<MapKey, string> = { iso27001: 'iso-27001', soc2: 'soc2', cmmc: 'cmmc', pci_dss: 'pci-dss', hipaa: 'hipaa' }
+
+export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const { isFrameworkEnabled, toggleFramework, enabledFrameworks: globalEnabledFrameworks } = useFramework()
+  const { getAssessmentForFramework } = useAssessment()
   const [search, setSearch] = useState('')
   const [anchorFramework, setAnchorFramework] = useState('nist-csf-2')
   const [filterFunction, setFilterFunction] = useState<string>('all')
   const [filterFramework, setFilterFramework] = useState<string>('all')
+  const [modalControl, setModalControl] = useState<{ id: string; frameworkId: string; description: string; frameworkName: string } | null>(null)
+  const [showStatus, setShowStatus] = useState(false)
+
+  const getStatusStyle = (controlId: string, frameworkId: string): React.CSSProperties | undefined => {
+    if (!showStatus) return undefined
+    const data = getAssessmentForFramework(frameworkId, controlId)
+    const color = MATURITY_HEX[data.maturity as MaturityLevel]
+    return { backgroundColor: color, color: '#fff', borderColor: color }
+  }
+
+  const openAssessment = (controlId: string, frameworkId: string) => {
+    const fw = FRAMEWORKS.find(f => f.id === frameworkId)
+    if (!fw) return
+    let desc = ''
+    for (const fn of fw.data) for (const cat of fn.categories) for (const sub of cat.subcategories) if (sub.id === controlId) { desc = sub.description; break }
+    setModalControl({ id: controlId, frameworkId, description: desc, frameworkName: fw.name })
+  }
 
   const isNistAnchor = anchorFramework === 'nist-csf-2'
   const anchorFw = FRAMEWORKS.find(f => f.id === anchorFramework)
-  const targetKeys = (['iso27001', 'soc2', 'cmmc'] as MapKey[]).filter(k => isNistAnchor || k !== FRAMEWORK_MAP[anchorFramework]?.key)
-  const targetLabels: Record<MapKey, string> = { iso27001: 'ISO 27001', soc2: 'SOC 2', cmmc: 'CMMC' }
+  const allTargetKeys = (['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa'] as MapKey[]).filter(k => isNistAnchor || k !== FRAMEWORK_MAP[anchorFramework]?.key)
+  const targetKeys = allTargetKeys.filter(k => isFrameworkEnabled(MAP_KEY_TO_FRAMEWORK_ID[k]))
+  const targetLabels: Record<MapKey, string> = { iso27001: 'ISO 27001', soc2: 'SOC 2', cmmc: 'CMMC', pci_dss: 'PCI DSS', hipaa: 'HIPAA' }
+
+  // Filter anchor selector to only show enabled frameworks
+  const mappableEnabled = MAPPABLE_FRAMEWORKS.filter(f => isFrameworkEnabled(f.id))
 
   const forwardRows = useMemo(() => isNistAnchor ? CROSS_MAP.map(m => ({ ...m, id: m.nist, description: getDescription('nist-csf-2', m.nist), functionId: getFunctionId('nist-csf-2', m.nist) })) : [], [isNistAnchor])
   const reverseRows = useMemo(() => isNistAnchor ? [] : buildReverseMap(anchorFramework), [isNistAnchor, anchorFramework])
@@ -83,7 +123,13 @@ export function CrossMapView() {
 
   const stats = useMemo(() => {
     const total = rows.length
-    if (isNistAnchor) return { total, iso: forwardRows.filter(r => r.iso27001.length > 0).length, soc2: forwardRows.filter(r => r.soc2.length > 0).length, cmmc: forwardRows.filter(r => r.cmmc.length > 0).length }
+    if (isNistAnchor) {
+      const s: Record<string, number> = { total }
+      for (const k of (['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa'] as MapKey[])) {
+        s[k] = forwardRows.filter(r => ((r as any)[k] as string[])?.length > 0).length
+      }
+      return s
+    }
     return { total, nist: reverseRows.filter(r => r.mappedNist.length > 0).length }
   }, [rows, isNistAnchor, forwardRows, reverseRows])
 
@@ -91,12 +137,12 @@ export function CrossMapView() {
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl">
-      <div className="flex items-center justify-between mb-1">
+      <div className="flex items-center justify-between mb-1.5">
         <h2 className="type-page-title" style={{ color: 'var(--color-text-primary)' }}>Cross-Framework <span style={{ color: 'var(--color-accent)' }}>Mapping</span></h2>
         <div className="flex items-center gap-2">
           <ArrowRightLeft className="w-3.5 h-3.5" style={{ color: 'var(--color-text-muted)' }} />
           <select value={anchorFramework} onChange={e => { setAnchorFramework(e.target.value); setFilterFunction('all'); setFilterFramework('all') }} aria-label="Select anchor framework" className="type-sm font-medium rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle}>
-            {MAPPABLE_FRAMEWORKS.map(fw => <option key={fw.id} value={fw.id}>Anchor: {fw.shortName}</option>)}
+            {mappableEnabled.map(fw => <option key={fw.id} value={fw.id}>Anchor: {fw.shortName}</option>)}
           </select>
         </div>
       </div>
@@ -104,19 +150,42 @@ export function CrossMapView() {
         {isNistAnchor ? 'NIST CSF controls mapped to other frameworks' : `${anchorFw?.shortName} controls with reverse NIST and transitive mappings`}
       </p>
 
-      <div className={`grid gap-3 mb-6 ${isNistAnchor ? 'grid-cols-4' : 'grid-cols-2'}`}>
+      {/* Framework visibility toggles — wired to global setting */}
+      <div className="flex items-center gap-2 mb-6">
+        <span className="type-label" style={{ color: 'var(--color-text-muted)' }}>Show</span>
+        {allTargetKeys.map(k => {
+          const fwId = MAP_KEY_TO_FRAMEWORK_ID[k]
+          const enabled = isFrameworkEnabled(fwId)
+          return (
+            <button
+              key={k}
+              onClick={() => toggleFramework(fwId)}
+              className="type-2xs font-medium px-2.5 py-1 rounded-lg"
+              style={{
+                background: enabled ? (statColors[k] + '12') : 'var(--color-surface-raised)',
+                color: enabled ? statColors[k] : 'var(--color-text-muted)',
+                border: `1px solid ${enabled ? statBorders[k] : 'var(--color-border-default)'}`,
+                opacity: enabled ? 1 : 0.6,
+              }}
+            >
+              {targetLabels[k]}
+            </button>
+          )
+        })}
+      </div>
+
+      <div className={`grid gap-3 mb-6`} style={{ gridTemplateColumns: `repeat(${1 + targetKeys.length}, 1fr)` }}>
         <div className="p-3 rounded-xl" style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-border-dim)' }}>
           <p className="type-label type-mono" style={{ color: 'var(--color-text-muted)' }}>{anchorFw?.shortName} Controls</p>
-          <p className="type-page-title mt-1" style={{ color: 'var(--color-text-primary)' }}>{stats.total}</p>
+          <p className="type-lg font-medium mt-1" style={{ color: 'var(--color-text-primary)' }}>{stats.total}</p>
         </div>
         {isNistAnchor ? (
-          (['iso', 'soc2', 'cmmc'] as const).map(k => {
-            const key = k === 'iso' ? 'iso27001' : k
-            const val = (stats as any)[k]
+          targetKeys.map(k => {
+            const val = (stats as any)[k] || 0
             return (
-              <div key={k} className="p-3 rounded-xl" style={{ background: 'var(--color-surface-card)', border: `1px solid ${statBorders[key]}` }}>
-                <p className="type-label type-mono" style={{ color: statColors[key] }}>{targetLabels[key as MapKey]}</p>
-                <p className="type-page-title mt-1" style={{ color: statColors[key] }}>{Math.round((val / stats.total) * 100)}%</p>
+              <div key={k} className="p-3 rounded-xl" style={{ background: 'var(--color-surface-card)', border: `1px solid ${statBorders[k]}` }}>
+                <p className="type-label type-mono" style={{ color: statColors[k] }}>{targetLabels[k]}</p>
+                <p className="type-lg font-medium mt-1" style={{ color: statColors[k] }}>{Math.round((val / stats.total) * 100)}%</p>
                 <p className="type-2xs type-mono" style={{ color: 'var(--color-text-muted)' }}>{val} mapped</p>
               </div>
             )
@@ -124,7 +193,7 @@ export function CrossMapView() {
         ) : (
           <div className="p-3 rounded-xl" style={{ background: 'var(--color-surface-card)', border: '1px solid var(--color-border-dim)' }}>
             <p className="type-label type-mono" style={{ color: 'var(--color-text-muted)' }}>Mapped to NIST</p>
-            <p className="type-page-title mt-1" style={{ color: 'var(--color-accent)' }}>{Math.round(((stats as any).nist / stats.total) * 100)}%</p>
+            <p className="type-lg font-medium mt-1" style={{ color: 'var(--color-accent)' }}>{Math.round(((stats as any).nist / stats.total) * 100)}%</p>
           </div>
         )}
       </div>
@@ -140,7 +209,13 @@ export function CrossMapView() {
         </select>
       </div>
 
-      <p className="type-2xs type-mono mb-2" style={{ color: 'var(--color-text-muted)' }}>{filteredRows.length} of {stats.total} controls</p>
+      <div className="flex items-center justify-between mb-3">
+        <p className="type-2xs type-mono" style={{ color: 'var(--color-text-muted)' }}>{filteredRows.length} of {stats.total} controls</p>
+        <button onClick={() => setShowStatus(s => !s)} className="inline-flex items-center gap-1.5 type-sm font-medium px-3 py-1.5 rounded-lg" style={{ color: showStatus ? '#fff' : 'var(--color-text-secondary)', background: showStatus ? 'var(--color-accent)' : 'var(--color-surface-raised)', border: `1px solid ${showStatus ? 'var(--color-accent)' : 'var(--color-border-default)'}` }}>
+          {showStatus ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+          {showStatus ? 'Maturity View' : 'Show Maturity'}
+        </button>
+      </div>
 
       <div className="rounded-xl overflow-hidden overflow-x-auto" style={{ border: '1px solid var(--color-border-dim)' }}>
         <table className="w-full type-sm">
@@ -155,16 +230,18 @@ export function CrossMapView() {
           <tbody>
             {filteredRows.map(row => (
               <tr key={row.id} style={{ borderBottom: '1px solid var(--color-border-dim)' }} className="hover:opacity-80">
-                <td className="px-3 py-2 type-mono font-semibold whitespace-nowrap" style={{ color: 'var(--color-text-secondary)' }}>{row.id}</td>
+                <td className="px-3 py-2 type-mono font-semibold whitespace-nowrap">
+                  <button onClick={() => openAssessment(row.id, anchorFramework)} className="hover:underline cursor-pointer" style={{ color: 'var(--color-accent)' }}>{row.id}</button>
+                </td>
                 <td className="px-3 py-2" style={{ color: 'var(--color-text-muted)' }}>{row.description}</td>
                 {isNistAnchor ? targetKeys.map(k => (
                   <td key={k} className="px-3 py-2">
-                    {((row as any)[k] as string[])?.length > 0 ? <div className="flex flex-wrap gap-1">{((row as any)[k] as string[]).map((id: string, i: number) => <span key={`${k}-${i}`} className={`type-2xs px-1.5 py-0.5 rounded type-mono ${badgeColors[k]}`}>{id}</span>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
+                    {((row as any)[k] as string[])?.length > 0 ? <div className="flex flex-wrap gap-1">{((row as any)[k] as string[]).map((id: string, i: number) => <button key={`${k}-${i}`} onClick={() => openAssessment(id, MAP_KEY_TO_FRAMEWORK_ID[k])} className={`type-2xs px-1.5 py-0.5 rounded type-mono hover:opacity-80 cursor-pointer ${showStatus ? '' : badgeColors[k]}`} style={getStatusStyle(id, MAP_KEY_TO_FRAMEWORK_ID[k])}>{id}</button>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
                   </td>
                 )) : <>
-                  <td className="px-3 py-2">{(row as ReverseRow).mappedNist.length > 0 ? <div className="flex flex-wrap gap-1">{(row as ReverseRow).mappedNist.map((id, i) => <span key={`nist-${i}-${id}`} className={`type-2xs px-1.5 py-0.5 rounded type-mono ${badgeColors.nist}`}>{id}</span>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}</td>
+                  <td className="px-3 py-2">{(row as ReverseRow).mappedNist.length > 0 ? <div className="flex flex-wrap gap-1">{(row as ReverseRow).mappedNist.map((id, i) => <button key={`nist-${i}-${id}`} onClick={() => openAssessment(id, 'nist-csf-2')} className={`type-2xs px-1.5 py-0.5 rounded type-mono hover:opacity-80 cursor-pointer ${showStatus ? '' : badgeColors.nist}`} style={getStatusStyle(id, 'nist-csf-2')}>{id}</button>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}</td>
                   {targetKeys.map(k => (
-                    <td key={k} className="px-3 py-2">{(row as ReverseRow).mappedOther[k]?.length > 0 ? <div className="flex flex-wrap gap-1">{(row as ReverseRow).mappedOther[k].map((id, i) => <span key={`${k}-${i}`} className={`type-2xs px-1.5 py-0.5 rounded type-mono ${badgeColors[k]}`}>{id}</span>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}</td>
+                    <td key={k} className="px-3 py-2">{(row as ReverseRow).mappedOther[k]?.length > 0 ? <div className="flex flex-wrap gap-1">{(row as ReverseRow).mappedOther[k].map((id, i) => <button key={`${k}-${i}`} onClick={() => openAssessment(id, MAP_KEY_TO_FRAMEWORK_ID[k])} className={`type-2xs px-1.5 py-0.5 rounded type-mono hover:opacity-80 cursor-pointer ${showStatus ? '' : badgeColors[k]}`} style={getStatusStyle(id, MAP_KEY_TO_FRAMEWORK_ID[k])}>{id}</button>)}</div> : <span style={{ color: 'var(--color-text-muted)' }}>—</span>}</td>
                   ))}
                 </>}
               </tr>
@@ -172,6 +249,15 @@ export function CrossMapView() {
           </tbody>
         </table>
       </div>
+      {modalControl && (
+        <AssessmentModal
+          controlId={modalControl.id}
+          frameworkId={modalControl.frameworkId}
+          description={modalControl.description}
+          frameworkName={modalControl.frameworkName}
+          onClose={() => setModalControl(null)}
+        />
+      )}
     </div>
   )
 }

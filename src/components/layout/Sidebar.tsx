@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ChevronDown, ChevronRight, Shield, LayoutDashboard, AlertTriangle, Grid3x3, Clock, GitCompare, Wrench } from 'lucide-react'
+import { ChevronDown, ChevronRight, Shield, LayoutDashboard, AlertTriangle, Grid3x3, Clock, GitCompare } from 'lucide-react'
 import { useFramework } from '../../store/framework-context'
 import { useAssessment } from '../../store/assessment-store'
 import { MaturityLevel, getFunctionColors } from '../../types/assessment'
@@ -18,7 +18,7 @@ const NAV_ITEMS = [
 ]
 
 export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
-  const { framework, setFramework, allFrameworks } = useFramework()
+  const { framework, setFramework, enabledFrameworks } = useFramework()
   const { assessment } = useAssessment()
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
 
@@ -31,7 +31,6 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
       : currentPath === 'heatmap' ? 'Heatmap'
       : currentPath === 'history' ? 'History'
       : currentPath === 'cross-map' ? 'Cross-Map'
-      : currentPath === 'custom-frameworks' ? 'Custom Frameworks'
       : currentPath.startsWith('category/') ? currentPath.replace('category/', '')
       : 'Dashboard'
     document.title = `${viewName} — PumaGRC`
@@ -101,7 +100,7 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
           className="w-full type-sm font-medium rounded-lg px-3 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
           style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border-default)' }}
         >
-          {allFrameworks.map(fw => (
+          {enabledFrameworks.map(fw => (
             <option key={fw.id} value={fw.id}>{fw.name}</option>
           ))}
         </select>
@@ -152,7 +151,7 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
                     <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${colors.bg}`} aria-hidden="true" />
                     <span className="truncate">{fn.id} — {fn.name}</span>
                   </div>
-                  <span className="type-2xs type-mono shrink-0 ml-1" aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : 'var(--color-text-muted)' }}>{pct}%</span>
+                  <span className="type-2xs type-mono shrink-0 ml-1" aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : pct > 0 && pct < 50 ? 'var(--color-warning)' : 'var(--color-text-muted)' }}>{pct}%</span>
                 </button>
                 {expanded[fn.id] && (
                   <div className="ml-3 pl-3" style={{ borderLeft: '1px solid var(--color-border-dim)' }} role="group" aria-label={`${fn.name} categories`}>

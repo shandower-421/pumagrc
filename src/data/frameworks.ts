@@ -3,6 +3,8 @@ import { NIST_CSF_2 } from './nist-csf-2'
 import { ISO_27001 } from './iso-27001'
 import { SOC2 } from './soc2'
 import { CMMC } from './cmmc'
+import { HIPAA } from './hipaa'
+import { PCI_DSS } from './pci-dss'
 
 export const FRAMEWORKS: FrameworkMeta[] = [
   {
@@ -36,6 +38,22 @@ export const FRAMEWORKS: FrameworkMeta[] = [
     version: '2.0',
     description: 'Cybersecurity Maturity Model Certification Level 2 — 14 domains and 110 practices based on NIST SP 800-171.',
     data: CMMC,
+  },
+  {
+    id: 'hipaa',
+    name: 'HIPAA Security Rule',
+    shortName: 'HIPAA',
+    version: '2013',
+    description: 'HIPAA Security Rule (45 CFR Part 164 Subpart C) — 3 safeguard categories, 18 standards, and 54 implementation specifications for protecting ePHI.',
+    data: HIPAA,
+  },
+  {
+    id: 'pci-dss',
+    name: 'PCI DSS 4.0.1',
+    shortName: 'PCI DSS',
+    version: '4.0.1',
+    description: 'Payment Card Industry Data Security Standard v4.0.1 — 12 requirements and 250+ sub-requirements for protecting payment card account data.',
+    data: PCI_DSS,
   },
 ]
 

@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer, useEffect, useRef, useCallback, type ReactNode } from 'react'
-import { type Assessment, type SubcategoryAssessment, type FrameworkMeta, MaturityLevel, Priority, MATURITY_NUMERIC } from '../types/assessment'
+import { type Assessment, type SubcategoryAssessment, type LogEntry, type FrameworkMeta, MaturityLevel, Priority, MATURITY_NUMERIC } from '../types/assessment'
 
 export interface Snapshot {
   id: string
@@ -27,7 +27,7 @@ function saveSnapshots(frameworkId: string, snapshots: Snapshot[]) {
   localStorage.setItem(getSnapshotsKey(frameworkId), JSON.stringify(snapshots))
 }
 
-const CURRENT_VERSION = '1.0'
+const CURRENT_VERSION = '1.1'
 
 function getStorageKey(frameworkId: string) {
   return `assessment-${frameworkId}`
@@ -45,10 +45,30 @@ function createEmptyAssessment(): SubcategoryAssessment {
   return {
     maturity: MaturityLevel.NotAssessed,
     priority: Priority.NotSet,
+    compensating: false,
     proof: '',
     plan: '',
     notes: '',
+    activityLog: [],
   }
+}
+
+// Migrate legacy notes string into activityLog entries
+function migrateSubcategory(sub: any, fallbackTimestamp: string): SubcategoryAssessment {
+  if (!sub.activityLog) {
+    sub.activityLog = []
+    if (sub.notes && typeof sub.notes === 'string' && sub.notes.trim()) {
+      sub.activityLog.push({
+        id: 'migrated-' + Date.now(),
+        text: sub.notes.trim(),
+        timestamp: fallbackTimestamp,
+        resolved: false,
+      })
+      sub.notes = ''
+    }
+  }
+  if (sub.compensating === undefined) sub.compensating = false
+  return sub as SubcategoryAssessment
 }
 
 function initializeAssessment(framework: FrameworkMeta): Assessment {
@@ -61,6 +81,8 @@ function initializeAssessment(framework: FrameworkMeta): Assessment {
       for (const id of allIds) {
         if (!parsed.subcategories[id]) {
           parsed.subcategories[id] = createEmptyAssessment()
+        } else {
+          parsed.subcategories[id] = migrateSubcategory(parsed.subcategories[id], parsed.lastSaved || new Date().toISOString())
         }
       }
       return parsed
@@ -76,7 +98,9 @@ function initializeAssessment(framework: FrameworkMeta): Assessment {
 }
 
 type Action =
-  | { type: 'SET_FIELD'; id: string; field: keyof SubcategoryAssessment; value: string }
+  | { type: 'SET_FIELD'; id: string; field: keyof SubcategoryAssessment; value: string | boolean }
+  | { type: 'ADD_LOG_ENTRY'; id: string; text: string }
+  | { type: 'TOGGLE_LOG_RESOLVED'; id: string; entryId: string }
   | { type: 'IMPORT'; assessment: Assessment }
   | { type: 'RESET'; framework: FrameworkMeta }
   | { type: 'SWITCH_FRAMEWORK'; framework: FrameworkMeta }
@@ -96,8 +120,50 @@ function reducer(state: Assessment, action: Action): Assessment {
         },
       }
     }
-    case 'IMPORT':
-      return { ...action.assessment, lastSaved: new Date().toISOString() }
+    case 'ADD_LOG_ENTRY': {
+      const sub = state.subcategories[action.id]
+      const entry: LogEntry = {
+        id: Date.now().toString(),
+        text: action.text,
+        timestamp: new Date().toISOString(),
+        resolved: false,
+      }
+      return {
+        ...state,
+        lastSaved: new Date().toISOString(),
+        subcategories: {
+          ...state.subcategories,
+          [action.id]: {
+            ...sub,
+            activityLog: [entry, ...(sub?.activityLog || [])],
+          },
+        },
+      }
+    }
+    case 'TOGGLE_LOG_RESOLVED': {
+      const sub = state.subcategories[action.id]
+      return {
+        ...state,
+        lastSaved: new Date().toISOString(),
+        subcategories: {
+          ...state.subcategories,
+          [action.id]: {
+            ...sub,
+            activityLog: (sub?.activityLog || []).map(e =>
+              e.id === action.entryId ? { ...e, resolved: !e.resolved } : e
+            ),
+          },
+        },
+      }
+    }
+    case 'IMPORT': {
+      // Migrate imported data
+      const imported = { ...action.assessment, lastSaved: new Date().toISOString() }
+      for (const [, sub] of Object.entries(imported.subcategories)) {
+        migrateSubcategory(sub, imported.lastSaved)
+      }
+      return imported
+    }
     case 'RESET': {
       const subcategories: Record<string, SubcategoryAssessment> = {}
       for (const id of getAllSubcategoryIds(action.framework)) {
@@ -114,7 +180,13 @@ function reducer(state: Assessment, action: Action): Assessment {
 
 interface AssessmentContextType {
   assessment: Assessment
-  setField: (id: string, field: keyof SubcategoryAssessment, value: string) => void
+  setField: (id: string, field: keyof SubcategoryAssessment, value: string | boolean) => void
+  setFieldForFramework: (frameworkId: string, controlId: string, field: keyof SubcategoryAssessment, value: string | boolean) => void
+  getAssessmentForFramework: (frameworkId: string, controlId: string) => SubcategoryAssessment
+  addLogEntry: (id: string, text: string) => void
+  toggleLogResolved: (id: string, entryId: string) => void
+  addLogEntryForFramework: (frameworkId: string, controlId: string, text: string) => void
+  toggleLogResolvedForFramework: (frameworkId: string, controlId: string, entryId: string) => void
   importAssessment: (data: Assessment) => void
   resetAssessment: () => void
   saveSnapshot: (label: string) => void
@@ -129,10 +201,8 @@ export function AssessmentProvider({ children, framework }: { children: ReactNod
   const debounceRef = useRef<ReturnType<typeof setTimeout>>()
   const frameworkIdRef = useRef(framework.id)
 
-  // Switch assessment data when framework changes
   useEffect(() => {
     if (frameworkIdRef.current !== framework.id) {
-      // Save current assessment before switching
       if (debounceRef.current) clearTimeout(debounceRef.current)
       localStorage.setItem(getStorageKey(frameworkIdRef.current), JSON.stringify(assessment))
       frameworkIdRef.current = framework.id
@@ -140,7 +210,6 @@ export function AssessmentProvider({ children, framework }: { children: ReactNod
     }
   }, [framework.id])
 
-  // Debounced save
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => {
@@ -151,9 +220,80 @@ export function AssessmentProvider({ children, framework }: { children: ReactNod
     }
   }, [assessment, framework.id])
 
-  const setField = (id: string, field: keyof SubcategoryAssessment, value: string) => {
+  const setField = (id: string, field: keyof SubcategoryAssessment, value: string | boolean) => {
     dispatch({ type: 'SET_FIELD', id, field, value })
   }
+
+  const setFieldForFramework = useCallback((frameworkId: string, controlId: string, field: keyof SubcategoryAssessment, value: string | boolean) => {
+    if (frameworkId === framework.id) {
+      dispatch({ type: 'SET_FIELD', id: controlId, field, value })
+      return
+    }
+    const key = getStorageKey(frameworkId)
+    const stored = localStorage.getItem(key)
+    const data: Assessment = stored ? JSON.parse(stored) : { version: CURRENT_VERSION, lastSaved: new Date().toISOString(), subcategories: {} }
+    if (!data.subcategories[controlId]) {
+      data.subcategories[controlId] = createEmptyAssessment()
+    }
+    ;(data.subcategories[controlId] as any)[field] = value
+    data.lastSaved = new Date().toISOString()
+    localStorage.setItem(key, JSON.stringify(data))
+  }, [framework.id])
+
+  const getAssessmentForFramework = useCallback((frameworkId: string, controlId: string): SubcategoryAssessment => {
+    if (frameworkId === framework.id) {
+      return assessment.subcategories[controlId] || createEmptyAssessment()
+    }
+    const key = getStorageKey(frameworkId)
+    const stored = localStorage.getItem(key)
+    if (stored) {
+      try {
+        const data = JSON.parse(stored) as Assessment
+        const sub = data.subcategories[controlId]
+        return sub ? migrateSubcategory(sub, data.lastSaved) : createEmptyAssessment()
+      } catch { /* ignore */ }
+    }
+    return createEmptyAssessment()
+  }, [framework.id, assessment])
+
+  const addLogEntry = (id: string, text: string) => {
+    dispatch({ type: 'ADD_LOG_ENTRY', id, text })
+  }
+
+  const toggleLogResolved = (id: string, entryId: string) => {
+    dispatch({ type: 'TOGGLE_LOG_RESOLVED', id, entryId })
+  }
+
+  const addLogEntryForFramework = useCallback((frameworkId: string, controlId: string, text: string) => {
+    if (frameworkId === framework.id) {
+      dispatch({ type: 'ADD_LOG_ENTRY', id: controlId, text })
+      return
+    }
+    const key = getStorageKey(frameworkId)
+    const stored = localStorage.getItem(key)
+    const data: Assessment = stored ? JSON.parse(stored) : { version: CURRENT_VERSION, lastSaved: new Date().toISOString(), subcategories: {} }
+    if (!data.subcategories[controlId]) data.subcategories[controlId] = createEmptyAssessment()
+    const entry: LogEntry = { id: Date.now().toString(), text, timestamp: new Date().toISOString(), resolved: false }
+    data.subcategories[controlId].activityLog = [entry, ...(data.subcategories[controlId].activityLog || [])]
+    data.lastSaved = new Date().toISOString()
+    localStorage.setItem(key, JSON.stringify(data))
+  }, [framework.id])
+
+  const toggleLogResolvedForFramework = useCallback((frameworkId: string, controlId: string, entryId: string) => {
+    if (frameworkId === framework.id) {
+      dispatch({ type: 'TOGGLE_LOG_RESOLVED', id: controlId, entryId })
+      return
+    }
+    const key = getStorageKey(frameworkId)
+    const stored = localStorage.getItem(key)
+    if (!stored) return
+    const data: Assessment = JSON.parse(stored)
+    const sub = data.subcategories[controlId]
+    if (!sub?.activityLog) return
+    sub.activityLog = sub.activityLog.map(e => e.id === entryId ? { ...e, resolved: !e.resolved } : e)
+    data.lastSaved = new Date().toISOString()
+    localStorage.setItem(key, JSON.stringify(data))
+  }, [framework.id])
 
   const importAssessment = (data: Assessment) => {
     dispatch({ type: 'IMPORT', assessment: data })
@@ -198,7 +338,7 @@ export function AssessmentProvider({ children, framework }: { children: ReactNod
   }, [framework.id])
 
   return (
-    <AssessmentContext.Provider value={{ assessment, setField, importAssessment, resetAssessment, saveSnapshot, deleteSnapshot, getSnapshots }}>
+    <AssessmentContext.Provider value={{ assessment, setField, setFieldForFramework, getAssessmentForFramework, addLogEntry, toggleLogResolved, addLogEntryForFramework, toggleLogResolvedForFramework, importAssessment, resetAssessment, saveSnapshot, deleteSnapshot, getSnapshots }}>
       {children}
     </AssessmentContext.Provider>
   )
