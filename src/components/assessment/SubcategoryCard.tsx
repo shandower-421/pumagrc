@@ -4,10 +4,28 @@ import { useAssessment } from '../../store/assessment-store'
 import { ActivityLog } from './ActivityLog'
 import {
   MaturityLevel, Priority,
-  MATURITY_LABELS, MATURITY_COLORS, MATURITY_DESCRIPTIONS,
-  PRIORITY_LABELS, PRIORITY_COLORS, PRIORITY_DESCRIPTIONS,
+  MATURITY_LABELS, MATURITY_COLORS, MATURITY_DESCRIPTIONS, MATURITY_HEX, MATURITY_NUMERIC,
+  PRIORITY_LABELS, PRIORITY_COLORS, PRIORITY_DESCRIPTIONS, PRIORITY_HEX,
   type SubcategoryAssessment,
 } from '../../types/assessment'
+
+const MATURITY_LEVELS = [
+  MaturityLevel.NotAssessed,
+  MaturityLevel.AdHoc,
+  MaturityLevel.Repeatable,
+  MaturityLevel.Defined,
+  MaturityLevel.Managed,
+  MaturityLevel.Optimized,
+]
+
+const PRIORITY_ORDER: Priority[] = [
+  Priority.NotSet,
+  Priority.High,
+  Priority.Med,
+  Priority.Low,
+  Priority.Next,
+  Priority.Working,
+]
 
 interface SubcategoryCardProps {
   id: string
@@ -15,7 +33,7 @@ interface SubcategoryCardProps {
   functionColor: string
 }
 
-const inputStyle = {
+const textareaStyle = {
   background: 'var(--color-surface)',
   color: 'var(--color-text-primary)',
   border: '1px solid var(--color-border-default)',
@@ -62,38 +80,63 @@ export const SubcategoryCard = memo(function SubcategoryCard({ id, description, 
       <div className="expand-panel" data-open={isExpanded} id={panelId}>
         <div className="px-4 py-4 space-y-3" style={{ borderTop: '1px solid var(--color-border-dim)', background: 'var(--color-surface-raised)' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label htmlFor={`${id}-maturity`} className="block type-label mb-1" style={{ color: 'var(--color-text-muted)' }}>Maturity</label>
-              <select
-                id={`${id}-maturity`}
-                value={data.maturity}
-                onChange={e => handleChange('maturity', e.target.value)}
-                className="w-full type-sm rounded-lg px-2.5 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
-                style={inputStyle}
-                title={MATURITY_DESCRIPTIONS[data.maturity]}
-              >
-                {Object.entries(MATURITY_LABELS).map(([value, label]) => (
-                  <option key={value} value={value}>{label}</option>
-                ))}
-              </select>
-              <p className="type-2xs mt-1" style={{ color: 'var(--color-text-muted)' }}>{MATURITY_DESCRIPTIONS[data.maturity]}</p>
+          {/* Maturity scale bar */}
+          <div>
+            <label className="block type-label mb-1" style={{ color: 'var(--color-text-muted)' }}>Maturity</label>
+            <div className="flex gap-0.5">
+              {MATURITY_LEVELS.map((level, i) => {
+                const isActive = data.maturity === level
+                const score = MATURITY_NUMERIC[level]
+                return (
+                  <button
+                    key={level}
+                    onClick={() => handleChange('maturity', level)}
+                    className="flex-1 py-1.5 rounded type-2xs font-medium text-center transition-all"
+                    style={{
+                      backgroundColor: MATURITY_HEX[level],
+                      color: score === 0 ? 'var(--color-text-secondary)' : '#fff',
+                      border: isActive ? '2px solid var(--color-text-primary)' : '2px solid transparent',
+                      opacity: isActive ? 1 : 0.45,
+                      boxShadow: isActive ? '0 0 0 2px var(--color-surface-raised), 0 0 0 4px var(--color-text-primary)' : 'none',
+                    }}
+                    title={MATURITY_DESCRIPTIONS[level]}
+                  >
+                    {i === 0 ? 'N/A' : i}
+                  </button>
+                )
+              })}
             </div>
-            <div>
-              <label htmlFor={`${id}-priority`} className="block type-label mb-1" style={{ color: 'var(--color-text-muted)' }}>Priority</label>
-              <select
-                id={`${id}-priority`}
-                value={data.priority}
-                onChange={e => handleChange('priority', e.target.value)}
-                className="w-full type-sm rounded-lg px-2.5 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
-                style={inputStyle}
-                title={PRIORITY_DESCRIPTIONS[data.priority]}
-              >
-                {Object.entries(PRIORITY_LABELS).map(([value, label]) => (
-                  <option key={value} value={value}>{label}</option>
-                ))}
-              </select>
-              <p className="type-2xs mt-1" style={{ color: 'var(--color-text-muted)' }}>{PRIORITY_DESCRIPTIONS[data.priority]}</p>
+            <p className="type-2xs mt-1" style={{ color: 'var(--color-text-muted)' }}>{MATURITY_LABELS[data.maturity]} — {MATURITY_DESCRIPTIONS[data.maturity]}</p>
+          </div>
+
+          {/* Priority scale bar */}
+          <div>
+            <label className="block type-label mb-1" style={{ color: 'var(--color-text-muted)' }}>Priority</label>
+            <div className="flex gap-0.5">
+              {PRIORITY_ORDER.map(level => {
+                const isActive = data.priority === level
+                const isNeutral = level === Priority.NotSet || level === Priority.Low
+                return (
+                  <button
+                    key={level}
+                    onClick={() => handleChange('priority', level)}
+                    className="flex-1 py-1.5 rounded type-2xs font-medium text-center transition-all"
+                    style={{
+                      backgroundColor: PRIORITY_HEX[level],
+                      color: isNeutral ? 'var(--color-text-secondary)' : '#fff',
+                      border: isActive ? '2px solid var(--color-text-primary)' : '2px solid transparent',
+                      opacity: isActive ? 1 : 0.45,
+                      boxShadow: isActive ? '0 0 0 2px var(--color-surface-raised), 0 0 0 4px var(--color-text-primary)' : 'none',
+                    }}
+                    title={PRIORITY_DESCRIPTIONS[level]}
+                  >
+                    {PRIORITY_LABELS[level]}
+                  </button>
+                )
+              })}
             </div>
+            <p className="type-2xs mt-1" style={{ color: 'var(--color-text-muted)' }}>{PRIORITY_LABELS[data.priority]} — {PRIORITY_DESCRIPTIONS[data.priority]}</p>
+          </div>
           </div>
 
           <label className="flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer" style={{ background: data.compensating ? 'rgba(79,70,229,0.06)' : 'transparent', border: `1px solid ${data.compensating ? 'rgba(79,70,229,0.2)' : 'var(--color-border-dim)'}` }}>
@@ -111,7 +154,7 @@ export const SubcategoryCard = memo(function SubcategoryCard({ id, description, 
                 placeholder={field === 'proof' ? 'Evidence: policies, screenshots, audit logs, tool configs...' : 'Target state, remediation steps, timeline, owner...'}
                 rows={2}
                 className="w-full type-sm rounded-lg px-2.5 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 resize-y placeholder:opacity-30"
-                style={{ ...inputStyle }}
+                style={textareaStyle}
               />
             </div>
           ))}
