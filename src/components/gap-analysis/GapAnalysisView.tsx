@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useRef } from 'react'
+import { useMemo, useState } from 'react'
 import { ArrowUpDown, Search } from 'lucide-react'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
@@ -140,30 +140,6 @@ export function GapAnalysisView() {
   const [sortField, setSortField] = useState<SortField>('id')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const [modalControl, setModalControl] = useState<{ id: string; description: string } | null>(null)
-  const [descWidth, setDescWidth] = useState(280)
-  const dragRef = useRef<{ startX: number; startWidth: number } | null>(null)
-
-  const onResizeStart = useCallback((e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    const startX = e.clientX
-    const startWidth = descWidth
-    dragRef.current = { startX, startWidth }
-
-    const onMove = (ev: MouseEvent) => {
-      if (!dragRef.current) return
-      const delta = ev.clientX - dragRef.current.startX
-      setDescWidth(Math.max(80, Math.min(600, dragRef.current.startWidth + delta)))
-    }
-    const onUp = () => {
-      dragRef.current = null
-      document.removeEventListener('mousemove', onMove)
-      document.removeEventListener('mouseup', onUp)
-    }
-    document.addEventListener('mousemove', onMove)
-    document.addEventListener('mouseup', onUp)
-  }, [descWidth])
-
   const showGap = viewMode === 'gap' || viewMode === 'all'
   const showRisk = viewMode === 'risk' || viewMode === 'all'
 
@@ -281,36 +257,28 @@ export function GapAnalysisView() {
 
       {/* Desktop table */}
       <div className="hidden sm:block rounded-xl overflow-x-auto" style={{ border: '1px solid var(--color-border-dim)' }}>
-        <table className="w-full type-sm">
+        <table className="w-full type-sm" style={{ tableLayout: 'fixed' }}>
           <thead>
             <tr style={{ background: 'var(--color-surface-raised)', borderBottom: '1px solid var(--color-border-dim)' }}>
               {[
-                { label: 'Control', field: 'id' as SortField, align: 'left', tooltip: 'Framework control identifier', show: true },
-                { label: 'Description', field: null, align: 'left', tooltip: 'Control description — drag right edge to resize', show: true, resizable: true },
+                { label: 'Control', field: 'id' as SortField, align: 'left', tooltip: 'Framework control identifier', show: true, width: 88 },
+                { label: 'Description', field: null, align: 'left', tooltip: 'Control description', show: true },
                 { label: 'Domain', field: null, align: 'left', tooltip: 'Framework function or domain', show: false },
-                { label: 'Maturity', field: 'maturity' as SortField, align: 'center', tooltip: 'Current maturity level (0-5)', show: showGap },
-                { label: 'Priority', field: 'priority' as SortField, align: 'center', tooltip: 'Remediation priority', show: showGap },
-                { label: 'L', field: 'likelihood' as SortField, align: 'center', tooltip: 'Likelihood of occurrence (1 = rare, 5 = almost certain)', show: showRisk },
-                { label: 'I', field: 'impact' as SortField, align: 'center', tooltip: 'Impact if realized (1 = negligible, 5 = catastrophic)', show: showRisk },
-                { label: 'Risk', field: 'riskScore' as SortField, align: 'center', tooltip: 'Risk Score = Likelihood × Impact (1-25). Higher = more urgent.', show: showRisk },
-                { label: 'Level', field: null, align: 'center', tooltip: 'Critical (20-25), High (15-19), Medium (8-14), Low (1-7)', show: showRisk },
-                { label: 'Owner', field: null, align: 'left', tooltip: 'Person or team responsible for managing this risk', show: showRisk },
-                { label: 'Treatment', field: null, align: 'left', tooltip: 'Risk treatment: Accept, Mitigate, Transfer, or Avoid', show: showRisk },
-                { label: 'Plan', field: null, align: 'center', tooltip: 'Whether a remediation plan has been documented', show: showGap },
+                { label: 'Maturity', field: 'maturity' as SortField, align: 'center', tooltip: 'Current maturity level (0-5)', show: showGap, width: 100 },
+                { label: 'Priority', field: 'priority' as SortField, align: 'center', tooltip: 'Remediation priority', show: showGap, width: 82 },
+                { label: 'L', field: 'likelihood' as SortField, align: 'center', tooltip: 'Likelihood of occurrence (1 = rare, 5 = almost certain)', show: showRisk, width: 90 },
+                { label: 'I', field: 'impact' as SortField, align: 'center', tooltip: 'Impact if realized (1 = negligible, 5 = catastrophic)', show: showRisk, width: 90 },
+                { label: 'Risk', field: 'riskScore' as SortField, align: 'center', tooltip: 'Risk Score = Likelihood × Impact (1-25). Higher = more urgent.', show: showRisk, width: 55 },
+                { label: 'Level', field: null, align: 'center', tooltip: 'Critical (20-25), High (15-19), Medium (8-14), Low (1-7)', show: showRisk, width: 100 },
+                { label: 'Owner', field: null, align: 'left', tooltip: 'Person or team responsible for managing this risk', show: showRisk, width: 90 },
+                { label: 'Treatment', field: null, align: 'left', tooltip: 'Risk treatment: Accept, Mitigate, Transfer, or Avoid', show: showRisk, width: 88 },
+                { label: 'Plan', field: null, align: 'center', tooltip: 'Whether a remediation plan has been documented', show: showGap, width: 52 },
               ].filter(col => col.show).map((col, i) => (
-                <th key={i} scope="col" className={`px-2 py-2.5 font-medium relative ${col.field ? 'cursor-pointer hover:opacity-80' : ''}`} style={{ color: 'var(--color-text-muted)', textAlign: col.align as any, ...(col.resizable ? { width: descWidth, minWidth: 80, maxWidth: 600 } : {}) }} title={col.tooltip} onClick={col.field ? () => toggleSort(col.field!) : undefined} onKeyDown={col.field ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSort(col.field!) } } : undefined} tabIndex={col.field ? 0 : undefined} aria-sort={col.field && sortField === col.field ? (sortDir === 'asc' ? 'ascending' : 'descending') : undefined}>
+                <th key={i} scope="col" className={`px-2 py-2.5 font-medium relative ${col.field ? 'cursor-pointer hover:opacity-80' : ''}`} style={{ color: 'var(--color-text-muted)', textAlign: col.align as any, ...(col.width ? { width: col.width } : {}) }} title={col.tooltip} onClick={col.field ? () => toggleSort(col.field!) : undefined} onKeyDown={col.field ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSort(col.field!) } } : undefined} tabIndex={col.field ? 0 : undefined} aria-sort={col.field && sortField === col.field ? (sortDir === 'asc' ? 'ascending' : 'descending') : undefined}>
                   <span className="inline-flex items-center gap-1">
                     {col.label}
                     {col.field && <ArrowUpDown className="w-2.5 h-2.5" aria-hidden="true" />}
                   </span>
-                  {col.resizable && (
-                    <span
-                      onMouseDown={onResizeStart}
-                      className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-[var(--color-accent)]"
-                      style={{ opacity: 0.3 }}
-                      aria-hidden="true"
-                    />
-                  )}
                 </th>
               ))}
             </tr>
@@ -319,19 +287,19 @@ export function GapAnalysisView() {
             {filtered.map(row => (
               <tr key={row.id} className="cursor-pointer hover:opacity-80" style={{ ...getRowStyle(row), borderBottom: '1px solid var(--color-border-dim)' }} onClick={() => setModalControl({ id: row.id, description: row.description })} onKeyDown={e => { if (e.key === 'Enter') setModalControl({ id: row.id, description: row.description }) }} tabIndex={0} role="button" aria-label={`${row.id}: ${row.description}`}>
                 <td className="px-3 py-2 type-mono font-semibold whitespace-nowrap" style={{ color: 'var(--color-text-secondary)' }}>{row.id}</td>
-                <td className="px-3 py-2 truncate" style={{ color: 'var(--color-text-muted)', maxWidth: descWidth }}>{row.description}</td>
+                <td className="px-3 py-2 truncate" style={{ color: 'var(--color-text-muted)' }}>{row.description}</td>
                 {false && <td className="px-3 py-2">
                   <span className={`type-2xs px-1.5 py-0.5 rounded type-mono font-medium ${functionColors[row.functionId]?.bg || 'bg-slate-600'} text-white`}>{row.functionId}</span>
                 </td>}
                 {showGap && <td className="px-2 py-2 text-center whitespace-nowrap"><span className={`type-2xs px-2 py-0.5 rounded-full ${MATURITY_COLORS[row.maturity]}`}>{MATURITY_LABELS[row.maturity]}</span></td>}
-                {showGap && <td className="px-2 py-2 text-center"><span className={`type-2xs px-2 py-0.5 rounded-full ${PRIORITY_COLORS[row.priority]}`}>{PRIORITY_LABELS[row.priority]}</span></td>}
+                {showGap && <td className="px-2 py-2 text-center whitespace-nowrap"><span className={`type-2xs px-2 py-0.5 rounded-full ${PRIORITY_COLORS[row.priority]}`}>{PRIORITY_LABELS[row.priority]}</span></td>}
                 {showRisk && <td className="px-2 py-2 text-center">
                   <RatingBar value={row.likelihood} onChange={v => handleInlineChange(row.id, 'riskLikelihood', v)} label={`Likelihood for ${row.id}`} />
                 </td>}
                 {showRisk && <td className="px-2 py-2 text-center">
                   <RatingBar value={row.impact} onChange={v => handleInlineChange(row.id, 'riskImpact', v)} label={`Impact for ${row.id}`} />
                 </td>}
-                {showRisk && <td className="px-2 py-2 text-center type-mono font-semibold" style={{ color: getRiskLevelColor(row.riskLevel) }}>
+                {showRisk && <td className="px-2 py-2 text-center whitespace-nowrap type-mono font-semibold" style={{ color: getRiskLevelColor(row.riskLevel) }}>
                   {row.riskScore > 0 ? row.riskScore : '—'}
                 </td>}
                 {showRisk && <td className="px-2 py-2 text-center whitespace-nowrap">
@@ -348,7 +316,7 @@ export function GapAnalysisView() {
                     className="focus:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400"
                   />
                 </td>}
-                {showRisk && <td className="px-2 py-2" onClick={e => e.stopPropagation()}>
+                {showRisk && <td className="px-2 py-2 whitespace-nowrap" onClick={e => e.stopPropagation()}>
                   <select
                     value={row.treatment}
                     onChange={e => handleInlineChange(row.id, 'riskTreatment', e.target.value)}
