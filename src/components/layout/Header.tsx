@@ -20,15 +20,14 @@ const btnDanger = {
 }
 
 
-export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void; onNavigate: (path: string) => void }) {
+export function Header({ onMenuToggle, onNavigate, onConfigureFrameworks }: { onMenuToggle: () => void; onNavigate: (path: string) => void; onConfigureFrameworks: () => void }) {
   const { assessment, importAssessment, resetAssessment } = useAssessment()
-  const { framework, allFrameworks, isFrameworkEnabled, toggleFramework } = useFramework()
+  const { framework } = useFramework()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [importError, setImportError] = useState<string | null>(null)
   const [showReportMenu, setShowReportMenu] = useState(false)
   const [showOverflowMenu, setShowOverflowMenu] = useState(false)
-  const [showFrameworkConfig, setShowFrameworkConfig] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
   const [aboutTab, setAboutTab] = useState<'getting-started' | 'data' | 'about'>('getting-started')
   const [generating, setGenerating] = useState(false)
@@ -187,6 +186,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
           <>
             <div className="fixed inset-0 z-40" onClick={() => setShowOverflowMenu(false)} />
             <div className="absolute right-0 top-full mt-1 rounded-lg z-50 py-1 w-48 animate-dropdown-in" role="menu" style={{ background: 'var(--color-surface-overlay)', border: '1px solid var(--color-border-default)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+              {!__DEMO_MODE__ && (<>
               <button onClick={() => { handleExport(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <Download className="w-3.5 h-3.5" aria-hidden="true" /> Export JSON
               </button>
@@ -194,13 +194,16 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
                 <Upload className="w-3.5 h-3.5" aria-hidden="true" /> Import JSON
               </button>
               <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
-              <button onClick={() => { setShowFrameworkConfig(true); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+              </>)}
+              <button onClick={() => { onConfigureFrameworks(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <Settings className="w-3.5 h-3.5" aria-hidden="true" /> Configure Frameworks
               </button>
+              {!__DEMO_MODE__ && (<>
               <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
               <button onClick={() => { setShowResetConfirm(true); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-danger)' }}>
                 <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" /> Reset Assessment
               </button>
+              </>)}
               <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
               <button onClick={() => { setShowAbout(true); setAboutTab('getting-started'); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" /> Help & About
@@ -209,6 +212,7 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
           </>
         )}
       </div>
+      {!__DEMO_MODE__ && (<>
       <input ref={fileInputRef} type="file" accept=".json" onChange={handleImport} className="hidden" aria-label="Import assessment file" />
 
       <Modal open={!!importError} onClose={() => setImportError(null)} label="Import error">
@@ -224,47 +228,8 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
           <button onClick={() => { resetAssessment(); setShowResetConfirm(false) }} className="type-sm px-3 py-1.5 rounded-lg" style={{ background: 'rgba(248, 113, 113, 0.15)', color: 'var(--color-danger)', border: '1px solid rgba(248, 113, 113, 0.3)' }}>Reset</button>
         </div>
       </Modal>
+      </>)}
 
-      <Modal open={showFrameworkConfig} onClose={() => setShowFrameworkConfig(false)} label="Configure frameworks">
-        <h3 className="font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>Configure Frameworks</h3>
-        <p className="type-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>Choose which frameworks appear in the selector and cross-map. Assessment data is preserved when a framework is hidden.</p>
-        <div className="space-y-4 mb-4">
-          {([
-            { group: 'Cybersecurity', ids: ['nist-csf-2', 'iso-27001', 'soc2'] },
-            { group: 'Federal / Defense', ids: ['nist-800-53', 'nist-800-171', 'cmmc'] },
-            { group: 'Industry Compliance', ids: ['hipaa', 'pci-dss'] },
-            { group: 'Privacy', ids: ['gdpr', 'nist-pf'] },
-            { group: 'AI Governance', ids: ['iso-42001'] },
-          ] as { group: string; ids: string[] }[]).map(section => {
-            const fws = section.ids.map(id => allFrameworks.find(f => f.id === id)).filter(Boolean) as typeof allFrameworks
-            if (fws.length === 0) return null
-            return (
-              <div key={section.group}>
-                <p className="type-2xs font-semibold uppercase tracking-wide mb-1.5 px-2" style={{ color: 'var(--color-text-muted)' }}>{section.group}</p>
-                <div className="space-y-1">
-                  {fws.map(fw => (
-                    <label key={fw.id} className="flex items-center gap-3 px-2 py-1.5 rounded-lg cursor-pointer hover:opacity-90" style={{ background: isFrameworkEnabled(fw.id) ? 'var(--color-accent-dim)' : 'transparent' }}>
-                      <input
-                        type="checkbox"
-                        checked={isFrameworkEnabled(fw.id)}
-                        onChange={() => toggleFramework(fw.id)}
-                        className="accent-cyan-500 rounded"
-                      />
-                      <div>
-                        <span className="type-sm font-medium" style={{ color: isFrameworkEnabled(fw.id) ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>{fw.name}</span>
-                        {fw.version && <span className="type-2xs ml-1.5" style={{ color: 'var(--color-text-muted)' }}>v{fw.version}</span>}
-                      </div>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-        <div className="flex justify-end">
-          <button onClick={() => setShowFrameworkConfig(false)} className="type-sm px-3 py-1.5 rounded-lg" style={btnSecondary}>Done</button>
-        </div>
-      </Modal>
       <Modal open={showAbout} onClose={() => setShowAbout(false)} wide label="Help and About">
         {/* Tabs */}
         <div className="flex gap-1 mb-4 p-0.5 rounded-lg" style={{ background: 'var(--color-surface-tint)', border: '1px solid var(--color-border-dim)' }}>

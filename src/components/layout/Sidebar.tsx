@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ChevronRight, Shield, LayoutDashboard, AlertTriangle, Grid3x3, Clock, GitCompare } from 'lucide-react'
+import { ChevronRight, Shield, LayoutDashboard, AlertTriangle, Grid3x3, Clock, GitCompare, Settings } from 'lucide-react'
 import { useFramework } from '../../store/framework-context'
 import { useAssessment } from '../../store/assessment-store'
 import { MaturityLevel, getFunctionColors } from '../../types/assessment'
@@ -7,6 +7,7 @@ import { MaturityLevel, getFunctionColors } from '../../types/assessment'
 interface SidebarProps {
   currentPath: string
   onNavigate: (path: string) => void
+  onConfigureFrameworks: () => void
 }
 
 const NAV_ITEMS = [
@@ -17,7 +18,7 @@ const NAV_ITEMS = [
   { path: 'cross-map', label: 'Cross-Map', icon: GitCompare },
 ]
 
-export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
+export function Sidebar({ currentPath, onNavigate, onConfigureFrameworks }: SidebarProps) {
   const { framework, setFramework, enabledFrameworks } = useFramework()
   const { assessment } = useAssessment()
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
@@ -94,7 +95,17 @@ export function Sidebar({ currentPath, onNavigate }: SidebarProps) {
 
       {/* Framework selector */}
       <div className="px-3 py-3" style={{ borderBottom: '1px solid var(--color-border-dim)' }}>
-        <p className="type-label mb-1.5 px-1" style={{ color: 'var(--color-text-muted)' }} id="fw-group-label">Framework</p>
+        <div className="flex items-center justify-between mb-1.5 px-1">
+          <p className="type-label" style={{ color: 'var(--color-text-muted)' }} id="fw-group-label">Framework</p>
+          <button
+            onClick={onConfigureFrameworks}
+            aria-label="Configure frameworks"
+            className="p-1 rounded hover:opacity-80"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            <Settings className="w-3.5 h-3.5" aria-hidden="true" />
+          </button>
+        </div>
         <div role="radiogroup" aria-labelledby="fw-group-label" className="space-y-0.5">
           {enabledFrameworks.map(fw => {
             const isActive = framework.id === fw.id
