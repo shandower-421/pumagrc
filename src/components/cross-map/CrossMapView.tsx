@@ -75,6 +75,20 @@ const statColors: Record<string, string> = { iso27001: 'var(--color-fw-iso)', so
 
 const MAP_KEY_TO_FRAMEWORK_ID: Record<MapKey, string> = { iso27001: 'iso-27001', soc2: 'soc2', cmmc: 'cmmc', pci_dss: 'pci-dss', hipaa: 'hipaa' }
 
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16)
+  return `rgba(${r},${g},${b},${alpha})`
+}
+
+const MATURITY_ROW_ALPHA: Record<string, number> = {
+  'not-assessed': 0.05,
+  'ad-hoc': 0.16,
+  'repeatable': 0.16,
+  'defined': 0.16,
+  'managed': 0.16,
+  'optimized': 0.16,
+}
+
 export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => void }) {
   const { isFrameworkEnabled, toggleFramework, enabledFrameworks: globalEnabledFrameworks } = useFramework()
   const { getAssessmentForFramework } = useAssessment()
@@ -83,13 +97,21 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
   const [filterFunction, setFilterFunction] = useState<string>('all')
   const [filterFramework, setFilterFramework] = useState<string>('all')
   const [modalControl, setModalControl] = useState<{ id: string; frameworkId: string; description: string; frameworkName: string } | null>(null)
-  const [showStatus, setShowStatus] = useState(false)
+  const [showStatus, setShowStatus] = useState(true)
 
   const getStatusStyle = (controlId: string, frameworkId: string): React.CSSProperties | undefined => {
     if (!showStatus) return undefined
     const data = getAssessmentForFramework(frameworkId, controlId)
     const color = MATURITY_HEX[data.maturity as MaturityLevel]
     return { backgroundColor: color, color: '#fff', borderColor: color }
+  }
+
+  const getRowBg = (controlId: string): string | undefined => {
+    if (!showStatus) return undefined
+    const data = getAssessmentForFramework(anchorFramework, controlId)
+    const hex = MATURITY_HEX[data.maturity as MaturityLevel]
+    const alpha = MATURITY_ROW_ALPHA[data.maturity] ?? 0.06
+    return hexToRgba(hex, alpha)
   }
 
   const openAssessment = (controlId: string, frameworkId: string) => {
@@ -139,12 +161,6 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
     <div className="p-4 sm:p-6 max-w-7xl">
       <div className="flex items-center justify-between mb-1.5">
         <h2 className="type-page-title" style={{ color: 'var(--color-text-primary)' }}>Cross-Framework <span style={{ color: 'var(--color-accent)' }}>Mapping</span></h2>
-        <div className="flex items-center gap-2">
-          <ArrowRightLeft className="w-3.5 h-3.5" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} />
-          <select value={anchorFramework} onChange={e => { setAnchorFramework(e.target.value); setFilterFunction('all'); setFilterFramework('all') }} aria-label="Select anchor framework" className="type-sm font-medium rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle}>
-            {mappableEnabled.map(fw => <option key={fw.id} value={fw.id}>Anchor: {fw.shortName}</option>)}
-          </select>
-        </div>
       </div>
       <p className="type-mono-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>
         {isNistAnchor ? 'NIST CSF controls mapped to other frameworks' : `${anchorFw?.shortName} controls with reverse NIST and transitive mappings`}
@@ -211,10 +227,16 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
 
       <div className="flex items-center justify-between mb-3">
         <p className="type-2xs type-mono" style={{ color: 'var(--color-text-muted)' }}>{filteredRows.length} of {stats.total} controls</p>
-        <button onClick={() => setShowStatus(s => !s)} className="inline-flex items-center gap-1.5 type-sm font-medium px-3 py-1.5 rounded-lg" style={{ color: showStatus ? '#fff' : 'var(--color-text-secondary)', background: showStatus ? 'var(--color-accent)' : 'var(--color-surface-raised)', border: `1px solid ${showStatus ? 'var(--color-accent)' : 'var(--color-border-default)'}` }}>
-          {showStatus ? <Eye className="w-3.5 h-3.5" aria-hidden="true" /> : <EyeOff className="w-3.5 h-3.5" aria-hidden="true" />}
-          {showStatus ? 'Maturity View' : 'Show Maturity'}
-        </button>
+        <div className="flex items-center gap-2">
+          <ArrowRightLeft className="w-3.5 h-3.5" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }} />
+          <select value={anchorFramework} onChange={e => { setAnchorFramework(e.target.value); setFilterFunction('all'); setFilterFramework('all') }} aria-label="Select anchor framework" className="type-sm font-medium rounded-lg px-2.5 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" style={selectStyle}>
+            {mappableEnabled.map(fw => <option key={fw.id} value={fw.id}>Anchor: {fw.shortName}</option>)}
+          </select>
+          <button onClick={() => setShowStatus(s => !s)} className="inline-flex items-center gap-1.5 type-sm font-medium px-3 py-1.5 rounded-lg" style={{ color: showStatus ? '#fff' : 'var(--color-text-secondary)', background: showStatus ? 'var(--color-accent)' : 'var(--color-surface-raised)', border: `1px solid ${showStatus ? 'var(--color-accent)' : 'var(--color-border-default)'}` }}>
+            {showStatus ? <Eye className="w-3.5 h-3.5" aria-hidden="true" /> : <EyeOff className="w-3.5 h-3.5" aria-hidden="true" />}
+            {showStatus ? 'Maturity View' : 'Show Maturity'}
+          </button>
+        </div>
       </div>
 
       <div className="rounded-xl overflow-hidden overflow-x-auto" style={{ border: '1px solid var(--color-border-dim)' }}>
@@ -229,7 +251,7 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
           </thead>
           <tbody>
             {filteredRows.map(row => (
-              <tr key={row.id} style={{ borderBottom: '1px solid var(--color-border-dim)' }} className="hover:opacity-80">
+              <tr key={row.id} style={{ borderBottom: '2px solid var(--color-surface)', backgroundColor: getRowBg(row.id) }} className="hover:opacity-80">
                 <td className="px-3 py-2 type-mono font-semibold whitespace-nowrap">
                   <button onClick={() => openAssessment(row.id, anchorFramework)} className="hover:underline cursor-pointer" style={{ color: 'var(--color-accent)' }}>{row.id}</button>
                 </td>

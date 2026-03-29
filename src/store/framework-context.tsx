@@ -20,7 +20,8 @@ function loadEnabledFrameworks(allIds: string[]): Set<string> {
       }
     } catch { /* ignore */ }
   }
-  return new Set(allIds)
+  const defaults = ['nist-csf-2', 'iso-27001', 'cmmc']
+  return new Set(allIds.filter(id => defaults.includes(id)))
 }
 
 function saveEnabledFrameworks(enabled: Set<string>) {
