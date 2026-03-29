@@ -219,10 +219,7 @@ export function GapAnalysisView() {
 
   const getRowStyle = (row: GapRow) => {
     if (row.riskLevel === 'Critical') return { background: 'var(--color-danger-dim)' }
-    if (row.priority === Priority.High && MATURITY_NUMERIC[row.maturity] <= 1)
-      return { background: 'var(--color-danger-dim)' }
-    if (row.riskLevel === 'High' || row.priority === Priority.High || MATURITY_NUMERIC[row.maturity] <= 1)
-      return { background: 'var(--color-warning-dim)' }
+    if (row.riskLevel === 'High') return { background: 'var(--color-warning-dim)' }
     return {}
   }
 
