@@ -49,6 +49,11 @@
   --color-fw-cmmc: #16a34a;
   --color-fw-pci: #d97706;
   --color-fw-hipaa: #e11d48;
+  --color-fw-80053: #0369a1;
+  --color-fw-80171: #0e7490;
+  --color-fw-iso42001: #9333ea;
+  --color-fw-gdpr: #b45309;
+  --color-fw-nistpf: #0d9488;
 }
 
 /* ─── Typography tokens ─── */

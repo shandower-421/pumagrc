@@ -7,7 +7,7 @@ import { useAssessment } from '../../store/assessment-store'
 import { MATURITY_HEX, type MaturityLevel } from '../../types/assessment'
 import { AssessmentModal } from './AssessmentModal'
 
-type MapKey = 'iso27001' | 'soc2' | 'cmmc' | 'pci_dss' | 'hipaa'
+type MapKey = 'iso27001' | 'soc2' | 'cmmc' | 'pci_dss' | 'hipaa' | 'nist_800_53' | 'nist_800_171' | 'iso_42001' | 'gdpr' | 'nist_pf'
 
 const FRAMEWORK_MAP: Record<string, { label: string; key: MapKey }> = {
   'nist-csf-2': { label: 'NIST CSF 2.0', key: 'iso27001' },
@@ -16,6 +16,11 @@ const FRAMEWORK_MAP: Record<string, { label: string; key: MapKey }> = {
   'cmmc': { label: 'CMMC 2.0', key: 'cmmc' },
   'pci-dss': { label: 'PCI DSS 4.0.1', key: 'pci_dss' },
   'hipaa': { label: 'HIPAA Security Rule', key: 'hipaa' },
+  'nist-800-53': { label: 'NIST SP 800-53', key: 'nist_800_53' },
+  'nist-800-171': { label: 'NIST SP 800-171', key: 'nist_800_171' },
+  'iso-42001': { label: 'ISO 42001', key: 'iso_42001' },
+  'gdpr': { label: 'GDPR', key: 'gdpr' },
+  'nist-pf': { label: 'NIST Privacy FW', key: 'nist_pf' },
 }
 
 const MAPPABLE_FRAMEWORKS = FRAMEWORKS.filter(f => FRAMEWORK_MAP[f.id])
@@ -51,8 +56,9 @@ function buildReverseMap(anchorId: string): ReverseRow[] {
   const allControls = fw.data.flatMap(fn => fn.categories.flatMap(cat => cat.subcategories.map(sub => ({ ...sub, functionId: fn.id }))))
   return allControls.map(control => {
     const mappedNist = CROSS_MAP.filter(m => m[anchorKey].includes(control.id)).map(m => m.nist)
-    const mappedOther: Record<MapKey, string[]> = { iso27001: [], soc2: [], cmmc: [], pci_dss: [], hipaa: [] }
-    const otherKeys = (['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa'] as MapKey[]).filter(k => k !== anchorKey)
+    const allMapKeys: MapKey[] = ['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa', 'nist_800_53', 'nist_800_171', 'iso_42001', 'gdpr', 'nist_pf']
+    const mappedOther = Object.fromEntries(allMapKeys.map(k => [k, []])) as Record<MapKey, string[]>
+    const otherKeys = allMapKeys.filter(k => k !== anchorKey)
     for (const nistId of mappedNist) {
       const mapping = CROSS_MAP.find(m => m.nist === nistId)
       if (mapping) for (const key of otherKeys) for (const id of mapping[key]) if (!mappedOther[key].includes(id)) mappedOther[key].push(id)
@@ -68,12 +74,17 @@ const badgeColors: Record<string, string> = {
   pci_dss: 'bg-amber-50 text-amber-700 border border-amber-200',
   hipaa: 'bg-rose-50 text-rose-700 border border-rose-200',
   nist: 'bg-slate-100 text-slate-600 border border-slate-200',
+  nist_800_53: 'bg-sky-50 text-sky-700 border border-sky-200',
+  nist_800_171: 'bg-cyan-50 text-cyan-700 border border-cyan-200',
+  iso_42001: 'bg-violet-50 text-violet-700 border border-violet-200',
+  gdpr: 'bg-orange-50 text-orange-700 border border-orange-200',
+  nist_pf: 'bg-teal-50 text-teal-700 border border-teal-200',
 }
 
-const statBorders: Record<string, string> = { iso27001: 'rgba(37,99,235,0.2)', soc2: 'rgba(124,58,237,0.2)', cmmc: 'rgba(22,163,74,0.2)', pci_dss: 'rgba(217,119,6,0.2)', hipaa: 'rgba(225,29,72,0.2)' }
-const statColors: Record<string, string> = { iso27001: 'var(--color-fw-iso)', soc2: 'var(--color-fw-soc2)', cmmc: 'var(--color-fw-cmmc)', pci_dss: 'var(--color-fw-pci)', hipaa: 'var(--color-fw-hipaa)' }
+const statBorders: Record<string, string> = { iso27001: 'rgba(37,99,235,0.2)', soc2: 'rgba(124,58,237,0.2)', cmmc: 'rgba(22,163,74,0.2)', pci_dss: 'rgba(217,119,6,0.2)', hipaa: 'rgba(225,29,72,0.2)', nist_800_53: 'rgba(3,105,161,0.2)', nist_800_171: 'rgba(14,116,144,0.2)', iso_42001: 'rgba(147,51,234,0.2)', gdpr: 'rgba(180,83,9,0.2)', nist_pf: 'rgba(13,148,136,0.2)' }
+const statColors: Record<string, string> = { iso27001: 'var(--color-fw-iso)', soc2: 'var(--color-fw-soc2)', cmmc: 'var(--color-fw-cmmc)', pci_dss: 'var(--color-fw-pci)', hipaa: 'var(--color-fw-hipaa)', nist_800_53: 'var(--color-fw-80053)', nist_800_171: 'var(--color-fw-80171)', iso_42001: 'var(--color-fw-iso42001)', gdpr: 'var(--color-fw-gdpr)', nist_pf: 'var(--color-fw-nistpf)' }
 
-const MAP_KEY_TO_FRAMEWORK_ID: Record<MapKey, string> = { iso27001: 'iso-27001', soc2: 'soc2', cmmc: 'cmmc', pci_dss: 'pci-dss', hipaa: 'hipaa' }
+const MAP_KEY_TO_FRAMEWORK_ID: Record<MapKey, string> = { iso27001: 'iso-27001', soc2: 'soc2', cmmc: 'cmmc', pci_dss: 'pci-dss', hipaa: 'hipaa', nist_800_53: 'nist-800-53', nist_800_171: 'nist-800-171', iso_42001: 'iso-42001', gdpr: 'gdpr', nist_pf: 'nist-pf' }
 
 function hexToRgba(hex: string, alpha: number): string {
   const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16)
@@ -124,9 +135,9 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
 
   const isNistAnchor = anchorFramework === 'nist-csf-2'
   const anchorFw = FRAMEWORKS.find(f => f.id === anchorFramework)
-  const allTargetKeys = (['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa'] as MapKey[]).filter(k => isNistAnchor || k !== FRAMEWORK_MAP[anchorFramework]?.key)
+  const allTargetKeys = (['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa', 'nist_800_53', 'nist_800_171', 'iso_42001', 'gdpr', 'nist_pf'] as MapKey[]).filter(k => isNistAnchor || k !== FRAMEWORK_MAP[anchorFramework]?.key)
   const targetKeys = allTargetKeys.filter(k => isFrameworkEnabled(MAP_KEY_TO_FRAMEWORK_ID[k]))
-  const targetLabels: Record<MapKey, string> = { iso27001: 'ISO 27001', soc2: 'SOC 2', cmmc: 'CMMC', pci_dss: 'PCI DSS', hipaa: 'HIPAA' }
+  const targetLabels: Record<MapKey, string> = { iso27001: 'ISO 27001', soc2: 'SOC 2', cmmc: 'CMMC', pci_dss: 'PCI DSS', hipaa: 'HIPAA', nist_800_53: '800-53', nist_800_171: '800-171', iso_42001: 'ISO 42001', gdpr: 'GDPR', nist_pf: 'Privacy FW' }
 
   // Filter anchor selector to only show enabled frameworks
   const mappableEnabled = MAPPABLE_FRAMEWORKS.filter(f => isFrameworkEnabled(f.id))
@@ -147,7 +158,7 @@ export function CrossMapView({ onNavigate }: { onNavigate: (path: string) => voi
     const total = rows.length
     if (isNistAnchor) {
       const s: Record<string, number> = { total }
-      for (const k of (['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa'] as MapKey[])) {
+      for (const k of (['iso27001', 'soc2', 'cmmc', 'pci_dss', 'hipaa', 'nist_800_53', 'nist_800_171', 'iso_42001', 'gdpr', 'nist_pf'] as MapKey[])) {
         s[k] = forwardRows.filter(r => ((r as any)[k] as string[])?.length > 0).length
       }
       return s

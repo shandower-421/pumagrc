@@ -228,21 +228,38 @@ export function Header({ onMenuToggle, onNavigate }: { onMenuToggle: () => void;
       <Modal open={showFrameworkConfig} onClose={() => setShowFrameworkConfig(false)} label="Configure frameworks">
         <h3 className="font-semibold mb-1" style={{ color: 'var(--color-text-primary)' }}>Configure Frameworks</h3>
         <p className="type-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>Choose which frameworks appear in the selector and cross-map. Assessment data is preserved when a framework is hidden.</p>
-        <div className="space-y-1.5 mb-4">
-          {allFrameworks.map(fw => (
-            <label key={fw.id} className="flex items-center gap-3 px-2 py-1.5 rounded-lg cursor-pointer hover:opacity-90" style={{ background: isFrameworkEnabled(fw.id) ? 'var(--color-accent-dim)' : 'transparent' }}>
-              <input
-                type="checkbox"
-                checked={isFrameworkEnabled(fw.id)}
-                onChange={() => toggleFramework(fw.id)}
-                className="accent-cyan-500 rounded"
-              />
-              <div>
-                <span className="type-sm font-medium" style={{ color: isFrameworkEnabled(fw.id) ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>{fw.name}</span>
-                {fw.version && <span className="type-2xs ml-1.5" style={{ color: 'var(--color-text-muted)' }}>v{fw.version}</span>}
+        <div className="space-y-4 mb-4">
+          {([
+            { group: 'Cybersecurity', ids: ['nist-csf-2', 'iso-27001', 'soc2'] },
+            { group: 'Federal / Defense', ids: ['nist-800-53', 'nist-800-171', 'cmmc'] },
+            { group: 'Industry Compliance', ids: ['hipaa', 'pci-dss'] },
+            { group: 'Privacy', ids: ['gdpr', 'nist-pf'] },
+            { group: 'AI Governance', ids: ['iso-42001'] },
+          ] as { group: string; ids: string[] }[]).map(section => {
+            const fws = section.ids.map(id => allFrameworks.find(f => f.id === id)).filter(Boolean) as typeof allFrameworks
+            if (fws.length === 0) return null
+            return (
+              <div key={section.group}>
+                <p className="type-2xs font-semibold uppercase tracking-wide mb-1.5 px-2" style={{ color: 'var(--color-text-muted)' }}>{section.group}</p>
+                <div className="space-y-1">
+                  {fws.map(fw => (
+                    <label key={fw.id} className="flex items-center gap-3 px-2 py-1.5 rounded-lg cursor-pointer hover:opacity-90" style={{ background: isFrameworkEnabled(fw.id) ? 'var(--color-accent-dim)' : 'transparent' }}>
+                      <input
+                        type="checkbox"
+                        checked={isFrameworkEnabled(fw.id)}
+                        onChange={() => toggleFramework(fw.id)}
+                        className="accent-cyan-500 rounded"
+                      />
+                      <div>
+                        <span className="type-sm font-medium" style={{ color: isFrameworkEnabled(fw.id) ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>{fw.name}</span>
+                        {fw.version && <span className="type-2xs ml-1.5" style={{ color: 'var(--color-text-muted)' }}>v{fw.version}</span>}
+                      </div>
+                    </label>
+                  ))}
+                </div>
               </div>
-            </label>
-          ))}
+            )
+          })}
         </div>
         <div className="flex justify-end">
           <button onClick={() => setShowFrameworkConfig(false)} className="type-sm px-3 py-1.5 rounded-lg" style={btnSecondary}>Done</button>

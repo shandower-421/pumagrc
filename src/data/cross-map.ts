@@ -1,5 +1,6 @@
 // Cross-Framework Control Mappings
-// Anchor: NIST CSF 2.0 subcategories mapped to ISO 27001:2022, SOC 2 TSC, CMMC 2.0, PCI DSS 4.0.1, and HIPAA Security Rule
+// Anchor: NIST CSF 2.0 subcategories mapped to ISO 27001:2022, SOC 2 TSC, CMMC 2.0, PCI DSS 4.0.1, HIPAA Security Rule,
+// NIST SP 800-53 Rev 5, NIST SP 800-171 Rev 2, ISO/IEC 42001:2023, GDPR, and NIST Privacy Framework 1.0
 //
 // Sources:
 //   - NIST CSF 2.0 Reference Tool (https://csrc.nist.gov/projects/cybersecurity-framework)
@@ -9,14 +10,24 @@
 //   - CMMC 2.0 Model Overview (DoD)
 //   - PCI DSS v4.0.1 (PCI Security Standards Council, June 2024)
 //   - HIPAA Security Rule, 45 CFR Part 164 Subpart C (HHS)
+//   - NIST SP 800-53 Rev 5 (Security and Privacy Controls)
+//   - NIST SP 800-171 Rev 2 (Protecting CUI in Nonfederal Systems)
+//   - ISO/IEC 42001:2023 (AI Management System)
+//   - EU General Data Protection Regulation (GDPR)
+//   - NIST Privacy Framework 1.0
 
 export interface ControlMapping {
-  nist: string;        // NIST CSF 2.0 subcategory ID (e.g., "GV.OC-01")
-  iso27001: string[];  // Mapped ISO 27001:2022 control IDs
-  soc2: string[];      // Mapped SOC 2 TSC criteria IDs
-  cmmc: string[];      // Mapped CMMC 2.0 practice IDs
-  pci_dss: string[];   // Mapped PCI DSS 4.0.1 requirement IDs
-  hipaa: string[];     // Mapped HIPAA Security Rule specification IDs
+  nist: string;           // NIST CSF 2.0 subcategory ID (e.g., "GV.OC-01")
+  iso27001: string[];     // Mapped ISO 27001:2022 control IDs
+  soc2: string[];         // Mapped SOC 2 TSC criteria IDs
+  cmmc: string[];         // Mapped CMMC 2.0 practice IDs
+  pci_dss: string[];      // Mapped PCI DSS 4.0.1 requirement IDs
+  hipaa: string[];        // Mapped HIPAA Security Rule specification IDs
+  nist_800_53: string[];  // Mapped NIST SP 800-53 Rev 5 control IDs
+  nist_800_171: string[]; // Mapped NIST SP 800-171 Rev 2 requirement IDs
+  iso_42001: string[];    // Mapped ISO/IEC 42001:2023 clause/control IDs
+  gdpr: string[];         // Mapped GDPR article IDs
+  nist_pf: string[];      // Mapped NIST Privacy Framework 1.0 function IDs
 }
 
 export const CROSS_MAP: ControlMapping[] = [
@@ -32,6 +43,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.1.1", "12.1.2"],
     hipaa: ["308.a1.i", "308.a1.iiB"],
+    nist_800_53: ["PM-1", "PM-7", "PL-1"],
+    nist_800_171: [],
+    iso_42001: ["4.1", "4.2"],
+    gdpr: ["Art.5.2", "Art.24.1"],
+    nist_pf: ["GV.PO-P1", "GV.PO-P3"],
   },
   {
     nist: "GV.OC-02",
@@ -40,6 +56,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.1.1", "12.1.3"],
     hipaa: ["308.a1.i", "308.a1.iiB"],
+    nist_800_53: ["PM-1", "PM-2", "PL-1"],
+    nist_800_171: [],
+    iso_42001: ["4.1", "4.2", "5.1"],
+    gdpr: ["Art.5.2", "Art.24.1", "Art.24.2"],
+    nist_pf: ["GV.PO-P1", "GV.PO-P3"],
   },
   {
     nist: "GV.OC-03",
@@ -48,6 +69,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.1.1", "12.3.1"],
     hipaa: ["308.a1.i"],
+    nist_800_53: ["PM-1", "PL-1", "SA-9"],
+    nist_800_171: [],
+    iso_42001: ["4.1", "4.2"],
+    gdpr: ["Art.5.1a", "Art.6.1"],
+    nist_pf: ["GV.PO-P1"],
   },
   {
     nist: "GV.OC-04",
@@ -56,6 +82,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.1.1"],
     hipaa: ["308.a7.i", "308.a7.iiE"],
+    nist_800_53: ["PM-9", "PM-11", "RA-1"],
+    nist_800_171: [],
+    iso_42001: ["4.1", "6.1.1"],
+    gdpr: ["Art.24.1"],
+    nist_pf: ["GV.PO-P1", "GV.PO-P4"],
   },
   {
     nist: "GV.OC-05",
@@ -64,6 +95,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.1", "12.8.2"],
     hipaa: ["308.b1.i", "308.b1.iii"],
+    nist_800_53: ["PM-9", "SA-9", "SR-1"],
+    nist_800_171: [],
+    iso_42001: ["4.2", "A.10.2"],
+    gdpr: ["Art.28.1", "Art.28.3"],
+    nist_pf: ["GV.PO-P5"],
   },
 
   // GV.RM - Risk Management Strategy
@@ -74,6 +110,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1"],
     pci_dss: ["12.3.1", "12.3.2"],
     hipaa: ["308.a1.iiA", "308.a1.iiB"],
+    nist_800_53: ["RA-1", "PM-9"],
+    nist_800_171: ["3.11.1"],
+    iso_42001: ["5.1", "6.1.1", "6.1.2"],
+    gdpr: ["Art.24.1", "Art.35.1"],
+    nist_pf: ["GV.PO-P1", "GV.PO-P6"],
   },
   {
     nist: "GV.RM-02",
@@ -82,6 +123,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1"],
     pci_dss: ["12.3.1"],
     hipaa: ["308.a1.iiA", "308.a1.iiB"],
+    nist_800_53: ["RA-1", "RA-3", "PM-9"],
+    nist_800_171: ["3.11.1"],
+    iso_42001: ["6.1.1", "6.1.2"],
+    gdpr: ["Art.24.1", "Art.35.1"],
+    nist_pf: ["GV.PO-P6", "GV.RM-P1"],
   },
   {
     nist: "GV.RM-03",
@@ -90,6 +136,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1"],
     pci_dss: ["12.3.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["RA-1", "RA-3", "PM-28"],
+    nist_800_171: ["3.11.1"],
+    iso_42001: ["6.1.1", "6.1.2", "A.3.2"],
+    gdpr: ["Art.24.1", "Art.35.1"],
+    nist_pf: ["GV.RM-P1", "GV.RM-P2"],
   },
   {
     nist: "GV.RM-04",
@@ -98,6 +149,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1"],
     pci_dss: ["12.3.1", "12.3.2"],
     hipaa: ["308.a1.iiA", "308.a1.iiB"],
+    nist_800_53: ["RA-1", "RA-3", "PM-9"],
+    nist_800_171: ["3.11.1"],
+    iso_42001: ["6.1.1", "6.1.2"],
+    gdpr: ["Art.24.1", "Art.35.1", "Art.35.7"],
+    nist_pf: ["GV.RM-P1", "GV.RM-P3"],
   },
   {
     nist: "GV.RM-05",
@@ -106,6 +162,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.1.1"],
     hipaa: ["308.a1.i"],
+    nist_800_53: ["PM-1", "PM-2", "PM-15"],
+    nist_800_171: [],
+    iso_42001: ["5.1", "7.4"],
+    gdpr: ["Art.24.1"],
+    nist_pf: ["GV.AT-P1", "GV.AT-P2"],
   },
   {
     nist: "GV.RM-06",
@@ -114,6 +175,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1"],
     pci_dss: ["12.3.1"],
     hipaa: ["308.a1.iiA", "308.a1.iiB"],
+    nist_800_53: ["RA-1", "RA-3", "RA-5"],
+    nist_800_171: ["3.11.1"],
+    iso_42001: ["6.1.1", "A.3.2"],
+    gdpr: ["Art.35.1", "Art.35.7"],
+    nist_pf: ["GV.RM-P1"],
   },
   {
     nist: "GV.RM-07",
@@ -122,6 +188,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.3.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["PM-7", "PM-9", "PM-11"],
+    nist_800_171: [],
+    iso_42001: ["6.1.1"],
+    gdpr: ["Art.24.1"],
+    nist_pf: ["GV.PO-P4", "GV.RM-P1"],
   },
 
   // GV.RR - Roles, Responsibilities, and Authorities
@@ -132,6 +203,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.1.2", "12.1.4"],
     hipaa: ["308.a2.i"],
+    nist_800_53: ["PM-1", "PM-2", "PL-1"],
+    nist_800_171: [],
+    iso_42001: ["5.1", "5.3"],
+    gdpr: ["Art.24.1", "Art.37.1"],
+    nist_pf: ["GV.PO-P1", "GV.PO-P2"],
   },
   {
     nist: "GV.RR-02",
@@ -140,6 +216,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.1.2"],
     hipaa: ["308.a2.i"],
+    nist_800_53: ["PM-2", "PM-13", "PL-1"],
+    nist_800_171: [],
+    iso_42001: ["5.3", "A.4.2"],
+    gdpr: ["Art.24.1", "Art.37.1", "Art.38.1"],
+    nist_pf: ["GV.PO-P2"],
   },
   {
     nist: "GV.RR-03",
@@ -148,6 +229,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.1.2"],
     hipaa: ["308.a2.i"],
+    nist_800_53: ["PM-2", "PM-29"],
+    nist_800_171: [],
+    iso_42001: ["5.3"],
+    gdpr: ["Art.24.1", "Art.38.2"],
+    nist_pf: ["GV.PO-P2"],
   },
   {
     nist: "GV.RR-04",
@@ -156,6 +242,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["PS.L2-3.9.1", "PS.L2-3.9.2"],
     pci_dss: ["12.7.1"],
     hipaa: ["308.a3.i", "308.a3.iiA", "308.a3.iiB"],
+    nist_800_53: ["PS-1", "PS-2", "PS-3", "PS-7"],
+    nist_800_171: ["3.9.1", "3.9.2"],
+    iso_42001: ["7.2"],
+    gdpr: ["Art.39.1b"],
+    nist_pf: ["GV.PO-P2", "GV.AT-P1"],
   },
 
   // GV.PO - Policy
@@ -166,6 +257,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CA.L2-3.12.4"],
     pci_dss: ["12.1.1", "12.1.3"],
     hipaa: ["308.a1.i"],
+    nist_800_53: ["PL-1", "PM-1", "PM-2"],
+    nist_800_171: ["3.12.4"],
+    iso_42001: ["5.1", "5.2", "A.2.2"],
+    gdpr: ["Art.24.1", "Art.24.2"],
+    nist_pf: ["GV.PO-P1", "GV.PO-P3"],
   },
   {
     nist: "GV.PO-02",
@@ -174,6 +270,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CA.L2-3.12.4"],
     pci_dss: ["12.1.1", "12.1.3"],
     hipaa: ["308.a1.i", "308.a8.i"],
+    nist_800_53: ["PL-1", "PM-1"],
+    nist_800_171: ["3.12.4"],
+    iso_42001: ["5.2", "10.1", "10.2"],
+    gdpr: ["Art.24.1"],
+    nist_pf: ["GV.PO-P1", "GV.PO-P7"],
   },
 
   // GV.OV - Oversight
@@ -184,6 +285,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CA.L2-3.12.1"],
     pci_dss: ["12.4.1", "12.4.2"],
     hipaa: ["308.a8.i"],
+    nist_800_53: ["CA-1", "CA-2", "CA-7"],
+    nist_800_171: ["3.12.1"],
+    iso_42001: ["9.1", "9.2", "9.3"],
+    gdpr: ["Art.24.1", "Art.39.1b"],
+    nist_pf: ["GV.MT-P1", "GV.MT-P3"],
   },
   {
     nist: "GV.OV-02",
@@ -192,6 +298,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CA.L2-3.12.1", "CA.L2-3.12.3"],
     pci_dss: ["12.4.1", "12.4.2"],
     hipaa: ["308.a8.i"],
+    nist_800_53: ["CA-2", "CA-7", "PM-6"],
+    nist_800_171: ["3.12.1", "3.12.3"],
+    iso_42001: ["9.1", "9.3"],
+    gdpr: ["Art.24.1"],
+    nist_pf: ["GV.MT-P1", "GV.MT-P3"],
   },
   {
     nist: "GV.OV-03",
@@ -200,6 +311,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CA.L2-3.12.1", "CA.L2-3.12.3"],
     pci_dss: ["12.4.2", "12.4.2.1"],
     hipaa: ["308.a8.i"],
+    nist_800_53: ["CA-2", "CA-7", "PM-14"],
+    nist_800_171: ["3.12.1", "3.12.3"],
+    iso_42001: ["9.3", "10.1"],
+    gdpr: ["Art.24.1"],
+    nist_pf: ["GV.MT-P1", "GV.MT-P5"],
   },
 
   // GV.SC - Cybersecurity Supply Chain Risk Management
@@ -210,6 +326,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.1"],
     hipaa: ["308.b1.i"],
+    nist_800_53: ["SR-1", "SR-2", "SA-9"],
+    nist_800_171: [],
+    iso_42001: ["A.10.2"],
+    gdpr: ["Art.28.1"],
+    nist_pf: ["GV.PO-P5"],
   },
   {
     nist: "GV.SC-02",
@@ -218,6 +339,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.1", "12.8.5"],
     hipaa: ["308.b1.i", "308.b1.iii"],
+    nist_800_53: ["SR-1", "SR-2", "SA-9"],
+    nist_800_171: [],
+    iso_42001: ["A.10.2"],
+    gdpr: ["Art.28.1", "Art.28.3"],
+    nist_pf: ["GV.PO-P5"],
   },
   {
     nist: "GV.SC-03",
@@ -226,6 +352,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.2", "12.8.3"],
     hipaa: ["308.b1.iii"],
+    nist_800_53: ["SR-3", "SR-5", "SA-9"],
+    nist_800_171: [],
+    iso_42001: ["A.10.2"],
+    gdpr: ["Art.28.1", "Art.28.3"],
+    nist_pf: ["GV.PO-P5", "ID.DE-P1"],
   },
   {
     nist: "GV.SC-04",
@@ -234,6 +365,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.1", "12.8.2"],
     hipaa: ["308.b1.i"],
+    nist_800_53: ["SR-1", "SR-2"],
+    nist_800_171: [],
+    iso_42001: ["A.10.2"],
+    gdpr: ["Art.28.1"],
+    nist_pf: ["GV.PO-P5"],
   },
   {
     nist: "GV.SC-05",
@@ -242,6 +378,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.2", "12.8.4"],
     hipaa: ["308.b1.iii"],
+    nist_800_53: ["SR-3", "SR-6", "SA-9"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.28.1", "Art.28.3"],
+    nist_pf: ["GV.PO-P5"],
   },
   {
     nist: "GV.SC-06",
@@ -250,6 +391,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.1", "12.8.5"],
     hipaa: ["308.b1.i", "308.b1.ii"],
+    nist_800_53: ["SR-2", "SR-5"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.28.1"],
+    nist_pf: ["GV.PO-P5"],
   },
   {
     nist: "GV.SC-07",
@@ -258,6 +404,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.2", "12.8.4"],
     hipaa: ["308.b1.iii"],
+    nist_800_53: ["SR-3", "SR-6", "RA-3"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.28.1", "Art.28.3"],
+    nist_pf: ["GV.PO-P5"],
   },
   {
     nist: "GV.SC-08",
@@ -266,6 +417,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.3", "12.10.5"],
     hipaa: ["308.a6.ii", "308.b1.iii"],
+    nist_800_53: ["IR-6", "SR-8"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.28.3", "Art.33.2"],
+    nist_pf: [],
   },
   {
     nist: "GV.SC-09",
@@ -274,6 +430,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.4"],
     hipaa: ["308.b1.iii"],
+    nist_800_53: ["SR-6", "CA-2"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.28.1"],
+    nist_pf: ["GV.PO-P5"],
   },
   {
     nist: "GV.SC-10",
@@ -282,6 +443,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.5"],
     hipaa: ["308.b1.iii"],
+    nist_800_53: ["SR-2", "SR-3"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.28.3"],
+    nist_pf: ["GV.PO-P5"],
   },
 
   // ============================================================
@@ -296,6 +462,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CM.L2-3.4.1"],
     pci_dss: ["2.2.1", "12.5.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["CM-8", "PM-5"],
+    nist_800_171: ["3.4.1"],
+    iso_42001: [],
+    gdpr: ["Art.30.1"],
+    nist_pf: ["ID.IM-P1", "ID.IM-P2"],
   },
   {
     nist: "ID.AM-02",
@@ -304,6 +475,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CM.L2-3.4.1"],
     pci_dss: ["2.2.1", "6.3.2", "12.5.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["CM-8", "CM-10", "PM-5"],
+    nist_800_171: ["3.4.1"],
+    iso_42001: [],
+    gdpr: ["Art.30.1"],
+    nist_pf: ["ID.IM-P1", "ID.IM-P2"],
   },
   {
     nist: "ID.AM-03",
@@ -312,6 +488,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["SC.L2-3.13.1"],
     pci_dss: ["1.2.3", "1.2.4"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["CM-8", "SC-7"],
+    nist_800_171: ["3.13.1"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: ["ID.IM-P1"],
   },
   {
     nist: "ID.AM-04",
@@ -320,6 +501,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.1"],
     hipaa: ["308.b1.i"],
+    nist_800_53: ["SA-9", "PM-5"],
+    nist_800_171: [],
+    iso_42001: ["A.10.2"],
+    gdpr: ["Art.28.1", "Art.30.1"],
+    nist_pf: ["ID.IM-P1"],
   },
   {
     nist: "ID.AM-05",
@@ -328,6 +514,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CM.L2-3.4.1"],
     pci_dss: ["2.2.1", "12.5.1"],
     hipaa: ["308.a1.iiA", "308.a7.iiE"],
+    nist_800_53: ["CM-8", "RA-2"],
+    nist_800_171: ["3.4.1"],
+    iso_42001: [],
+    gdpr: ["Art.30.1"],
+    nist_pf: ["ID.IM-P1", "ID.IM-P4"],
   },
   {
     nist: "ID.AM-07",
@@ -336,6 +527,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["MP.L2-3.8.1", "MP.L2-3.8.4"],
     pci_dss: ["3.2.1", "9.4.1"],
     hipaa: ["308.a1.iiA", "310.d1.i"],
+    nist_800_53: ["RA-2", "CM-12", "CM-13"],
+    nist_800_171: ["3.8.1", "3.8.4"],
+    iso_42001: [],
+    gdpr: ["Art.30.1", "Art.35.1"],
+    nist_pf: ["ID.IM-P1", "ID.IM-P4"],
   },
   {
     nist: "ID.AM-08",
@@ -344,6 +540,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CM.L2-3.4.1", "MP.L2-3.8.3"],
     pci_dss: ["9.4.5", "9.4.6"],
     hipaa: ["310.d1.i", "310.d1.iiA", "310.d1.iiB"],
+    nist_800_53: ["CM-8", "MP-6"],
+    nist_800_171: ["3.4.1", "3.8.3"],
+    iso_42001: [],
+    gdpr: ["Art.5.1e", "Art.17.1"],
+    nist_pf: ["ID.IM-P1", "CT.DM-P7"],
   },
 
   // ID.RA - Risk Assessment
@@ -354,6 +555,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.2", "RA.L2-3.11.3"],
     pci_dss: ["6.3.1", "11.3.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["RA-5", "CA-8"],
+    nist_800_171: ["3.11.2", "3.11.3"],
+    iso_42001: ["6.1.1"],
+    gdpr: ["Art.32.1d"],
+    nist_pf: ["ID.RA-P1"],
   },
   {
     nist: "ID.RA-02",
@@ -362,6 +568,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["SI.L2-3.14.3"],
     pci_dss: ["6.3.1", "12.3.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["RA-3", "PM-16", "SI-5"],
+    nist_800_171: ["3.14.3"],
+    iso_42001: ["6.1.1"],
+    gdpr: ["Art.32.1d"],
+    nist_pf: ["ID.RA-P1", "ID.RA-P2"],
   },
   {
     nist: "ID.RA-03",
@@ -370,6 +581,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1"],
     pci_dss: ["12.3.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["RA-3", "PM-16"],
+    nist_800_171: ["3.11.1"],
+    iso_42001: ["6.1.1", "A.3.2"],
+    gdpr: ["Art.35.1", "Art.35.7"],
+    nist_pf: ["ID.RA-P1", "ID.RA-P3"],
   },
   {
     nist: "ID.RA-04",
@@ -378,6 +594,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1"],
     pci_dss: ["6.3.1", "12.3.1"],
     hipaa: ["308.a1.iiA", "308.a1.iiB"],
+    nist_800_53: ["RA-3", "RA-5"],
+    nist_800_171: ["3.11.1"],
+    iso_42001: ["6.1.1", "6.1.2"],
+    gdpr: ["Art.35.1", "Art.35.7"],
+    nist_pf: ["ID.RA-P3", "ID.RA-P4"],
   },
   {
     nist: "ID.RA-05",
@@ -386,6 +607,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1"],
     pci_dss: ["12.3.1", "12.3.2"],
     hipaa: ["308.a1.iiA", "308.a1.iiB"],
+    nist_800_53: ["RA-3", "RA-7"],
+    nist_800_171: ["3.11.1"],
+    iso_42001: ["6.1.2"],
+    gdpr: ["Art.35.7"],
+    nist_pf: ["ID.RA-P4", "ID.RA-P5"],
   },
   {
     nist: "ID.RA-06",
@@ -394,6 +620,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.1", "RA.L2-3.11.3"],
     pci_dss: ["12.3.1", "12.3.2"],
     hipaa: ["308.a1.iiB"],
+    nist_800_53: ["RA-3", "PM-9"],
+    nist_800_171: ["3.11.1", "3.11.3"],
+    iso_42001: ["6.1.2", "8.1"],
+    gdpr: ["Art.35.7"],
+    nist_pf: ["ID.RA-P4"],
   },
   {
     nist: "ID.RA-07",
@@ -402,6 +633,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CM.L2-3.4.3", "CM.L2-3.4.4"],
     pci_dss: ["6.5.1", "6.5.2"],
     hipaa: ["308.a1.iiB"],
+    nist_800_53: ["CM-3", "CM-4", "SA-10"],
+    nist_800_171: ["3.4.3", "3.4.4"],
+    iso_42001: ["8.1"],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "ID.RA-08",
@@ -410,6 +646,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["RA.L2-3.11.2"],
     pci_dss: ["6.3.1", "11.3.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["RA-5", "CA-8"],
+    nist_800_171: ["3.11.2"],
+    iso_42001: [],
+    gdpr: ["Art.32.1d"],
+    nist_pf: ["ID.RA-P1"],
   },
   {
     nist: "ID.RA-09",
@@ -418,6 +659,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["SI.L2-3.14.1"],
     pci_dss: ["6.3.2", "12.8.1"],
     hipaa: ["308.b1.i"],
+    nist_800_53: ["RA-3", "SR-3", "SA-9"],
+    nist_800_171: ["3.14.1"],
+    iso_42001: ["A.10.2"],
+    gdpr: ["Art.28.1"],
+    nist_pf: ["ID.RA-P1"],
   },
   {
     nist: "ID.RA-10",
@@ -426,6 +672,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.8.4"],
     hipaa: ["308.b1.iii"],
+    nist_800_53: ["RA-3", "SR-6"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.28.1"],
+    nist_pf: [],
   },
 
   // ID.IM - Improvement
@@ -436,6 +687,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CA.L2-3.12.1", "CA.L2-3.12.2"],
     pci_dss: ["12.4.1", "12.4.2"],
     hipaa: ["308.a8.i"],
+    nist_800_53: ["CA-2", "CA-7", "PM-6"],
+    nist_800_171: ["3.12.1", "3.12.2"],
+    iso_42001: ["9.1", "9.2"],
+    gdpr: ["Art.24.1"],
+    nist_pf: ["GV.MT-P1", "GV.MT-P3"],
   },
   {
     nist: "ID.IM-02",
@@ -444,6 +700,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CA.L2-3.12.1", "IR.L2-3.6.3"],
     pci_dss: ["11.3.1", "11.3.1.1"],
     hipaa: ["308.a8.i"],
+    nist_800_53: ["CA-2", "CA-8", "PM-14"],
+    nist_800_171: ["3.12.1", "3.6.3"],
+    iso_42001: ["9.1"],
+    gdpr: ["Art.32.1d"],
+    nist_pf: ["GV.MT-P3"],
   },
   {
     nist: "ID.IM-03",
@@ -452,6 +713,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CA.L2-3.12.1"],
     pci_dss: ["12.4.2", "12.4.2.1"],
     hipaa: ["308.a8.i"],
+    nist_800_53: ["CA-7", "PM-14", "PM-31"],
+    nist_800_171: ["3.12.1"],
+    iso_42001: ["10.1", "10.2"],
+    gdpr: ["Art.24.1"],
+    nist_pf: ["GV.MT-P1", "GV.MT-P5"],
   },
   {
     nist: "ID.IM-04",
@@ -460,6 +726,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1", "IR.L2-3.6.3"],
     pci_dss: ["12.10.2"],
     hipaa: ["308.a6.ii", "308.a7.iiD"],
+    nist_800_53: ["IR-4", "IR-8", "CP-2"],
+    nist_800_171: ["3.6.1", "3.6.3"],
+    iso_42001: [],
+    gdpr: ["Art.33.1", "Art.34.1"],
+    nist_pf: [],
   },
 
   // ============================================================
@@ -474,6 +745,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AC.L2-3.1.1", "IA.L2-3.5.1", "IA.L2-3.5.2", "IA.L2-3.5.5", "IA.L2-3.5.6"],
     pci_dss: ["7.2.1", "8.2.1", "8.2.4"],
     hipaa: ["312.a1.i", "312.a1.iiA", "308.a4.i"],
+    nist_800_53: ["AC-2", "IA-1", "IA-2", "IA-5"],
+    nist_800_171: ["3.1.1", "3.5.1", "3.5.2", "3.5.5", "3.5.6"],
+    iso_42001: [],
+    gdpr: ["Art.32.1b"],
+    nist_pf: ["PR.AC-P1", "PR.AC-P2"],
   },
   {
     nist: "PR.AA-02",
@@ -482,6 +758,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IA.L2-3.5.1", "IA.L2-3.5.2"],
     pci_dss: ["8.2.1", "8.2.2", "8.6.1"],
     hipaa: ["312.a1.iiA", "312.d.i"],
+    nist_800_53: ["IA-2", "IA-4", "IA-5"],
+    nist_800_171: ["3.5.1", "3.5.2"],
+    iso_42001: [],
+    gdpr: ["Art.32.1b"],
+    nist_pf: ["PR.AC-P1"],
   },
   {
     nist: "PR.AA-03",
@@ -490,6 +771,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IA.L2-3.5.2", "IA.L2-3.5.3", "IA.L2-3.5.4", "IA.L2-3.5.7", "IA.L2-3.5.8", "IA.L2-3.5.9", "IA.L2-3.5.10", "IA.L2-3.5.11"],
     pci_dss: ["8.3.1", "8.3.2", "8.3.6", "8.4.1", "8.4.2", "8.5.1"],
     hipaa: ["312.d.i", "308.a5.iiD"],
+    nist_800_53: ["IA-2", "IA-5", "IA-6", "IA-8"],
+    nist_800_171: ["3.5.2", "3.5.3", "3.5.4", "3.5.7", "3.5.8", "3.5.9", "3.5.10", "3.5.11"],
+    iso_42001: [],
+    gdpr: ["Art.32.1b"],
+    nist_pf: ["PR.AC-P1"],
   },
   {
     nist: "PR.AA-04",
@@ -498,6 +784,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IA.L2-3.5.2", "IA.L2-3.5.4", "SC.L2-3.13.15"],
     pci_dss: ["8.3.2", "8.5.1"],
     hipaa: ["312.d.i", "308.a5.iiD"],
+    nist_800_53: ["IA-5", "SC-12", "SC-13"],
+    nist_800_171: ["3.5.2", "3.5.4", "3.13.15"],
+    iso_42001: [],
+    gdpr: ["Art.32.1a"],
+    nist_pf: ["PR.AC-P1"],
   },
   {
     nist: "PR.AA-05",
@@ -506,6 +797,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AC.L2-3.1.1", "AC.L2-3.1.2", "AC.L2-3.1.4", "AC.L2-3.1.5", "AC.L2-3.1.6", "AC.L2-3.1.7"],
     pci_dss: ["7.2.1", "7.2.2", "7.2.4", "7.3.1", "7.3.3"],
     hipaa: ["308.a4.i", "308.a4.iiB", "308.a4.iiC", "312.a1.i"],
+    nist_800_53: ["AC-1", "AC-2", "AC-3", "AC-6"],
+    nist_800_171: ["3.1.1", "3.1.2", "3.1.4", "3.1.5", "3.1.6", "3.1.7"],
+    iso_42001: [],
+    gdpr: ["Art.25.2", "Art.32.1b"],
+    nist_pf: ["PR.AC-P1", "PR.AC-P2"],
   },
   {
     nist: "PR.AA-06",
@@ -514,6 +810,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["PE.L2-3.10.1", "PE.L2-3.10.2", "PE.L2-3.10.3", "PE.L2-3.10.4", "PE.L2-3.10.5"],
     pci_dss: ["9.2.1", "9.3.1", "9.4.1"],
     hipaa: ["310.a1.i", "310.a1.iiB", "310.a1.iiC"],
+    nist_800_53: ["PE-2", "PE-3", "PE-6"],
+    nist_800_171: ["3.10.1", "3.10.2", "3.10.3", "3.10.4", "3.10.5"],
+    iso_42001: [],
+    gdpr: ["Art.32.1b"],
+    nist_pf: ["PR.AC-P1"],
   },
 
   // PR.AT - Awareness and Training
@@ -524,6 +825,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AT.L2-3.2.1", "AT.L2-3.2.3"],
     pci_dss: ["12.6.1", "12.6.2", "12.6.3"],
     hipaa: ["308.a5.i", "308.a5.iiA"],
+    nist_800_53: ["AT-1", "AT-2", "AT-3"],
+    nist_800_171: ["3.2.1", "3.2.3"],
+    iso_42001: ["7.2", "7.3"],
+    gdpr: ["Art.39.1a", "Art.47.2n"],
+    nist_pf: ["GV.AT-P1", "GV.AT-P2"],
   },
   {
     nist: "PR.AT-02",
@@ -532,6 +838,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AT.L2-3.2.2"],
     pci_dss: ["12.6.2", "12.6.3"],
     hipaa: ["308.a5.i", "308.a5.iiA"],
+    nist_800_53: ["AT-2", "AT-3", "AT-4"],
+    nist_800_171: ["3.2.2"],
+    iso_42001: ["7.2", "7.3"],
+    gdpr: ["Art.39.1a"],
+    nist_pf: ["GV.AT-P1", "GV.AT-P2"],
   },
 
   // PR.DS - Data Security
@@ -542,6 +853,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["MP.L2-3.8.1", "MP.L2-3.8.9", "SC.L2-3.13.16"],
     pci_dss: ["3.5.1", "3.5.1.1", "3.6.1", "3.7.1"],
     hipaa: ["312.a1.iiD", "312.c1.i"],
+    nist_800_53: ["SC-28", "MP-4", "MP-5"],
+    nist_800_171: ["3.8.1", "3.8.9", "3.13.16"],
+    iso_42001: [],
+    gdpr: ["Art.5.1f", "Art.32.1a"],
+    nist_pf: ["PR.DS-P1", "CT.DM-P4"],
   },
   {
     nist: "PR.DS-02",
@@ -550,6 +866,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AC.L2-3.1.13", "MP.L2-3.8.5", "MP.L2-3.8.6", "SC.L2-3.13.1", "SC.L2-3.13.8"],
     pci_dss: ["4.2.1", "4.2.1.1", "4.2.2"],
     hipaa: ["312.e1.i", "312.e1.iiA", "312.e1.iiB"],
+    nist_800_53: ["SC-8", "SC-13", "MP-5"],
+    nist_800_171: ["3.1.13", "3.8.5", "3.8.6", "3.13.1", "3.13.8"],
+    iso_42001: [],
+    gdpr: ["Art.5.1f", "Art.32.1a"],
+    nist_pf: ["PR.DS-P1", "PR.DS-P2"],
   },
   {
     nist: "PR.DS-10",
@@ -558,6 +879,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AC.L2-3.1.3", "SC.L2-3.13.4"],
     pci_dss: ["3.4.1", "3.5.1"],
     hipaa: ["312.c1.i", "312.c1.iiA"],
+    nist_800_53: ["SC-28", "SC-13"],
+    nist_800_171: ["3.1.3", "3.13.4"],
+    iso_42001: [],
+    gdpr: ["Art.5.1f", "Art.32.1a"],
+    nist_pf: ["PR.DS-P1"],
   },
   {
     nist: "PR.DS-11",
@@ -566,6 +892,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["MP.L2-3.8.9"],
     pci_dss: [],
     hipaa: ["308.a7.iiA", "310.d1.iiD"],
+    nist_800_53: ["CP-9", "CP-10"],
+    nist_800_171: ["3.8.9"],
+    iso_42001: [],
+    gdpr: ["Art.5.1f", "Art.32.1c"],
+    nist_pf: ["PR.DS-P1"],
   },
 
   // PR.PS - Platform Security
@@ -576,6 +907,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CM.L2-3.4.1", "CM.L2-3.4.2"],
     pci_dss: ["2.2.1", "2.2.4", "2.2.6"],
     hipaa: ["308.a1.iiB"],
+    nist_800_53: ["CM-2", "CM-6", "CM-7"],
+    nist_800_171: ["3.4.1", "3.4.2"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "PR.PS-02",
@@ -584,6 +920,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CM.L2-3.4.3", "CM.L2-3.4.8", "CM.L2-3.4.9", "SI.L2-3.14.1"],
     pci_dss: ["6.3.1", "6.3.3", "6.5.1"],
     hipaa: ["308.a1.iiB"],
+    nist_800_53: ["CM-3", "CM-4", "SI-2"],
+    nist_800_171: ["3.4.3", "3.4.8", "3.4.9", "3.14.1"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "PR.PS-03",
@@ -592,6 +933,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["MA.L2-3.7.1", "MA.L2-3.7.2", "MA.L2-3.7.3", "MA.L2-3.7.4", "MA.L2-3.7.5", "MA.L2-3.7.6"],
     pci_dss: ["9.5.1"],
     hipaa: ["310.a1.iiD", "310.d1.i"],
+    nist_800_53: ["MA-1", "MA-2", "MA-3", "MA-4"],
+    nist_800_171: ["3.7.1", "3.7.2", "3.7.3", "3.7.4", "3.7.5", "3.7.6"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "PR.PS-04",
@@ -600,6 +946,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AU.L2-3.3.1", "AU.L2-3.3.2", "AU.L2-3.3.7"],
     pci_dss: ["10.2.1", "10.2.2", "10.3.1"],
     hipaa: ["312.b.i", "308.a1.iiD"],
+    nist_800_53: ["AU-2", "AU-3", "AU-6", "AU-12"],
+    nist_800_171: ["3.3.1", "3.3.2", "3.3.7"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: ["PR.PO-P6"],
   },
   {
     nist: "PR.PS-05",
@@ -608,6 +959,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["CM.L2-3.4.6", "CM.L2-3.4.7", "CM.L2-3.4.8", "CM.L2-3.4.9", "SI.L2-3.14.2", "SI.L2-3.14.4", "SI.L2-3.14.5"],
     pci_dss: ["5.2.1", "5.2.2", "5.3.1", "5.3.5", "6.3.3"],
     hipaa: ["308.a5.iiB"],
+    nist_800_53: ["SI-3", "SI-4", "CM-11"],
+    nist_800_171: ["3.4.6", "3.4.7", "3.4.8", "3.4.9", "3.14.2", "3.14.4", "3.14.5"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "PR.PS-06",
@@ -616,6 +972,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["SC.L2-3.13.2"],
     pci_dss: ["6.2.1", "6.2.3", "6.2.4"],
     hipaa: [],
+    nist_800_53: ["SA-3", "SA-8", "SA-11", "SA-15"],
+    nist_800_171: ["3.13.2"],
+    iso_42001: ["8.1"],
+    gdpr: ["Art.25.1"],
+    nist_pf: [],
   },
 
   // PR.IR - Technology Infrastructure Resilience
@@ -626,6 +987,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AC.L2-3.1.12", "AC.L2-3.1.14", "AC.L2-3.1.16", "AC.L2-3.1.17", "SC.L2-3.13.1", "SC.L2-3.13.5", "SC.L2-3.13.6", "SC.L2-3.13.7"],
     pci_dss: ["1.2.1", "1.3.1", "1.3.2", "1.4.1"],
     hipaa: ["312.e1.i", "312.e1.iiA"],
+    nist_800_53: ["SC-7", "SC-5", "AC-4"],
+    nist_800_171: ["3.1.12", "3.1.14", "3.1.16", "3.1.17", "3.13.1", "3.13.5", "3.13.6", "3.13.7"],
+    iso_42001: [],
+    gdpr: ["Art.32.1b"],
+    nist_pf: [],
   },
   {
     nist: "PR.IR-02",
@@ -634,6 +1000,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["PE.L2-3.10.2"],
     pci_dss: ["9.2.1"],
     hipaa: ["310.a1.i", "310.a1.iiA"],
+    nist_800_53: ["PE-9", "PE-10", "PE-11", "PE-12"],
+    nist_800_171: ["3.10.2"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "PR.IR-03",
@@ -642,6 +1013,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: [],
     hipaa: ["308.a7.i", "308.a7.iiB", "308.a7.iiC"],
+    nist_800_53: ["CP-1", "CP-2", "CP-7", "CP-8"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.32.1b", "Art.32.1c"],
+    nist_pf: [],
   },
   {
     nist: "PR.IR-04",
@@ -650,6 +1026,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: [],
     hipaa: ["308.a7.i", "308.a7.iiC"],
+    nist_800_53: ["CP-2", "CP-8", "SC-36"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.32.1b"],
+    nist_pf: [],
   },
 
   // ============================================================
@@ -664,6 +1045,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["SI.L2-3.14.6", "SC.L2-3.13.1"],
     pci_dss: ["10.4.1", "11.4.1"],
     hipaa: ["308.a1.iiD", "312.b.i"],
+    nist_800_53: ["SI-4", "AU-6", "CA-7"],
+    nist_800_171: ["3.14.6", "3.13.1"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "DE.CM-02",
@@ -672,6 +1058,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["PE.L2-3.10.2"],
     pci_dss: ["9.2.1", "9.2.2"],
     hipaa: ["310.a1.iiB", "310.a1.iiC"],
+    nist_800_53: ["PE-6", "PE-8"],
+    nist_800_171: ["3.10.2"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "DE.CM-03",
@@ -680,6 +1071,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AC.L2-3.1.7", "AU.L2-3.3.1", "AU.L2-3.3.2", "SI.L2-3.14.7"],
     pci_dss: ["10.2.1", "10.2.2", "10.4.1"],
     hipaa: ["308.a1.iiD", "308.a5.iiC", "312.b.i"],
+    nist_800_53: ["AU-2", "AU-6", "SI-4", "AC-2"],
+    nist_800_171: ["3.1.7", "3.3.1", "3.3.2", "3.14.7"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "DE.CM-06",
@@ -688,6 +1084,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AC.L2-3.1.20"],
     pci_dss: ["12.8.4"],
     hipaa: ["308.b1.iii"],
+    nist_800_53: ["CA-7", "SA-9"],
+    nist_800_171: ["3.1.20"],
+    iso_42001: [],
+    gdpr: ["Art.28.1"],
+    nist_pf: [],
   },
   {
     nist: "DE.CM-09",
@@ -696,6 +1097,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["SI.L2-3.14.2", "SI.L2-3.14.4", "SI.L2-3.14.5", "SI.L2-3.14.6"],
     pci_dss: ["5.2.1", "5.2.2", "5.3.2", "11.3.1", "11.3.2"],
     hipaa: ["308.a5.iiB"],
+    nist_800_53: ["SI-3", "SI-4", "RA-5"],
+    nist_800_171: ["3.14.2", "3.14.4", "3.14.5", "3.14.6"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
 
   // DE.AE - Adverse Event Analysis
@@ -706,6 +1112,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AU.L2-3.3.5", "SI.L2-3.14.6"],
     pci_dss: ["10.4.1", "10.4.2"],
     hipaa: ["308.a1.iiD", "312.b.i"],
+    nist_800_53: ["AU-6", "IR-4", "SI-4"],
+    nist_800_171: ["3.3.5", "3.14.6"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "DE.AE-03",
@@ -714,6 +1125,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AU.L2-3.3.5", "AU.L2-3.3.6"],
     pci_dss: ["10.4.1", "10.4.2", "10.4.3"],
     hipaa: ["308.a1.iiD", "312.b.i"],
+    nist_800_53: ["AU-6", "AU-12", "IR-4"],
+    nist_800_171: ["3.3.5", "3.3.6"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "DE.AE-04",
@@ -722,6 +1138,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["10.4.1", "12.10.1"],
     hipaa: ["308.a6.i", "308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5", "IR-6"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
   {
     nist: "DE.AE-06",
@@ -730,6 +1151,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AU.L2-3.3.4", "IR.L2-3.6.2"],
     pci_dss: ["10.4.1", "12.10.1"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5", "AU-6"],
+    nist_800_171: ["3.3.4", "3.6.2"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
   {
     nist: "DE.AE-07",
@@ -738,6 +1164,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["SI.L2-3.14.3"],
     pci_dss: ["6.3.1", "11.3.1"],
     hipaa: ["308.a1.iiA"],
+    nist_800_53: ["SI-5", "RA-5"],
+    nist_800_171: ["3.14.3"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "DE.AE-08",
@@ -746,6 +1177,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1"],
     hipaa: ["308.a6.i", "308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
 
   // ============================================================
@@ -760,6 +1196,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1"],
     hipaa: ["308.a6.i", "308.a6.ii"],
+    nist_800_53: ["IR-1", "IR-4", "IR-8"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1", "Art.33.2"],
+    nist_pf: [],
   },
   {
     nist: "RS.MA-02",
@@ -768,6 +1209,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1", "IR.L2-3.6.2"],
     pci_dss: ["12.10.1", "12.10.4"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5", "IR-6"],
+    nist_800_171: ["3.6.1", "3.6.2"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
   {
     nist: "RS.MA-03",
@@ -776,6 +1222,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
   {
     nist: "RS.MA-04",
@@ -784,6 +1235,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1", "IR.L2-3.6.2"],
     pci_dss: ["12.10.1", "12.10.5"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5", "IR-6"],
+    nist_800_171: ["3.6.1", "3.6.2"],
+    iso_42001: [],
+    gdpr: ["Art.33.1", "Art.33.3"],
+    nist_pf: [],
   },
   {
     nist: "RS.MA-05",
@@ -792,6 +1248,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1", "12.10.2"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "CP-2", "CP-10"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
 
   // RS.AN - Incident Analysis
@@ -802,6 +1263,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1", "12.10.6"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
   {
     nist: "RS.AN-06",
@@ -810,6 +1276,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AU.L2-3.3.1", "AU.L2-3.3.8"],
     pci_dss: ["10.2.1", "10.2.2"],
     hipaa: ["308.a1.iiD", "312.b.i"],
+    nist_800_53: ["AU-6", "AU-7", "IR-4"],
+    nist_800_171: ["3.3.1", "3.3.8"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "RS.AN-07",
@@ -818,6 +1289,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["AU.L2-3.3.1", "AU.L2-3.3.8"],
     pci_dss: ["10.2.1", "10.2.2", "10.5.1"],
     hipaa: ["308.a1.iiD", "312.b.i"],
+    nist_800_53: ["AU-6", "AU-7", "IR-4"],
+    nist_800_171: ["3.3.1", "3.3.8"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
   {
     nist: "RS.AN-08",
@@ -826,6 +1302,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
 
   // RS.CO - Incident Response Reporting and Communication
@@ -836,6 +1317,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.2"],
     pci_dss: ["12.10.1", "12.10.5"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-6", "IR-7"],
+    nist_800_171: ["3.6.2"],
+    iso_42001: [],
+    gdpr: ["Art.33.1", "Art.33.3", "Art.34.1"],
+    nist_pf: [],
   },
   {
     nist: "RS.CO-03",
@@ -844,6 +1330,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.2"],
     pci_dss: ["12.10.1"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-6", "IR-7"],
+    nist_800_171: ["3.6.2"],
+    iso_42001: [],
+    gdpr: ["Art.33.1", "Art.34.1"],
+    nist_pf: [],
   },
 
   // RS.MI - Incident Mitigation
@@ -854,6 +1345,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1", "12.10.4"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "IR-5"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
   {
     nist: "RS.MI-02",
@@ -862,6 +1358,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1", "12.10.4"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-4", "SI-3"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.33.1"],
+    nist_pf: [],
   },
 
   // ============================================================
@@ -876,6 +1377,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1"],
     hipaa: ["308.a7.i", "308.a7.iiB"],
+    nist_800_53: ["CP-2", "CP-10", "IR-4"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.32.1c"],
+    nist_pf: [],
   },
   {
     nist: "RC.RP-02",
@@ -884,6 +1390,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.1"],
     pci_dss: ["12.10.1", "12.10.2"],
     hipaa: ["308.a7.i", "308.a7.iiB"],
+    nist_800_53: ["CP-2", "CP-10"],
+    nist_800_171: ["3.6.1"],
+    iso_42001: [],
+    gdpr: ["Art.32.1c"],
+    nist_pf: [],
   },
   {
     nist: "RC.RP-03",
@@ -892,6 +1403,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["MP.L2-3.8.9"],
     pci_dss: [],
     hipaa: ["308.a7.iiA", "310.d1.iiD"],
+    nist_800_53: ["CP-9", "CP-10"],
+    nist_800_171: ["3.8.9"],
+    iso_42001: [],
+    gdpr: ["Art.32.1c"],
+    nist_pf: [],
   },
   {
     nist: "RC.RP-04",
@@ -900,6 +1416,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: ["12.10.1"],
     hipaa: ["308.a7.i", "308.a7.iiC"],
+    nist_800_53: ["CP-2", "IR-4"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.32.1c"],
+    nist_pf: [],
   },
   {
     nist: "RC.RP-05",
@@ -908,6 +1429,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: [],
     pci_dss: [],
     hipaa: ["308.a7.iiA", "308.a7.iiB"],
+    nist_800_53: ["CP-2", "CP-9", "CP-10"],
+    nist_800_171: [],
+    iso_42001: [],
+    gdpr: ["Art.32.1c"],
+    nist_pf: [],
   },
   {
     nist: "RC.RP-06",
@@ -916,6 +1442,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.2"],
     pci_dss: ["12.10.2"],
     hipaa: ["308.a7.iiD"],
+    nist_800_53: ["CP-2", "IR-4", "IR-8"],
+    nist_800_171: ["3.6.2"],
+    iso_42001: [],
+    gdpr: [],
+    nist_pf: [],
   },
 
   // RC.CO - Incident Recovery Communication
@@ -926,6 +1457,11 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.2"],
     pci_dss: ["12.10.1", "12.10.5"],
     hipaa: ["308.a6.ii"],
+    nist_800_53: ["IR-6", "CP-2"],
+    nist_800_171: ["3.6.2"],
+    iso_42001: [],
+    gdpr: ["Art.34.1"],
+    nist_pf: [],
   },
   {
     nist: "RC.CO-04",
@@ -934,5 +1470,10 @@ export const CROSS_MAP: ControlMapping[] = [
     cmmc: ["IR.L2-3.6.2"],
     pci_dss: ["12.10.1"],
     hipaa: ["308.a6.ii", "308.a7.iiD"],
+    nist_800_53: ["IR-6", "CP-2"],
+    nist_800_171: ["3.6.2"],
+    iso_42001: [],
+    gdpr: ["Art.34.1"],
+    nist_pf: [],
   },
 ];

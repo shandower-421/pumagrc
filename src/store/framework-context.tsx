@@ -11,12 +11,7 @@ function loadEnabledFrameworks(allIds: string[]): Set<string> {
     try {
       const parsed = JSON.parse(stored) as string[]
       if (Array.isArray(parsed) && parsed.length > 0) {
-        const set = new Set(parsed)
-        // Auto-enable any newly added frameworks not yet in stored set
-        for (const id of allIds) {
-          if (!set.has(id) && !parsed.includes(id)) set.add(id)
-        }
-        return set
+        return new Set(parsed)
       }
     } catch { /* ignore */ }
   }
