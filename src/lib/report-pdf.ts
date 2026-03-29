@@ -6,15 +6,6 @@ import {
   MATURITY_LABELS, PRIORITY_LABELS, MATURITY_NUMERIC,
 } from '../types/assessment'
 
-const PRIORITY_WEIGHT: Record<Priority, number> = {
-  [Priority.High]: 5,
-  [Priority.Next]: 4,
-  [Priority.Working]: 3,
-  [Priority.Med]: 2,
-  [Priority.Low]: 1,
-  [Priority.NotSet]: 0,
-}
-
 function computeStats(assessment: Assessment) {
   const entries = Object.values(assessment.subcategories)
   const total = entries.length
@@ -39,26 +30,25 @@ function computeStats(assessment: Assessment) {
   return { total, assessed, withPlan, highPriority, maturityCounts, priorityCounts, avgMaturity }
 }
 
-function getTopGaps(assessment: Assessment, framework: FrameworkMeta, limit = 10) {
-  const gaps: { id: string; description: string; maturity: string; priority: string; gapScore: number }[] = []
+function getControlsNeedingAttention(assessment: Assessment, framework: FrameworkMeta, limit = 10) {
+  const items: { id: string; description: string; maturity: string; maturityScore: number; priority: string }[] = []
   for (const fn of framework.data) {
     for (const cat of fn.categories) {
       for (const sub of cat.subcategories) {
         const data = assessment.subcategories[sub.id]
         if (!data) continue
         const maturityScore = MATURITY_NUMERIC[data.maturity]
-        const priorityScore = PRIORITY_WEIGHT[data.priority]
-        const gapScore = (5 - maturityScore) * (priorityScore + 1)
-        gaps.push({
+        items.push({
           id: sub.id, description: sub.description,
           maturity: MATURITY_LABELS[data.maturity],
-          priority: PRIORITY_LABELS[data.priority], gapScore,
+          maturityScore,
+          priority: PRIORITY_LABELS[data.priority],
         })
       }
     }
   }
-  gaps.sort((a, b) => b.gapScore - a.gapScore)
-  return gaps.slice(0, limit)
+  items.sort((a, b) => a.maturityScore - b.maturityScore)
+  return items.slice(0, limit)
 }
 
 export function generatePdfReport(assessment: Assessment, framework: FrameworkMeta) {
@@ -160,16 +150,16 @@ export function generatePdfReport(assessment: Assessment, framework: FrameworkMe
   y = (doc as any).lastAutoTable.finalY + 20
 
   addPageIfNeeded(100)
-  sectionTitle('Top Gaps (Highest Risk)', 12)
-  const topGaps = getTopGaps(assessment, framework, 10)
+  sectionTitle('Controls Needing Attention (Lowest Maturity)', 12)
+  const needsAttention = getControlsNeedingAttention(assessment, framework, 10)
   autoTable(doc, {
     startY: y, margin: { left: margin, right: margin },
-    head: [['Control', 'Description', 'Maturity', 'Priority', 'Gap Score']],
-    body: topGaps.map(g => [g.id, g.description, g.maturity, g.priority, g.gapScore.toString()]),
+    head: [['Control', 'Description', 'Maturity', 'Priority']],
+    body: needsAttention.map(g => [g.id, g.description, g.maturity, g.priority]),
     styles: { fontSize: 8, cellPadding: 4 },
     headStyles: { fillColor: [153, 27, 27], textColor: 255, fontStyle: 'bold' },
     alternateRowStyles: { fillColor: [254, 242, 242] },
-    columnStyles: { 0: { cellWidth: 55 }, 2: { cellWidth: 65 }, 3: { cellWidth: 50 }, 4: { cellWidth: 45, halign: 'center' } },
+    columnStyles: { 0: { cellWidth: 55 }, 2: { cellWidth: 65 }, 3: { cellWidth: 50 } },
   })
   y = (doc as any).lastAutoTable.finalY + 20
 

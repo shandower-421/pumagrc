@@ -1,20 +1,21 @@
 import demoData from '../demo.json'
 
 export function loadDemoData() {
-  // Load assessments for each framework
-  const assessments = (demoData as any).assessments as Record<string, any>
-  for (const [frameworkId, assessment] of Object.entries(assessments)) {
-    localStorage.setItem(`assessment-${frameworkId}`, JSON.stringify(assessment))
+  const data = demoData as any
+
+  // V2 format: { version: "2.0", frameworks: { fwId: { assessment, snapshots } } }
+  const frameworks = data.frameworks as Record<string, { assessment: any; snapshots: any[] }>
+  for (const [frameworkId, fwData] of Object.entries(frameworks)) {
+    if (fwData.assessment) {
+      localStorage.setItem(`assessment-${frameworkId}`, JSON.stringify(fwData.assessment))
+    }
+    if (Array.isArray(fwData.snapshots)) {
+      localStorage.setItem(`snapshots-${frameworkId}`, JSON.stringify(fwData.snapshots))
+    }
   }
 
-  // Load snapshots for each framework
-  const snapshots = (demoData as any).snapshots as Record<string, any[]>
-  for (const [frameworkId, snapshotList] of Object.entries(snapshots)) {
-    localStorage.setItem(`snapshots-${frameworkId}`, JSON.stringify(snapshotList))
-  }
-
-  localStorage.setItem('active-framework', (demoData as any).activeFramework || 'nist-csf-2')
+  localStorage.setItem('active-framework', data.activeFramework || 'nist-csf-2')
   localStorage.setItem('enabled-frameworks', JSON.stringify(
-    (demoData as any).enabledFrameworks || ['nist-csf-2', 'iso-27001', 'cmmc']
+    data.enabledFrameworks || ['nist-csf-2', 'iso-27001', 'cmmc']
   ))
 }

@@ -426,3 +426,84 @@ button:active:not(:disabled),
 .recharts-polar-grid-angle line {
   stroke: var(--color-border-dim) !important;
 }
+
+/* ─── Print styles ─── */
+@media print {
+  @page {
+    margin: 1.5cm;
+  }
+
+  /* Hide non-content elements */
+  aside,
+  header,
+  [aria-label="Actions"],
+  [aria-haspopup="true"],
+  .fixed,
+  .recharts-wrapper,
+  [data-backup-reminder] {
+    display: none !important;
+  }
+
+  /* Hide all buttons except table row buttons used for layout */
+  button:not([role="button"]):not(tr button) {
+    display: none !important;
+  }
+
+  /* Full-width content */
+  .flex.h-screen {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .flex-1.flex.flex-col.overflow-hidden {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  main {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Clean appearance */
+  * {
+    box-shadow: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 10pt !important;
+  }
+
+  /* Table printing */
+  tr {
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  table {
+    page-break-inside: auto;
+  }
+
+  /* Ensure visible borders for tables */
+  table, th, td {
+    border-color: #d4dae4 !important;
+  }
+
+  /* Remove background colors on cards for ink saving */
+  [style*="background"] {
+    background: white !important;
+  }
+
+  /* Keep badge backgrounds for readability */
+  .bg-red-50, .bg-amber-50, .bg-yellow-50, .bg-sky-50, .bg-emerald-50, .bg-slate-100 {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

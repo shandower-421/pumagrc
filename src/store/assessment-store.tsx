@@ -98,7 +98,7 @@ function initializeAssessment(framework: FrameworkMeta): Assessment {
 }
 
 type Action =
-  | { type: 'SET_FIELD'; id: string; field: keyof SubcategoryAssessment; value: string | boolean }
+  | { type: 'SET_FIELD'; id: string; field: keyof SubcategoryAssessment; value: string | boolean | number }
   | { type: 'ADD_LOG_ENTRY'; id: string; text: string }
   | { type: 'TOGGLE_LOG_RESOLVED'; id: string; entryId: string }
   | { type: 'IMPORT'; assessment: Assessment }
@@ -180,8 +180,8 @@ function reducer(state: Assessment, action: Action): Assessment {
 
 interface AssessmentContextType {
   assessment: Assessment
-  setField: (id: string, field: keyof SubcategoryAssessment, value: string | boolean) => void
-  setFieldForFramework: (frameworkId: string, controlId: string, field: keyof SubcategoryAssessment, value: string | boolean) => void
+  setField: (id: string, field: keyof SubcategoryAssessment, value: string | boolean | number) => void
+  setFieldForFramework: (frameworkId: string, controlId: string, field: keyof SubcategoryAssessment, value: string | boolean | number) => void
   getAssessmentForFramework: (frameworkId: string, controlId: string) => SubcategoryAssessment
   addLogEntry: (id: string, text: string) => void
   toggleLogResolved: (id: string, entryId: string) => void
@@ -220,11 +220,11 @@ export function AssessmentProvider({ children, framework }: { children: ReactNod
     }
   }, [assessment, framework.id])
 
-  const setField = (id: string, field: keyof SubcategoryAssessment, value: string | boolean) => {
+  const setField = (id: string, field: keyof SubcategoryAssessment, value: string | boolean | number) => {
     dispatch({ type: 'SET_FIELD', id, field, value })
   }
 
-  const setFieldForFramework = useCallback((frameworkId: string, controlId: string, field: keyof SubcategoryAssessment, value: string | boolean) => {
+  const setFieldForFramework = useCallback((frameworkId: string, controlId: string, field: keyof SubcategoryAssessment, value: string | boolean | number) => {
     if (frameworkId === framework.id) {
       dispatch({ type: 'SET_FIELD', id: controlId, field, value })
       return

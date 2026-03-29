@@ -31,6 +31,10 @@ export interface SubcategoryAssessment {
   plan: string
   notes: string
   activityLog: LogEntry[]
+  riskLikelihood?: number
+  riskImpact?: number
+  riskOwner?: string
+  riskTreatment?: RiskTreatment
 }
 
 export interface Assessment {
@@ -137,6 +141,32 @@ export const MATURITY_NUMERIC: Record<MaturityLevel, number> = {
   [MaturityLevel.Defined]: 3,
   [MaturityLevel.Managed]: 4,
   [MaturityLevel.Optimized]: 5,
+}
+
+export const PRIORITY_WEIGHT: Record<Priority, number> = {
+  [Priority.High]: 5,
+  [Priority.Next]: 4,
+  [Priority.Working]: 3,
+  [Priority.Med]: 2,
+  [Priority.Low]: 1,
+  [Priority.NotSet]: 0,
+}
+
+export const RiskTreatment = {
+  NotSet: 'not-set',
+  Accept: 'accept',
+  Mitigate: 'mitigate',
+  Transfer: 'transfer',
+  Avoid: 'avoid',
+} as const
+export type RiskTreatment = typeof RiskTreatment[keyof typeof RiskTreatment]
+
+export const RISK_TREATMENT_LABELS: Record<RiskTreatment, string> = {
+  [RiskTreatment.NotSet]: 'Not Set',
+  [RiskTreatment.Accept]: 'Accept',
+  [RiskTreatment.Mitigate]: 'Mitigate',
+  [RiskTreatment.Transfer]: 'Transfer',
+  [RiskTreatment.Avoid]: 'Avoid',
 }
 
 export interface FrameworkMeta {

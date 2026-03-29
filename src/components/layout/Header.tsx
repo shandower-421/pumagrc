@@ -1,22 +1,17 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { Modal } from './Modal'
-import { Download, Upload, RotateCcw, FileText, ChevronDown, Menu, MoreVertical, Check, Settings, HelpCircle } from 'lucide-react'
+import { Download, Upload, RotateCcw, FileText, FileSpreadsheet, ChevronDown, Menu, MoreVertical, Check, Settings, HelpCircle, Printer } from 'lucide-react'
 import { useAssessment } from '../../store/assessment-store'
 import { useFramework } from '../../store/framework-context'
 import { generatePdfReport } from '../../lib/report-pdf'
 import { generateDocxReport } from '../../lib/report-docx'
-import type { Assessment } from '../../types/assessment'
+import { generateCsvReport, importCsvAssessment } from '../../lib/report-csv'
+import { exportAllData, parseImportData } from '../../lib/export-json'
 
 const btnSecondary = {
   background: 'var(--color-surface-raised)',
   color: 'var(--color-text-secondary)',
   border: '1px solid var(--color-border-default)',
-}
-
-const btnDanger = {
-  background: 'transparent',
-  color: 'var(--color-danger)',
-  border: '1px solid rgba(248, 113, 113, 0.2)',
 }
 
 
@@ -56,19 +51,11 @@ export function Header({ onMenuToggle, onNavigate, onConfigureFrameworks }: { on
     return () => document.removeEventListener('keydown', handleEscape)
   }, [showReportMenu])
 
-  const filePrefix = framework.id
-
   const handleExport = () => {
-    const snapshots = JSON.parse(localStorage.getItem(`snapshots-${framework.id}`) || '[]')
-    const exportData = { assessment, snapshots }
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${filePrefix}-assessment-${new Date().toISOString().slice(0, 10)}.json`
-    a.click()
-    URL.revokeObjectURL(url)
+    exportAllData()
   }
+
+  const csvInputRef = useRef<HTMLInputElement>(null)
 
   const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -78,26 +65,36 @@ export function Header({ onMenuToggle, onNavigate, onConfigureFrameworks }: { on
     reader.onload = (ev) => {
       try {
         const raw = JSON.parse(ev.target?.result as string)
-        let data: Assessment
-        // New format: { assessment, snapshots }
-        if (raw.assessment && raw.assessment.subcategories) {
-          data = raw.assessment
-          if (Array.isArray(raw.snapshots)) {
-            localStorage.setItem(`snapshots-${framework.id}`, JSON.stringify(raw.snapshots))
-          }
-        // Legacy format: direct assessment object
-        } else if (raw.subcategories && typeof raw.subcategories === 'object') {
-          data = raw
-        } else {
-          throw new Error('Invalid assessment format')
+        const result = parseImportData(raw)
+        if (result.type === 'v2') {
+          // Full reload to pick up all framework data + enabled list
+          window.location.reload()
+          return
         }
-        importAssessment(data)
+        // V1 legacy: import into current framework
+        if (result.snapshots) {
+          localStorage.setItem(`snapshots-${framework.id}`, JSON.stringify(result.snapshots))
+        }
+        importAssessment(result.assessment)
       } catch {
-        setImportError('Invalid file format. Please select a valid assessment JSON file.')
+        setImportError('Invalid file format. Please select a valid assessment JSON or CSV file.')
       }
     }
     reader.readAsText(file)
     if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
+  const handleCsvImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setImportError(null)
+    try {
+      const updatedAssessment = await importCsvAssessment(file, framework, assessment)
+      importAssessment(updatedAssessment)
+    } catch (err: any) {
+      setImportError(err.message || 'Invalid CSV format.')
+    }
+    if (csvInputRef.current) csvInputRef.current.value = ''
   }
 
   const handlePdfReport = async () => {
@@ -119,6 +116,11 @@ export function Header({ onMenuToggle, onNavigate, onConfigureFrameworks }: { on
     } finally {
       setGenerating(false)
     }
+  }
+
+  const handleCsvReport = () => {
+    setShowReportMenu(false)
+    generateCsvReport(assessment, framework)
   }
 
   return (
@@ -165,6 +167,9 @@ export function Header({ onMenuToggle, onNavigate, onConfigureFrameworks }: { on
               <button onClick={handleDocxReport} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <FileText className="w-4 h-4" aria-hidden="true" style={{ color: 'var(--color-info)' }} /> Word Document
               </button>
+              <button onClick={handleCsvReport} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+                <FileSpreadsheet className="w-4 h-4" aria-hidden="true" style={{ color: 'var(--color-success)' }} /> CSV Spreadsheet
+              </button>
             </div>
           </>
         )}
@@ -193,6 +198,9 @@ export function Header({ onMenuToggle, onNavigate, onConfigureFrameworks }: { on
               <button onClick={() => { fileInputRef.current?.click(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <Upload className="w-3.5 h-3.5" aria-hidden="true" /> Import JSON
               </button>
+              <button onClick={() => { csvInputRef.current?.click(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+                <Upload className="w-3.5 h-3.5" aria-hidden="true" /> Import CSV
+              </button>
               <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
               </>)}
               <button onClick={() => { onConfigureFrameworks(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
@@ -204,6 +212,9 @@ export function Header({ onMenuToggle, onNavigate, onConfigureFrameworks }: { on
                 <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" /> Reset Assessment
               </button>
               </>)}
+              <button onClick={() => { window.print(); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
+                <Printer className="w-3.5 h-3.5" aria-hidden="true" /> Print View
+              </button>
               <div className="my-1" style={{ borderTop: '1px solid var(--color-border-dim)' }} />
               <button onClick={() => { setShowAbout(true); setAboutTab('getting-started'); setShowOverflowMenu(false) }} role="menuitem" className="w-full text-left px-3 py-2 type-sm flex items-center gap-2 hover:opacity-80" style={{ color: 'var(--color-text-secondary)' }}>
                 <HelpCircle className="w-3.5 h-3.5" aria-hidden="true" /> Help & About
@@ -214,6 +225,7 @@ export function Header({ onMenuToggle, onNavigate, onConfigureFrameworks }: { on
       </div>
       {!__DEMO_MODE__ && (<>
       <input ref={fileInputRef} type="file" accept=".json" onChange={handleImport} className="hidden" aria-label="Import assessment file" />
+      <input ref={csvInputRef} type="file" accept=".csv" onChange={handleCsvImport} className="hidden" aria-label="Import CSV file" />
 
       <Modal open={!!importError} onClose={() => setImportError(null)} label="Import error">
         <p className="type-body mb-4" role="alert" style={{ color: 'var(--color-danger)' }}>{importError}</p>

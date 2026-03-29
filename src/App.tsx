@@ -11,6 +11,7 @@ import { GapAnalysisView } from './components/gap-analysis/GapAnalysisView'
 import { CrossMapView } from './components/cross-map/CrossMapView'
 import { HistoryView } from './components/history/HistoryView'
 import { HeatmapView } from './components/heatmap/HeatmapView'
+import { BackupReminder } from './components/layout/BackupReminder'
 
 function AppContent() {
   const { hash, navigate } = useHash()
@@ -27,8 +28,8 @@ function AppContent() {
   if (hash.startsWith('category/')) {
     const categoryId = hash.replace('category/', '')
     content = <CategoryView categoryId={categoryId} />
-  } else if (hash === 'gap-analysis') {
-    content = <GapAnalysisView onNavigate={handleNavigate} />
+  } else if (hash === 'gap-analysis' || hash === 'risk-register') {
+    content = <GapAnalysisView />
   } else if (hash === 'cross-map') {
     content = <CrossMapView onNavigate={handleNavigate} />
   } else if (hash === 'history') {
@@ -65,6 +66,7 @@ function AppContent() {
               Demo Mode &mdash; Sample data pre-loaded. Import/export/reset disabled.
             </div>
           )}
+          {!__DEMO_MODE__ && <BackupReminder />}
           <Header onMenuToggle={() => setSidebarOpen(s => !s)} onNavigate={handleNavigate} onConfigureFrameworks={() => setShowFrameworkConfig(true)} />
           <main className="flex-1 overflow-y-auto" id="main-content">
             {content}

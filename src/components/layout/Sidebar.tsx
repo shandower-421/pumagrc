@@ -12,7 +12,7 @@ interface SidebarProps {
 
 const NAV_ITEMS = [
   { path: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { path: 'gap-analysis', label: 'Gap Analysis', icon: AlertTriangle },
+  { path: 'gap-analysis', label: 'Gap & Risk', icon: AlertTriangle },
   { path: 'heatmap', label: 'Heatmap', icon: Grid3x3 },
   { path: 'history', label: 'History', icon: Clock },
   { path: 'cross-map', label: 'Cross-Map', icon: GitCompare },
@@ -28,7 +28,7 @@ export function Sidebar({ currentPath, onNavigate, onConfigureFrameworks }: Side
   // Update document title on navigation
   useEffect(() => {
     const viewName = currentPath === 'dashboard' ? 'Dashboard'
-      : currentPath === 'gap-analysis' ? 'Gap Analysis'
+      : currentPath === 'gap-analysis' ? 'Gap & Risk'
       : currentPath === 'heatmap' ? 'Heatmap'
       : currentPath === 'history' ? 'History'
       : currentPath === 'cross-map' ? 'Cross-Map'

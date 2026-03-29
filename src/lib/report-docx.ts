@@ -10,15 +10,6 @@ import {
   MATURITY_LABELS, PRIORITY_LABELS, MATURITY_NUMERIC,
 } from '../types/assessment'
 
-const PRIORITY_WEIGHT: Record<Priority, number> = {
-  [Priority.High]: 5,
-  [Priority.Next]: 4,
-  [Priority.Working]: 3,
-  [Priority.Med]: 2,
-  [Priority.Low]: 1,
-  [Priority.NotSet]: 0,
-}
-
 const SLATE_900 = '1E293B'
 const SLATE_500 = '64748B'
 const SLATE_100 = 'F1F5F9'
@@ -143,29 +134,28 @@ export async function generateDocxReport(assessment: Assessment, framework: Fram
     ], [3500, 2000, 2000]),
   )
 
-  // Top Gaps
-  const gaps: { id: string; desc: string; mat: string; pri: string; score: number }[] = []
+  // Controls Needing Attention
+  const items: { id: string; desc: string; mat: string; matScore: number; pri: string }[] = []
   for (const fn of framework.data) {
     for (const cat of fn.categories) {
       for (const sub of cat.subcategories) {
         const data = assessment.subcategories[sub.id]
         if (!data) continue
-        const gapScore = (5 - MATURITY_NUMERIC[data.maturity]) * (PRIORITY_WEIGHT[data.priority] + 1)
-        gaps.push({ id: sub.id, desc: sub.description, mat: MATURITY_LABELS[data.maturity], pri: PRIORITY_LABELS[data.priority], score: gapScore })
+        items.push({ id: sub.id, desc: sub.description, mat: MATURITY_LABELS[data.maturity], matScore: MATURITY_NUMERIC[data.maturity], pri: PRIORITY_LABELS[data.priority] })
       }
     }
   }
-  gaps.sort((a, b) => b.score - a.score)
-  const topGaps = gaps.slice(0, 10)
+  items.sort((a, b) => a.matScore - b.matScore)
+  const needsAttention = items.slice(0, 10)
 
   sections.push(
-    new Paragraph({ text: 'Top Gaps (Highest Risk)', heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 100 } }),
+    new Paragraph({ text: 'Controls Needing Attention (Lowest Maturity)', heading: HeadingLevel.HEADING_2, spacing: { before: 300, after: 100 } }),
     noBorderTable([
-      new TableRow({ children: [headerCell('Control', RED_700), headerCell('Description', RED_700), headerCell('Maturity', RED_700), headerCell('Priority', RED_700), headerCell('Gap', RED_700)] }),
-      ...topGaps.map((g, i) =>
-        new TableRow({ children: [cell(g.id, i % 2 === 1), cell(g.desc, i % 2 === 1), cell(g.mat, i % 2 === 1), cell(g.pri, i % 2 === 1), cell(g.score.toString(), i % 2 === 1)] })
+      new TableRow({ children: [headerCell('Control', RED_700), headerCell('Description', RED_700), headerCell('Maturity', RED_700), headerCell('Priority', RED_700)] }),
+      ...needsAttention.map((g, i) =>
+        new TableRow({ children: [cell(g.id, i % 2 === 1), cell(g.desc, i % 2 === 1), cell(g.mat, i % 2 === 1), cell(g.pri, i % 2 === 1)] })
       ),
-    ], [1200, 4500, 1200, 1000, 800]),
+    ], [1200, 5300, 1200, 1000]),
     new Paragraph({ children: [], pageBreakBefore: true }),
   )
 
