@@ -6,35 +6,43 @@ const DIR = 'docs/screenshots'
 const WIDTH = 1440
 const HEIGHT = 900
 
-// Load the full demo data — keys map directly to localStorage keys
+// Load and unpack V2 demo data into localStorage-compatible entries
 const demoData = JSON.parse(readFileSync('public/demo.json', 'utf-8'))
 
-// Build localStorage entries: each top-level key becomes a localStorage key with JSON-stringified value
 const localStorageData = {
   'active-framework': 'nist-csf-2',
-  'enabled-frameworks': JSON.stringify(['nist-csf-2', 'iso-27001', 'soc2', 'cmmc', 'hipaa', 'pci-dss']),
+  'enabled-frameworks': JSON.stringify(['nist-csf-2', 'iso-27001', 'soc2', 'cmmc', 'hipaa', 'pci-dss', 'nist-800-53', 'nist-800-171', 'iso-42001', 'gdpr', 'nist-pf']),
+  'last-backup-date': new Date().toISOString(),
 }
-for (const [key, value] of Object.entries(demoData)) {
-  localStorageData[key] = JSON.stringify(value)
+
+// Unpack V2 format: frameworks.{id}.assessment → assessment-{id}, frameworks.{id}.snapshots → snapshots-{id}
+if (demoData.frameworks) {
+  for (const [fwId, fwData] of Object.entries(demoData.frameworks)) {
+    if (fwData.assessment) {
+      localStorageData[`assessment-${fwId}`] = JSON.stringify(fwData.assessment)
+    }
+    if (Array.isArray(fwData.snapshots)) {
+      localStorageData[`snapshots-${fwId}`] = JSON.stringify(fwData.snapshots)
+    }
+  }
 }
 
 const views = [
   { name: 'dashboard', hash: '#dashboard', wait: 1500 },
+  { name: 'category-assessment', hash: '#category/GV.OC', wait: 1000, expand: true },
   { name: 'gap-analysis', hash: '#gap-analysis', wait: 1000 },
   { name: 'heatmap', hash: '#heatmap', wait: 1000 },
-  { name: 'history', hash: '#history', wait: 1500 },
   { name: 'cross-map', hash: '#cross-map', wait: 1000 },
-  { name: 'category-assessment', hash: '#category/GV.OC', wait: 1000, expand: true },
+  { name: 'history', hash: '#history', wait: 1500 },
 ]
 
 const browser = await puppeteer.launch({ headless: true })
 
 for (const view of views) {
-  // Use a fresh page per view to avoid React state leaking between navigations
   const viewPage = await browser.newPage()
   await viewPage.setViewport({ width: WIDTH, height: HEIGHT })
 
-  // Inject localStorage BEFORE any page JS runs via evaluateOnNewDocument
+  // Inject localStorage BEFORE any page JS runs
   await viewPage.evaluateOnNewDocument((data) => {
     for (const [key, value] of Object.entries(data)) {
       localStorage.setItem(key, value)
