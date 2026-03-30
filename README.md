@@ -122,4 +122,4 @@ This tool is provided as-is, with no warranties or guarantees of any kind. Use i
 
 ## License
 
-Private — not licensed for redistribution.
+[MIT](LICENSE)
