@@ -261,7 +261,7 @@ export function GapAnalysisView() {
           <thead>
             <tr style={{ background: 'var(--color-surface-raised)', borderBottom: '1px solid var(--color-border-dim)' }}>
               {[
-                { label: 'Control', field: 'id' as SortField, align: 'left', tooltip: 'Framework control identifier', show: true, width: 88 },
+                { label: 'Control', field: 'id' as SortField, align: 'left', tooltip: 'Framework control identifier', show: true, width: 120 },
                 { label: 'Description', field: null, align: 'left', tooltip: 'Control description', show: true },
                 { label: 'Domain', field: null, align: 'left', tooltip: 'Framework function or domain', show: false },
                 { label: 'Maturity', field: 'maturity' as SortField, align: 'center', tooltip: 'Current maturity level (0-5)', show: showGap, width: 100 },
