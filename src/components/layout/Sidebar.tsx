@@ -72,36 +72,36 @@ export function Sidebar({ currentPath, onNavigate, onConfigureFrameworks }: Side
   }
 
   return (
-    <aside className="w-72 flex flex-col h-screen overflow-hidden border-r" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border-dim)' }} aria-label="Sidebar">
+    <aside className="w-72 flex flex-col h-screen overflow-hidden border-r" style={{ background: 'var(--color-sidebar-bg)', borderColor: 'var(--color-sidebar-border)' }} aria-label="Sidebar">
       {/* Logo — link to greykit.com */}
       <a
         href="https://www.greykit.com"
         target="_blank"
         rel="noopener noreferrer"
         className="px-5 py-4 text-left w-full block"
-        style={{ borderBottom: '1px solid var(--color-border-dim)' }}
+        style={{ borderBottom: '1px solid var(--color-sidebar-border)' }}
         aria-label="PumaGRC — Visit greykit.com"
       >
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-accent-dim)', border: '1px solid var(--color-accent-glow)' }}>
-            <Shield className="w-4 h-4" aria-hidden="true" style={{ color: 'var(--color-accent)' }} />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'oklch(0.55 0.12 195 / 0.15)', border: '1px solid oklch(0.55 0.12 195 / 0.25)' }}>
+            <Shield className="w-4 h-4" aria-hidden="true" style={{ color: 'var(--color-sidebar-primary)' }} />
           </div>
           <div>
-            <span className="block type-sm font-semibold" style={{ color: 'var(--color-text-primary)', letterSpacing: 'var(--tracking-label)' }}>PUMAGRC</span>
-            <span className="block type-label" style={{ color: 'var(--color-text-muted)' }}>Self Assessment Tool</span>
+            <span className="block type-sm font-semibold" style={{ color: 'var(--color-sidebar-fg)', letterSpacing: 'var(--tracking-label)' }}>PUMAGRC</span>
+            <span className="block type-label" style={{ color: 'var(--color-sidebar-fg-muted)' }}>Self Assessment Tool</span>
           </div>
         </div>
       </a>
 
       {/* Framework selector */}
-      <div className="px-3 py-3" style={{ borderBottom: '1px solid var(--color-border-dim)' }}>
+      <div className="px-3 py-3" style={{ borderBottom: '1px solid var(--color-sidebar-border)' }}>
         <div className="flex items-center justify-between mb-1.5 px-1">
-          <p className="type-label" style={{ color: 'var(--color-text-muted)' }} id="fw-group-label">Framework</p>
+          <p className="type-label" style={{ color: 'var(--color-sidebar-fg-muted)' }} id="fw-group-label">Framework</p>
           <button
             onClick={onConfigureFrameworks}
             aria-label="Configure frameworks"
             className="p-1 rounded hover:opacity-80"
-            style={{ color: 'var(--color-text-muted)' }}
+            style={{ color: 'var(--color-sidebar-fg-muted)' }}
           >
             <Settings className="w-3.5 h-3.5" aria-hidden="true" />
           </button>
@@ -117,9 +117,9 @@ export function Sidebar({ currentPath, onNavigate, onConfigureFrameworks }: Side
                 onClick={() => handleFrameworkChange(fw.id)}
                 className="w-full text-left px-3 py-1.5 type-sm font-medium rounded-md flex items-center gap-2"
                 style={{
-                  color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
-                  background: isActive ? 'var(--color-accent-dim)' : undefined,
-                  borderLeft: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
+                  color: isActive ? 'var(--color-sidebar-primary)' : 'var(--color-sidebar-fg)',
+                  background: isActive ? 'var(--color-sidebar-accent-bg)' : undefined,
+                  borderLeft: isActive ? '2px solid var(--color-sidebar-primary)' : '2px solid transparent',
                 }}
               >
                 {fw.shortName}
@@ -139,12 +139,12 @@ export function Sidebar({ currentPath, onNavigate, onConfigureFrameworks }: Side
               <button
                 key={item.path}
                 onClick={() => onNavigate(item.path)}
-                className="w-full text-left px-3 py-2 type-sm font-medium rounded-lg flex items-center gap-2.5 hover:bg-[var(--color-surface-tint)]"
+                className="w-full text-left px-3 py-2 type-sm font-medium rounded-lg flex items-center gap-2.5 hover:bg-[var(--color-sidebar-accent-bg)]/50"
                 aria-current={isActive ? 'page' : undefined}
                 style={{
-                  color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
-                  background: isActive ? 'var(--color-accent-dim)' : undefined,
-                  border: isActive ? '1px solid rgba(34, 211, 238, 0.15)' : '1px solid transparent',
+                  color: isActive ? 'var(--color-sidebar-primary)' : 'oklch(0.88 0.01 200 / 0.7)',
+                  background: isActive ? 'var(--color-sidebar-accent-bg)' : undefined,
+                  border: isActive ? '1px solid oklch(0.55 0.12 195 / 0.2)' : '1px solid transparent',
                 }}
               >
                 <Icon className="w-3.5 h-3.5" aria-hidden="true" style={{ opacity: isActive ? 1 : 0.5 }} />
@@ -155,7 +155,7 @@ export function Sidebar({ currentPath, onNavigate, onConfigureFrameworks }: Side
         </div>
 
         {/* Framework tree */}
-        <div className="mt-3 pt-3 px-2" style={{ borderTop: '1px solid var(--color-border-dim)' }}>
+        <div className="mt-3 pt-3 px-2" style={{ borderTop: '1px solid var(--color-sidebar-border)' }}>
           {framework.data.map(fn => {
             const colors = functionColors[fn.id]
             const progress = getFunctionProgress(fn.id)
@@ -167,17 +167,17 @@ export function Sidebar({ currentPath, onNavigate, onConfigureFrameworks }: Side
                   aria-expanded={expanded[fn.id]}
                   aria-label={`${fn.id} ${fn.name}, ${pct}% assessed`}
                   className="w-full text-left px-2 py-2 type-sm font-medium rounded-md flex items-center justify-between group"
-                  style={{ color: 'var(--color-text-secondary)' }}
+                  style={{ color: 'var(--color-sidebar-fg)' }}
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <ChevronRight className="w-3.5 h-3.5 shrink-0 chevron-transition" aria-hidden="true" style={{ color: 'var(--color-text-muted)', transform: expanded[fn.id] ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+                    <ChevronRight className="w-3.5 h-3.5 shrink-0 chevron-transition" aria-hidden="true" style={{ color: 'var(--color-sidebar-fg-muted)', transform: expanded[fn.id] ? 'rotate(90deg)' : 'rotate(0deg)' }} />
                     <span className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${colors.bg}`} aria-hidden="true" />
                     <span className="truncate">{fn.id} — {fn.name}</span>
                   </div>
-                  <span className={`type-2xs type-mono shrink-0 ml-1 ${pct === 100 ? 'milestone-complete' : ''}`} aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : pct > 0 && pct < 50 ? 'var(--color-warning)' : 'var(--color-text-muted)' }}>{pct}%</span>
+                  <span className={`type-2xs type-mono shrink-0 ml-1 ${pct === 100 ? 'milestone-complete' : ''}`} aria-hidden="true" style={{ color: pct === 100 ? 'var(--color-success)' : pct > 0 && pct < 50 ? 'var(--color-warning)' : 'var(--color-sidebar-fg-muted)' }}>{pct}%</span>
                 </button>
                 {expanded[fn.id] && (
-                  <div className="ml-3 pl-3 animate-content-in" style={{ borderLeft: '1px solid var(--color-border-dim)' }} role="group" aria-label={`${fn.name} categories`}>
+                  <div className="ml-3 pl-3 animate-content-in" style={{ borderLeft: '1px solid var(--color-sidebar-border)' }} role="group" aria-label={`${fn.name} categories`}>
                     {fn.categories.map(cat => {
                       const catProgress = getCategoryProgress(cat.id)
                       const isActive = currentPath === `category/${cat.id}`
@@ -188,12 +188,12 @@ export function Sidebar({ currentPath, onNavigate, onConfigureFrameworks }: Side
                           aria-current={isActive ? 'page' : undefined}
                           className="w-full text-left px-2 py-1 type-xs rounded flex items-center justify-between"
                           style={{
-                            color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
-                            background: isActive ? 'var(--color-accent-dim)' : 'transparent',
+                            color: isActive ? 'var(--color-sidebar-primary)' : 'var(--color-sidebar-fg-muted)',
+                            background: isActive ? 'var(--color-sidebar-accent-bg)' : 'transparent',
                           }}
                         >
                           <span className="truncate">{cat.id} {cat.name}</span>
-                          <span className="type-2xs type-mono shrink-0 ml-1" aria-hidden="true" style={{ color: 'var(--color-text-muted)' }}>{catProgress.assessed}/{catProgress.total}</span>
+                          <span className="type-2xs type-mono shrink-0 ml-1" aria-hidden="true" style={{ color: 'var(--color-sidebar-fg-dim)' }}>{catProgress.assessed}/{catProgress.total}</span>
                         </button>
                       )
                     })}
